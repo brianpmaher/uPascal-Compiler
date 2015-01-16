@@ -4,8 +4,6 @@ Micro Pascal compiler final project for Compilers class at Montana State Univers
 ## C# Compiler
 This project uses the mono C# compiler, available at http://www.mono-project.com/
 
-To compile:
-`mcs main.cs`
+To compile: `mcs -out:uPc.exe *.cs`
 
-To run:
-`mono main.exe`
+To run: `mono uPc.exe`
