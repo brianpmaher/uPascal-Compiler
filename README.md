@@ -6,4 +6,4 @@ This project uses the mono C# compiler, available at http://www.mono-project.com
 
 To compile: `mcs -out:YµP.exe *.cs`
 
-To run: `mono YµP.exe`
+To run: `mono YµP.exe <µPascal file> <output filename>`
