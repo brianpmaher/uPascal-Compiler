@@ -1,4 +1,4 @@
-# YuP(Why micro Pascal?)-Compiler Project
+# YµP(Why micro Pascal?)-Compiler Project
 Micro Pascal compiler final project for Compilers class at Montana State University. Team members include: Jesse Brown, Brian Maher, and Sean Rogers.
 
 ## C# Compiler
