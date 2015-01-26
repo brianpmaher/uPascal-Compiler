@@ -6,6 +6,5 @@ public static class Constants {
 
 	// All token IDs (add more as we come across them)
 	public enum TOKENS {
-		// TODO : Populate with µPascal Tokens from documents
 	};
 }
