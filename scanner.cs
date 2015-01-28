@@ -1,8 +1,20 @@
 using System;
+using System.IO;
 
 public class Scanner {
-	public void initializeScanner(string file_name) {
+	private StreamReader __reader;
 
+	public void initializeScanner(string fileName) {
+		try {
+			if(!fileName.EndsWith(".mp")) {
+				throw new Exception(Constants.ERROR_FILE_FORMAT);
+			} else {
+				this.__reader = new StreamReader(fileName);
+				getNextToken();
+			}
+		} catch(Exception ex) {
+			Console.WriteLine(ex);
+		}
 	}
 
 	private int getNextToken() {
