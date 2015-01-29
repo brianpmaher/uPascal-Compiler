@@ -27,8 +27,8 @@ public class Scanner {
                 string ws = Constants.WHITESPACE;
 
                 // Loop through, ignoring whitespace
-                for(i=0; i<length; i++) {
-                    if(ws.Contains(""+__bytes[i])) {
+                for(i = 0; i < length; i++) {
+                    if(ws.Contains("" + __bytes[i])) {
                         if(__bytes[i] == '\n'){
                             line++;
                         }
