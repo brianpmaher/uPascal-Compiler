@@ -6,7 +6,8 @@ public class Driver {
 		if(args.Length == 0 || args.Length > 2) {
 			Console.WriteLine(Constants.USAGE_HELP);
 		} else { // Begin compiling
-			// Here be the compiler
+			Scanner scanner = new Scanner();
+			scanner.initializeScanner(args[0]);
 		}
 	}
 }
