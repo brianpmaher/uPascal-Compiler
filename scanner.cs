@@ -6,7 +6,7 @@ public class Scanner {
     private int curByte = 0;
     private int column = 1;
     private int line = 1;
-    private byte[] __bytes;
+    private char[] __bytes;
     private List<Tuple<string, TOKENS>> __tokens;
 
     // Initializes the scanner and checks for file format
@@ -17,7 +17,9 @@ public class Scanner {
                 throw new Exception(Constants.ERROR_FILE_FORMAT);
             } else {
                 // Grab all bytes from the file
-                this.__bytes = File.ReadAllBytes(fileName);
+                StreamReader reader = new StreamReader(fileName);
+                string temp = reader.ReadToEnd();
+                __bytes = temp.ToCharArray();
 
                 // Caching variables to save memory
                 int i = 0,
@@ -61,10 +63,10 @@ public class Scanner {
 
     private Tuple<string, TOKENS> fsaDigit() {
         string lexeme = "";
-        bool done = false;
         string DIGITS = Constants.DIGITS;
-        TOKENS token = null;
-        char next = '';
+        TOKENS token;
+        char next;
+        goto S0; // Smothers warning about S0 label not used
         S0: //Start state
             next = __bytes[curByte];
             column++;
@@ -96,7 +98,7 @@ public class Scanner {
                 goto S4;
             } else { //This is a success state, so reset the fp and return the lexeme
                 curByte--; //reset the fp
-                return new Tuple<lexeme, token>;
+                return new Tuple<string, TOKENS>(lexeme, token);
             }
         S2: // A '.' has been read
             next = __bytes[curByte];
@@ -109,7 +111,7 @@ public class Scanner {
                 // Must remove the last character (.) from lexeme
                 lexeme.Remove(lexeme.Length - 1);
                 curByte -= 2;
-                return new Tuple<lexeme, token>;
+                return new Tuple<string, TOKENS>(lexeme, token);
             }
         S3: // Digits have followed a valid '.'
             token = TOKENS.FIXED_LIT;
@@ -124,7 +126,7 @@ public class Scanner {
                 goto S4;
             } else {
                 curByte--;
-                return new Tuple<lexeme, token>;
+                return new Tuple<string, TOKENS>(lexeme, token);
             }
         S4: // An e or E has been read
             next = __bytes[curByte];
@@ -135,9 +137,9 @@ public class Scanner {
                 goto S5;
             } else {
                 // Must remove the last character (e or E) from lexeme
-                lexeme = lexeme.Remove(lexeme.length - 1);
+                lexeme = lexeme.Remove(lexeme.Length - 1);
                 curByte -= 2;
-                return new Tuple<lexeme, token>;
+                return new Tuple<string, TOKENS>(lexeme, token);
             }
         S5: // A + or - has followed a valid 'e' or 'E'
             next = __bytes[curByte];
@@ -148,9 +150,9 @@ public class Scanner {
                 goto S6;
             } else {
                 // Must remove the last two characters ((e or E) and (- or +))
-                lexeme = lexeme.Remove(lexeme.length - 2);
+                lexeme = lexeme.Remove(lexeme.Length - 2);
                 curByte -= 3;
-                return new Tuple<lexeme, token>;
+                return new Tuple<string, TOKENS>(lexeme, token);
             }
         S6: // A float has been found, keep parsing digits
             token = TOKENS.FLOAT_LIT;
@@ -162,7 +164,7 @@ public class Scanner {
                 goto S6;
             } else {
                 curByte--;
-                return new Tuple<lexeme, token>;
+                return new Tuple<string, TOKENS>(lexeme, token);
             }
     }
 
