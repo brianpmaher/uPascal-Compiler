@@ -94,8 +94,8 @@ public class Scanner {
             } else if(next == 'e' || next == 'E'){
                 lexeme += next;
                 goto S4;
-            } else { //This is a success state, so reset the fp and return the lexeme
-                __curByte--; //reset the fp
+            } else { // This is a success state, so reset the fp and return the lexeme
+                __curByte--; // reset the fp
                 return new Tuple<string, TOKENS>(lexeme, token);
             }
         S2: // A '.' has been read
