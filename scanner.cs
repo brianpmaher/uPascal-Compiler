@@ -54,7 +54,71 @@ public class Scanner {
         return 0; // change this
     }
 
-    private int fsaDigit() {
+    private Tuple<string, TOKENS> fsaDigit() {
+        string lexeme = "";
+        bool done = false;
+        string DIGITS = Constants.DIGITS;
+        TOKENS token = null;
+        char next = '';
+        S0: //Start state
+            next = __bytes[curByte];
+            curByte++;
+            if(DIGITS.Contains("" + next)){
+                lexeme += next;
+                goto S1;
+            } else {
+                curByte--;
+                throw new Exception(
+                    "Dispatcher done goofed. Passed " +
+                    next + " to the digit FSA, but " +  next +
+                    "is not a digit."
+                );
+            }
+        S1:
+            token = TOKENS.INTEGER_LIT;
+            next = __bytes[curByte];
+            curByte++;
+            if(DIGITS.Contains("" + next)){
+                lexeme += next;
+                goto S1;
+            } else if(next == '.'){
+                lexeme += next;
+                goto S2;
+            } else if(next == 'e' || next == 'E'){
+                lexeme += next;
+                goto S4;
+            } else { //This is a success state, so reset the fp and return the lexeme
+                curByte--; //reset the fp
+                return new Tuple<lexeme, token>;
+            }
+        S2:
+            next = __bytes[curByte];
+            curByte++;
+            if(DIGITS.Contains("" + next)){
+                lexeme += next;
+                goto S3;
+            } else {
+                curByte -= 2;
+                return new Tuple<lexeme, token>;
+            }
+        S3:
+            token = TOKENS.FIXED_LIT;
+            next = __bytes[curByte];
+            curByte++;
+            if(DIGITS.Contains("" + next)){
+                lexeme += next;
+                goto S3;
+            } else if(next == 'e' || next == 'E'){
+                lexeme += next;
+                goto S4;
+            } else {
+                curByte--;
+                return new Tuple<lexeme, token>;
+            }
+        S4:
+            next = __bytes[curByte];
+
+
         return 0; // change this
     }
 
