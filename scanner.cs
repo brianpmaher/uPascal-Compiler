@@ -22,16 +22,19 @@ public class Scanner {
                 __bytes = temp.ToCharArray();
 
                 // Caching variables to save memory
-                int i = 0,
-                    length = __bytes.Length;
+                int length = __bytes.Length;
                 string ws = Constants.WHITESPACE;
 
-                // Loop through, ignoring whitespace
-                for(i = 0; i < length; i++) {
-                    if(ws.Contains("" + __bytes[i])) {
-                        if(__bytes[i] == '\n'){
+                // Loop until EOF, ignoring whitespace
+                while(__curByte < length){
+                    if(ws.Contains("" + __bytes[__curByte])) {
+                        if(__bytes[__curByte] == '\n'){
                             __line++;
+                            __column = 0;
+                        } else if(__bytes[__curByte] == ' '){
+                            __column++;
                         }
+                        __curByte++;
                         continue;
                     } else {
                         getNextToken();
