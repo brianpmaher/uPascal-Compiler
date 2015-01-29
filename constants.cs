@@ -80,5 +80,5 @@ public static class Constants {
     // List of whitespace characters
     public const string WHITESPACE = " \r\n\t";
 
-	public const string DIGITS = "0123456789";
+    public const string DIGITS = "0123456789";
 }
