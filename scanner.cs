@@ -3,9 +3,9 @@ using System.IO;
 using System.Collections.Generic;
 
 public class Scanner {
-    private int curByte = 0;
-    private int column = 1;
-    private int line = 1;
+    private int __curByte = 0;
+    private int __column = 1;
+    private int __line = 1;
     private char[] __bytes;
     private List<Tuple<string, TOKENS>> __tokens;
 
@@ -30,7 +30,7 @@ public class Scanner {
                 for(i = 0; i < length; i++) {
                     if(ws.Contains("" + __bytes[i])) {
                         if(__bytes[i] == '\n'){
-                            line++;
+                            __line++;
                         }
                         continue;
                     } else {
@@ -67,15 +67,15 @@ public class Scanner {
         TOKENS token;
         char next;
         goto S0; // Smothers warning about S0 label not used
-        S0: //Start state
-            next = __bytes[curByte];
-            column++;
-            curByte++;
+        S0: // Start state
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
             if(DIGITS.Contains("" + next)){
                 lexeme += next;
                 goto S1;
             } else {
-                curByte--;
+                __curByte--;
                 throw new Exception(
                     "Dispatcher done goofed. Passed " +
                     next + " to the digit FSA, but " +  next +
@@ -84,9 +84,9 @@ public class Scanner {
             }
         S1: // One or more digits have been read
             token = TOKENS.INTEGER_LIT;
-            next = __bytes[curByte];
-            column++;
-            curByte++;
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
             if(DIGITS.Contains("" + next)){
                 lexeme += next;
                 goto S1;
@@ -97,27 +97,27 @@ public class Scanner {
                 lexeme += next;
                 goto S4;
             } else { //This is a success state, so reset the fp and return the lexeme
-                curByte--; //reset the fp
+                __curByte--; //reset the fp
                 return new Tuple<string, TOKENS>(lexeme, token);
             }
         S2: // A '.' has been read
-            next = __bytes[curByte];
-            column++;
-            curByte++;
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
             if(DIGITS.Contains("" + next)){
                 lexeme += next;
                 goto S3;
             } else {
                 // Must remove the last character (.) from lexeme
                 lexeme.Remove(lexeme.Length - 1);
-                curByte -= 2;
+                __curByte -= 2;
                 return new Tuple<string, TOKENS>(lexeme, token);
             }
         S3: // Digits have followed a valid '.'
             token = TOKENS.FIXED_LIT;
-            next = __bytes[curByte];
-            column++;
-            curByte++;
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
             if(DIGITS.Contains("" + next)){
                 lexeme += next;
                 goto S3;
@@ -125,45 +125,45 @@ public class Scanner {
                 lexeme += next;
                 goto S4;
             } else {
-                curByte--;
+                __curByte--;
                 return new Tuple<string, TOKENS>(lexeme, token);
             }
         S4: // An e or E has been read
-            next = __bytes[curByte];
-            column++;
-            curByte++;
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
             if(next == '+' || next == '-'){
                 lexeme += next;
                 goto S5;
             } else {
                 // Must remove the last character (e or E) from lexeme
                 lexeme = lexeme.Remove(lexeme.Length - 1);
-                curByte -= 2;
+                __curByte -= 2;
                 return new Tuple<string, TOKENS>(lexeme, token);
             }
         S5: // A + or - has followed a valid 'e' or 'E'
-            next = __bytes[curByte];
-            column++;
-            curByte++;
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
             if(DIGITS.Contains("" + next)){
                 lexeme += next;
                 goto S6;
             } else {
                 // Must remove the last two characters ((e or E) and (- or +))
                 lexeme = lexeme.Remove(lexeme.Length - 2);
-                curByte -= 3;
+                __curByte -= 3;
                 return new Tuple<string, TOKENS>(lexeme, token);
             }
         S6: // A float has been found, keep parsing digits
             token = TOKENS.FLOAT_LIT;
-            next = __bytes[curByte];
-            column++;
-            curByte++;
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
             if(DIGITS.Contains("" + next)){
                 lexeme += next;
                 goto S6;
             } else {
-                curByte--;
+                __curByte--;
                 return new Tuple<string, TOKENS>(lexeme, token);
             }
     }
