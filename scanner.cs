@@ -133,6 +133,9 @@ public class Scanner {
             if(next == '+' || next == '-'){
                 lexeme += next;
                 goto S5;
+            } else if (DIGITS.Contains("" + next)){
+                lexeme += next;
+                goto S6;
             } else {
                 // Must remove the last character (e or E) from lexeme
                 lexeme = lexeme.Remove(lexeme.Length - 1);
