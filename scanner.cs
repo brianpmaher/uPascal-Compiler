@@ -77,9 +77,7 @@ public class Scanner {
             } else {
                 __curByte--;
                 throw new Exception(
-                    "Dispatcher done goofed. Passed " +
-                    next + " to the digit FSA, but " +  next +
-                    "is not a digit."
+                    String.Format(Constants.ERROR_DISPATCHER_DIGIT, next)
                 );
             }
         S1: // One or more digits have been read
