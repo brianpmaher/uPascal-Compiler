@@ -100,12 +100,8 @@ public class Scanner {
                 goto S4;
             } else { // This is a success state, so reset the fp and return the lexeme
                 __curByte--; // reset the fp
-<<<<<<< HEAD
                 __column--;
-                return new Tuple<string, TOKENS>(lexeme, token);
-=======
                 return new Token(lexeme, token, __column, __line);
->>>>>>> d99839534a660de716f89fda1a5ef55c859efe81
             }
         S2: // A '.' has been read
             next = __bytes[__curByte];
@@ -118,12 +114,8 @@ public class Scanner {
                 // Must remove the last character (.) from lexeme
                 lexeme.Remove(lexeme.Length - 1);
                 __curByte -= 2;
-<<<<<<< HEAD
                 __column -=2;
-                return new Tuple<string, TOKENS>(lexeme, token);
-=======
                 return new Token(lexeme, token, __column, __line);
->>>>>>> d99839534a660de716f89fda1a5ef55c859efe81
             }
         S3: // Digits have followed a valid '.'
             token = TOKENS.FIXED_LIT;
@@ -138,12 +130,8 @@ public class Scanner {
                 goto S4;
             } else {
                 __curByte--;
-<<<<<<< HEAD
                 __column--;
-                return new Tuple<string, TOKENS>(lexeme, token);
-=======
                 return new Token(lexeme, token, __column, __line);
->>>>>>> d99839534a660de716f89fda1a5ef55c859efe81
             }
         S4: // An e or E has been read
             next = __bytes[__curByte];
@@ -159,12 +147,8 @@ public class Scanner {
                 // Must remove the last character (e or E) from lexeme
                 lexeme = lexeme.Remove(lexeme.Length - 1);
                 __curByte -= 2;
-<<<<<<< HEAD
                 __column -= 2;
-                return new Tuple<string, TOKENS>(lexeme, token);
-=======
                 return new Token(lexeme, token, __column, __line);
->>>>>>> d99839534a660de716f89fda1a5ef55c859efe81
             }
         S5: // A + or - has followed a valid 'e' or 'E'
             next = __bytes[__curByte];
@@ -177,12 +161,8 @@ public class Scanner {
                 // Must remove the last two characters ((e or E) and (- or +))
                 lexeme = lexeme.Remove(lexeme.Length - 2);
                 __curByte -= 3;
-<<<<<<< HEAD
                 __column -= 3;
-                return new Tuple<string, TOKENS>(lexeme, token);
-=======
                 return new Token(lexeme, token, __column, __line);
->>>>>>> d99839534a660de716f89fda1a5ef55c859efe81
             }
         S6: // A float has been found, keep parsing digits
             token = TOKENS.FLOAT_LIT;
@@ -194,12 +174,8 @@ public class Scanner {
                 goto S6;
             } else {
                 __curByte--;
-<<<<<<< HEAD
                 __column--;
-                return new Tuple<string, TOKENS>(lexeme, token);
-=======
                 return new Token(lexeme, token, __column, __line);
->>>>>>> d99839534a660de716f89fda1a5ef55c859efe81
             }
     }
 
