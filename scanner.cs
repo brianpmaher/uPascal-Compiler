@@ -105,6 +105,7 @@ public class Scanner {
                 goto S4;
             } else { // This is a success state, so reset the fp and return the lexeme
                 __curByte--; // reset the fp
+                __column--;
                 return new Token(lexeme, token, __column, __line);
             }
         S2: // A '.' has been read
@@ -118,6 +119,7 @@ public class Scanner {
                 // Must remove the last character (.) from lexeme
                 lexeme.Remove(lexeme.Length - 1);
                 __curByte -= 2;
+                __column -=2;
                 return new Token(lexeme, token, __column, __line);
             }
         S3: // Digits have followed a valid '.'
@@ -133,6 +135,7 @@ public class Scanner {
                 goto S4;
             } else {
                 __curByte--;
+                __column--;
                 return new Token(lexeme, token, __column, __line);
             }
         S4: // An e or E has been read
@@ -149,6 +152,7 @@ public class Scanner {
                 // Must remove the last character (e or E) from lexeme
                 lexeme = lexeme.Remove(lexeme.Length - 1);
                 __curByte -= 2;
+                __column -= 2;
                 return new Token(lexeme, token, __column, __line);
             }
         S5: // A + or - has followed a valid 'e' or 'E'
@@ -162,6 +166,7 @@ public class Scanner {
                 // Must remove the last two characters ((e or E) and (- or +))
                 lexeme = lexeme.Remove(lexeme.Length - 2);
                 __curByte -= 3;
+                __column -= 3;
                 return new Token(lexeme, token, __column, __line);
             }
         S6: // A float has been found, keep parsing digits
@@ -174,6 +179,7 @@ public class Scanner {
                 goto S6;
             } else {
                 __curByte--;
+                __column--;
                 return new Token(lexeme, token, __column, __line);
             }
     }
