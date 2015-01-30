@@ -175,7 +175,7 @@ public class Scanner {
     }
 
     private Token fsaPunct() { // doesn't include quotes
-        int column;
+        int column = __column;
         string  lexeme = "",
                 PUNCTUATION = Constants.PUNCTUATION;
         char    next;
