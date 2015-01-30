@@ -172,8 +172,90 @@ public class Scanner {
             }
     }
 
-    private int fsaPunct() { // doesn't include quotes
-        return 0; // change this
+    private Tuple<string, TOKENS> fsaPunct() { // doesn't include quotes
+        string  lexeme = "",
+                PUNCTUATION = Constants.PUNCTUATION;
+        char    next;
+        goto S0; // Smothers warning about S0 label not used
+        S0: // Start state
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(PUNCTUATION.Contains("" + next)){
+                lexeme += next;
+                switch(next) {
+                    case ':':
+                        goto S1;
+                    case ',':
+                        return new Tuple<string, TOKENS>(lexeme, TOKENS.COMMA);
+                    case '=':
+                        return new Tuple<string, TOKENS>(lexeme, TOKENS.EQUAL);
+                    case '/':
+                        return new Tuple<string, TOKENS>(lexeme, TOKENS.FLOAT_DIVIDE);
+                    case '>':
+                        goto S3;
+                    case '<':
+                        goto S2;
+                    case '(':
+                        return new Tuple<string, TOKENS>(lexeme, TOKENS.LPAREN);
+                    case '-':
+                        return new Tuple<string, TOKENS>(lexeme, TOKENS.MINUS);
+                    case '.':
+                        return new Tuple<string, TOKENS>(lexeme, TOKENS.PERIOD);
+                    case '+':
+                        return new Tuple<string, TOKENS>(lexeme, TOKENS.PLUS);
+                    case ')':
+                        return new Tuple<string, TOKENS>(lexeme, TOKENS.RPAREN);
+                    case ';':
+                        return new Tuple<string, TOKENS>(lexeme, TOKENS.SCOLON);
+                    case '*':
+                        return new Tuple<string, TOKENS>(lexeme, TOKENS.TIMES);
+                }
+            } else {
+                __curByte--;
+                throw new Exception(
+                    String.Format(Constants.ERROR_DISPATCHER_PUNCTUATION, next)
+                );
+            }
+        S1: // ":"
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '=') {
+                lexeme += next;
+                return new Tuple<string, TOKENS>(lexeme, TOKENS.ASSIGN);
+            } else {
+                __column--;
+                __curByte--;
+                return new Tuple<string, TOKENS>(lexeme, TOKENS.COLON);
+            }
+        S2: // "<"
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '=') {
+                lexeme += next;
+                return new Tuple<string, TOKENS>(lexeme, TOKENS.LEQUAL);
+            } else if(next == '>') {
+                lexeme += next;
+                return new Tuple<string, TOKENS>(lexeme, TOKENS.NEQUAL);
+            } else {
+                __column--;
+                __curByte--;
+                return new Tuple<string, TOKENS>(lexeme, TOKENS.LTHAN);
+            }
+        S3: // ">"
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '=') {
+                lexeme += next;
+                return new Tuple<string, TOKENS>(lexeme, TOKENS.GEQUAL);
+            } else {
+                __column--;
+                __curByte--;
+                return new Tuple<string, TOKENS>(lexeme, TOKENS.GTHAN);
+            }
     }
 
     private int fsaString() { // surrounded by quotes

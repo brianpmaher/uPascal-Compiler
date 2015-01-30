@@ -76,10 +76,15 @@ public static class Constants {
 
     // Error messages
     public const string ERROR_FILE_FORMAT = "ERROR: File format does not conform to format: <filename>.mp; ";
-    public const string ERROR_DISPATCHER_DIGIT = "ERROR: Dispatcher done goofed. Passed {0} to the digit FSA, but {0} is not a digit.";
+    public const string ERROR_DISPATCHER_DIGIT =
+        "ERROR: Dispatcher done goofed. Passed {0} to the digit FSA, but {0} is not a digit.";
+    public const string ERROR_DISPATCHER_PUNCTUATION =
+        "ERROR: Dispatcher done goofed. Passed {0} to the punctuation FSA, but {0} is not punctuation.";
 
     // List of whitespace characters
     public const string WHITESPACE = " \r\n\t";
-
+    // List of digit characters
     public const string DIGITS = "0123456789";
+    // List of punctuation characters
+    public const string PUNCTUATION = ":,=/><(-.+);*";
 }
