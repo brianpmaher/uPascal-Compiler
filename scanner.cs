@@ -7,7 +7,7 @@ public class Scanner {
     private int __column = 1;
     private int __line = 1;
     private char[] __bytes;
-    private List<Tuple<string, TOKENS>> __tokens;
+    private List<Token> __tokens;
 
     // Initializes the scanner and checks for file format
     public void initializeScanner(string fileName) {
@@ -64,7 +64,7 @@ public class Scanner {
         return 0; // change this
     }
 
-    private Tuple<string, TOKENS> fsaDigit() {
+    private Token fsaDigit() {
         string lexeme = "";
         string DIGITS = Constants.DIGITS;
         TOKENS token;
@@ -79,6 +79,7 @@ public class Scanner {
                 goto S1;
             } else {
                 __curByte--;
+                __column--;
                 throw new Exception(
                     String.Format(Constants.ERROR_DISPATCHER_DIGIT, next)
                 );
@@ -99,7 +100,7 @@ public class Scanner {
                 goto S4;
             } else { // This is a success state, so reset the fp and return the lexeme
                 __curByte--; // reset the fp
-                return new Tuple<string, TOKENS>(lexeme, token);
+                return new Token(lexeme, token, __column, __line);
             }
         S2: // A '.' has been read
             next = __bytes[__curByte];
@@ -112,7 +113,7 @@ public class Scanner {
                 // Must remove the last character (.) from lexeme
                 lexeme.Remove(lexeme.Length - 1);
                 __curByte -= 2;
-                return new Tuple<string, TOKENS>(lexeme, token);
+                return new Token(lexeme, token, __column, __line);
             }
         S3: // Digits have followed a valid '.'
             token = TOKENS.FIXED_LIT;
@@ -127,7 +128,7 @@ public class Scanner {
                 goto S4;
             } else {
                 __curByte--;
-                return new Tuple<string, TOKENS>(lexeme, token);
+                return new Token(lexeme, token, __column, __line);
             }
         S4: // An e or E has been read
             next = __bytes[__curByte];
@@ -143,7 +144,7 @@ public class Scanner {
                 // Must remove the last character (e or E) from lexeme
                 lexeme = lexeme.Remove(lexeme.Length - 1);
                 __curByte -= 2;
-                return new Tuple<string, TOKENS>(lexeme, token);
+                return new Token(lexeme, token, __column, __line);
             }
         S5: // A + or - has followed a valid 'e' or 'E'
             next = __bytes[__curByte];
@@ -156,7 +157,7 @@ public class Scanner {
                 // Must remove the last two characters ((e or E) and (- or +))
                 lexeme = lexeme.Remove(lexeme.Length - 2);
                 __curByte -= 3;
-                return new Tuple<string, TOKENS>(lexeme, token);
+                return new Token(lexeme, token, __column, __line);
             }
         S6: // A float has been found, keep parsing digits
             token = TOKENS.FLOAT_LIT;
@@ -168,11 +169,11 @@ public class Scanner {
                 goto S6;
             } else {
                 __curByte--;
-                return new Tuple<string, TOKENS>(lexeme, token);
+                return new Token(lexeme, token, __column, __line);
             }
     }
 
-    private Tuple<string, TOKENS> fsaPunct() { // doesn't include quotes
+    private Token fsaPunct() { // doesn't include quotes
         string  lexeme = "",
                 PUNCTUATION = Constants.PUNCTUATION;
         char    next;
@@ -187,29 +188,29 @@ public class Scanner {
                     case ':':
                         goto S1;
                     case ',':
-                        return new Tuple<string, TOKENS>(lexeme, TOKENS.COMMA);
+                        return new Token(lexeme, TOKENS.COMMA, __column, __line);
                     case '=':
-                        return new Tuple<string, TOKENS>(lexeme, TOKENS.EQUAL);
+                        return new Token(lexeme, TOKENS.EQUAL, __column, __line);
                     case '/':
-                        return new Tuple<string, TOKENS>(lexeme, TOKENS.FLOAT_DIVIDE);
+                        return new Token(lexeme, TOKENS.FLOAT_DIVIDE, __column, __line);
                     case '>':
                         goto S3;
                     case '<':
                         goto S2;
                     case '(':
-                        return new Tuple<string, TOKENS>(lexeme, TOKENS.LPAREN);
+                        return new Token(lexeme, TOKENS.LPAREN, __column, __line);
                     case '-':
-                        return new Tuple<string, TOKENS>(lexeme, TOKENS.MINUS);
+                        return new Token(lexeme, TOKENS.MINUS, __column, __line);
                     case '.':
-                        return new Tuple<string, TOKENS>(lexeme, TOKENS.PERIOD);
+                        return new Token(lexeme, TOKENS.PERIOD, __column, __line);
                     case '+':
-                        return new Tuple<string, TOKENS>(lexeme, TOKENS.PLUS);
+                        return new Token(lexeme, TOKENS.PLUS, __column, __line);
                     case ')':
-                        return new Tuple<string, TOKENS>(lexeme, TOKENS.RPAREN);
+                        return new Token(lexeme, TOKENS.RPAREN, __column, __line);
                     case ';':
-                        return new Tuple<string, TOKENS>(lexeme, TOKENS.SCOLON);
+                        return new Token(lexeme, TOKENS.SCOLON, __column, __line);
                     case '*':
-                        return new Tuple<string, TOKENS>(lexeme, TOKENS.TIMES);
+                        return new Token(lexeme, TOKENS.TIMES, __column, __line);
                 }
             } else {
                 __curByte--;
@@ -223,11 +224,11 @@ public class Scanner {
             __curByte++;
             if(next == '=') {
                 lexeme += next;
-                return new Tuple<string, TOKENS>(lexeme, TOKENS.ASSIGN);
+                return new Token(lexeme, TOKENS.ASSIGN, __column, __line);
             } else {
                 __column--;
                 __curByte--;
-                return new Tuple<string, TOKENS>(lexeme, TOKENS.COLON);
+                return new Token(lexeme, TOKENS.COLON, __column, __line);
             }
         S2: // "<"
             next = __bytes[__curByte];
@@ -235,14 +236,14 @@ public class Scanner {
             __curByte++;
             if(next == '=') {
                 lexeme += next;
-                return new Tuple<string, TOKENS>(lexeme, TOKENS.LEQUAL);
+                return new Token(lexeme, TOKENS.LEQUAL, __column, __line);
             } else if(next == '>') {
                 lexeme += next;
-                return new Tuple<string, TOKENS>(lexeme, TOKENS.NEQUAL);
+                return new Token(lexeme, TOKENS.NEQUAL, __column, __line);
             } else {
                 __column--;
                 __curByte--;
-                return new Tuple<string, TOKENS>(lexeme, TOKENS.LTHAN);
+                return new Token(lexeme, TOKENS.LTHAN, __column, __line);
             }
         S3: // ">"
             next = __bytes[__curByte];
@@ -250,11 +251,11 @@ public class Scanner {
             __curByte++;
             if(next == '=') {
                 lexeme += next;
-                return new Tuple<string, TOKENS>(lexeme, TOKENS.GEQUAL);
+                return new Token(lexeme, TOKENS.GEQUAL, __column, __line);
             } else {
                 __column--;
                 __curByte--;
-                return new Tuple<string, TOKENS>(lexeme, TOKENS.GTHAN);
+                return new Token(lexeme, TOKENS.GTHAN, __column, __line);
             }
     }
 
