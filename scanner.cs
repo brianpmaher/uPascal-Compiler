@@ -53,7 +53,7 @@ public class Scanner {
             return fsaDigit();
         } else if(Constants.PUNCTUATION.Contains("" + next)){
             return fsaPunct();
-        } else if(Constants.LETTERS.Contains("" + next)){
+        } else if(Constants.LETTERS.Contains("" + next) || next == '_'){
             return fsaLetter();
         } else if(next == '\''){
             return fsaString();
