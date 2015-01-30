@@ -232,7 +232,7 @@ public class Scanner {
         S2: // "<"
             next = __bytes[__curByte];
             __column++;
-            __curByte;
+            __curByte++;
             if(next == '=') {
                 lexeme += next;
                 return new Tuple<string, TOKENS>(lexeme, TOKENS.LEQUAL);
