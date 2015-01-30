@@ -27,6 +27,7 @@ public class Scanner {
 
                 // Loop until EOF, ignoring whitespace
                 while(__curByte < length){
+                    // TODO: Handle comments like we handle whitespace
                     if(ws.Contains("" + __bytes[__curByte])) {
                         if(__bytes[__curByte] == '\n'){
                             __line++;
@@ -37,7 +38,7 @@ public class Scanner {
                         __curByte++;
                         continue;
                     } else {
-                        getNextToken();
+                        __tokens.Add(getNextToken());
                     }
                 }
             }
@@ -46,22 +47,26 @@ public class Scanner {
         }
     }
 
-    // This is the dispatcher
-    private int getNextToken() {
-        return 0; // change this
-    }
-
-    private int getLineNumber() {
-        return 0; // change this
-    }
-
-    private int getColumnNumber() {
-        return 0; // change this
+    private Token getNextToken() {
+        char next = __bytes[__curByte];
+        if(Constants.DIGITS.Contains("" + next)){
+            return fsaDigit();
+        } else if(Constants.PUNCTUATION.Contains("" + next)){
+            return fsaPunct();
+        } else if(Constants.LETTERS.Contains("" + next)){
+            return fsaLetter();
+        } else if(next == '\''){
+            return fsaString();
+        } else {
+            __curByte++;
+            __column++;
+            return new Token("" + next, TOKENS.ERROR, __column - 1, __line);
+        }
     }
 
     // Finite State Automatons
-    private int fsaLetter() {
-        return 0; // change this
+    private Token fsaLetter() {
+        return null; // change this
     }
 
     private Token fsaDigit() {
@@ -259,7 +264,7 @@ public class Scanner {
             }
     }
 
-    private int fsaString() { // surrounded by quotes
-        return 0; // change this
+    private Token fsaString() { // surrounded by quotes
+        return null; // change this
     }
 }
