@@ -60,8 +60,54 @@ public class Scanner {
     }
 
     // Finite State Automatons
-    private int fsaLetter() {
-        return 0; // change this
+    private Tuple<string, TOKENS> fsaLetter() {
+        string lexeme = "",
+        LETTERS = Constants.LETTERS,
+        DIGITS = Constants.DIGITS;
+        char next;
+        goto S0;
+        S0: //start state
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '_') {
+                lexeme += next;
+                goto S1;
+            } else if (LETTERS.Contains("" + next)) {
+                lexeme += next;
+                goto S2;
+            } else {
+                __column--;
+                __curByte--;
+                throw new Exception(String.Format(Constants.ERROR_DISPATCHER_LETTERS, next));
+            }
+        S1: // underscore route
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if (LETTERS.Contains("" + next) || DIGITS.Contains("" + next)) {
+                lexeme += next;
+                goto S2;
+            } else {
+                __column--;
+                __curByte--;
+                throw new Exception(String.Format(Constants.ERROR_DISPATCHER_LETTERS, next));
+            }
+        S2: // letter/digit
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if (LETTERS.Contains("" + next) || DIGITS.Contains("" + next)) {
+                lexeme += next;
+                goto S2;
+            } else if (next == '_') {
+                lexeme += next;
+                goto S1;
+            } else {
+                __column--;
+                __curByte--;
+                return new Tuple<string, TOKENS> (lexeme, TOKENS.IDENTIFIER);
+            }
     }
 
     private Tuple<string, TOKENS> fsaDigit() {
