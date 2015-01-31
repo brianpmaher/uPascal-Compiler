@@ -67,8 +67,8 @@ public class Scanner {
     private Token fsaDigit() {
         string lexeme = "";
         string DIGITS = Constants.DIGITS;
-        TOKENS token;
         char next;
+        TOKENS token;
         goto S0; // Smothers warning about S0 label not used
         S0: // Start state
             next = __bytes[__curByte];
@@ -265,7 +265,63 @@ public class Scanner {
             }
     }
 
-    private int fsaString() { // surrounded by quotes
-        return 0; // change this
+    private Token fsaString() { // surrounded by quotes
+        string lexeme = "";
+        char next;
+        int column = __column;
+        goto S0;
+        S0:
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '\''){
+                lexeme += next;
+                goto S1;
+            } else {
+                return new Token(lexeme, TOKENS.ERROR, column, __line);
+            }
+        S1:
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '\''){
+                lexeme += next;
+                goto S2;
+            } else if(next == '\n'){
+                __column--;
+                __curByte--;
+                return new Token(lexeme, TOKENS.ERROR, column, __line);
+            } else {
+                lexeme += next;
+                goto S3;
+            }
+        S2:
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '\''){
+                lexeme += next;
+                goto S1;
+            } else {
+                // Success, reset fp
+                __column--;
+                __curByte--;
+                return new Token(lexeme, TOKENS.STRING_LIT, column, __line);
+            }
+        S3:
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '\''){
+                lexeme += next;
+                goto S2;
+            } else if( next == '\n'){
+                __column--;
+                __curByte--;
+                return new Token(lexeme, TOKENS.ERROR, column, __line);
+            } else {
+                lexeme += next;
+                goto S3;
+            }
     }
 }
