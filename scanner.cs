@@ -290,7 +290,7 @@ public class Scanner {
             } else if(next == '\n'){
                 __column--;
                 __curByte--;
-                return new Token(lexeme, TOKENS.ERROR, column, __line);
+                return new Token(lexeme, TOKENS.RUN_STRING, column, __line);
             } else {
                 lexeme += next;
                 goto S3;
@@ -319,7 +319,7 @@ public class Scanner {
             } else if( next == '\n'){
                 __column--;
                 __curByte--;
-                return new Token(lexeme, TOKENS.ERROR, column, __line);
+                return new Token(lexeme, TOKENS.RUN_STRING, column, __line);
             } else {
                 lexeme += next;
                 goto S3;
