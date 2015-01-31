@@ -275,7 +275,7 @@ public class Scanner {
             __column++;
             __curByte++;
             if(next == '\''){
-                lexeme += next;
+                // We don't include the opening apostrophe
                 goto S1;
             } else {
                 return new Token(lexeme, TOKENS.ERROR, column, __line);
@@ -304,6 +304,7 @@ public class Scanner {
                 goto S1;
             } else {
                 // Success, reset fp
+                // We don't include the closing apostrophe
                 __column--;
                 __curByte--;
                 return new Token(lexeme, TOKENS.STRING_LIT, column, __line);
