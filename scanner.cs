@@ -285,7 +285,7 @@ public class Scanner {
             __column++;
             __curByte++;
             if(next == '\''){
-                lexeme += next;
+                // Closing apostrophe, don't include
                 goto S2;
             } else if(next == '\n'){
                 __column--;
@@ -300,7 +300,8 @@ public class Scanner {
             __column++;
             __curByte++;
             if(next == '\''){
-                // Don't add to the lexeme, because we have to discard one
+                // This apostrophe we include
+                lexeme += next;
                 goto S1;
             } else {
                 // Success, reset fp
@@ -314,7 +315,7 @@ public class Scanner {
             __column++;
             __curByte++;
             if(next == '\''){
-                lexeme += next;
+                // Potentially closing apostrophe, don't include
                 goto S2;
             } else if( next == '\n'){
                 __column--;
