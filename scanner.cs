@@ -300,7 +300,7 @@ public class Scanner {
             __column++;
             __curByte++;
             if(next == '\''){
-                lexeme += next;
+                // Don't add to the lexeme, because we have to discard one
                 goto S1;
             } else {
                 // Success, reset fp
