@@ -60,7 +60,11 @@ public class Scanner {
     }
 
     // Finite State Automatons
+<<<<<<< HEAD
     private Token fsaLetter() {
+=======
+    private Tuple<string, TOKENS> fsaLetter() {
+>>>>>>> 22bf12013bce6f8040b6b17f2d16776212ac2def
         string lexeme = "",
         LETTERS = Constants.LETTERS,
         DIGITS = Constants.DIGITS;
@@ -106,6 +110,7 @@ public class Scanner {
             } else {
                 __column--;
                 __curByte--;
+<<<<<<< HEAD
                 if (Constants.DICTIONARY.ContainsKey(lexeme)){
                     switch (lexeme)
                     {
@@ -152,6 +157,9 @@ public class Scanner {
                     return new Token (lexeme, TOKENS.IDENTIFIER, __column, __line);
                 } 
                 throw new Exception(String.Format(Constants.ERROR_DISPATCHER_LETTERS, next));
+=======
+                return new Tuple<string, TOKENS> (lexeme, TOKENS.IDENTIFIER);
+>>>>>>> 22bf12013bce6f8040b6b17f2d16776212ac2def
             }
     }
 
