@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 // All token IDs (add more as we come across them)
 public enum TOKENS {
@@ -80,6 +81,8 @@ public static class Constants {
         "ERROR: Dispatcher done goofed. Passed {0} to the digit FSA, but {0} is not a digit.";
     public const string ERROR_DISPATCHER_PUNCTUATION =
         "ERROR: Dispatcher done goofed. Passed {0} to the punctuation FSA, but {0} is not punctuation.";
+    public const string ERROR_DISPATCHER_LETTERS =
+        "ERROR: Dispatcher done goofed. Passed {0} to the letters FSA, but {0} is not a letter";
 
     // List of whitespace characters
     public const string WHITESPACE = " \r\n\t";
@@ -87,4 +90,16 @@ public static class Constants {
     public const string DIGITS = "0123456789";
     // List of punctuation characters
     public const string PUNCTUATION = ":,=/><(-.+);*";
+    // List of letters
+    public const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    // Dictionary of reserved words
+    public static readonly Dictionary<string, int> DICTIONARY = new Dictionary<string, int>() 
+    {
+        {"and", 1}, {"begin", 2}, {"Boolean", 3}, {"div", 4}, {"do", 5}, {"downto", 6},
+        {"else", 7}, {"end", 8}, {"false", 9}, {"fixed", 10}, {"float", 11}, {"for", 12},
+        {"function", 13}, {"if", 14}, {"integer", 15}, {"mod", 16}, {"not", 17}, 
+        {"or", 18}, {"procedure", 19}, {"program", 20}, {"read", 21}, {"repeat", 22},
+        {"string", 23}, {"then", 24}, {"true", 25}, {"to", 26}, {"type", 27}, {"until", 28}, 
+        {"var", 29}, {"while", 30}, {"write", 31}, {"writeln", 32}
+    };
 }
