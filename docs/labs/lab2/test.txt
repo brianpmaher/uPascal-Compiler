@@ -1,0 +1,6 @@
+Scanning test.mp for tokens...
+BEGIN
+    x := 2;
+END
+  AND        scanned from []
+...
