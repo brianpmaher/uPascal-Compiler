@@ -124,8 +124,8 @@ public class Scanner {
         int column = __column;
         string lexeme = "";
         string DIGITS = Constants.DIGITS;
-        TOKENS token;
         char next;
+        TOKENS token;
         goto S0; // Smothers warning about S0 label not used
         S0: // Start state
             next = __bytes[__curByte];
@@ -324,6 +324,64 @@ public class Scanner {
     }
 
     private Token fsaString() { // surrounded by quotes
-        return null; // change this
+        string lexeme = "";
+        char next;
+        int column = __column;
+        goto S0;
+        S0:
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '\''){
+                // We don't include the opening apostrophe
+                goto S1;
+            } else {
+                return new Token(lexeme, TOKENS.ERROR, column, __line);
+            }
+        S1:
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '\''){
+                // Closing apostrophe, don't include
+                goto S2;
+            } else if(next == '\n'){
+                __column--;
+                __curByte--;
+                return new Token(lexeme, TOKENS.RUN_STRING, column, __line);
+            } else {
+                lexeme += next;
+                goto S3;
+            }
+        S2:
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '\''){
+                // This apostrophe we include
+                lexeme += next;
+                goto S1;
+            } else {
+                // Success, reset fp
+                // We don't include the closing apostrophe
+                __column--;
+                __curByte--;
+                return new Token(lexeme, TOKENS.STRING_LIT, column, __line);
+            }
+        S3:
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '\''){
+                // Potentially closing apostrophe, don't include
+                goto S2;
+            } else if( next == '\n'){
+                __column--;
+                __curByte--;
+                return new Token(lexeme, TOKENS.RUN_STRING, column, __line);
+            } else {
+                lexeme += next;
+                goto S3;
+            }
     }
 }
