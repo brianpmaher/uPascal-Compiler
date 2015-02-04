@@ -7,26 +7,26 @@ public class Scanner {
     private int __column = 1;
     private int __line = 1;
     private char[] __bytes;
-    private List<Token> __tokens;
+    private List<Token> __tokens = new List<Token>();
 
     // Initializes the scanner and checks for file format
-    public void initializeScanner(string fileName) {
+    public List<Token> initializeScanner(string fileName) {
         try {
             if(!fileName.EndsWith(".mp")) {
                 // File format exception
                 throw new Exception(Constants.ERROR_FILE_FORMAT);
             } else {
                 // Grab all bytes from the file
-                StreamReader reader = new StreamReader(fileName);
+                StreamReader reader = new StreamReader(
+                    Path.GetFullPath(fileName));
                 string temp = reader.ReadToEnd();
                 __bytes = temp.ToCharArray();
-
                 // Caching variables to save memory
                 int length = __bytes.Length;
                 string ws = Constants.WHITESPACE;
-
                 // Loop until EOF, ignoring whitespace
                 while(__curByte < length){
+                    // TODO: Handle comments like we handle whitespace
                     if(ws.Contains("" + __bytes[__curByte])) {
                         if(__bytes[__curByte] == '\n'){
                             __line++;
@@ -37,34 +37,40 @@ public class Scanner {
                         __curByte++;
                         continue;
                     } else {
-                        getNextToken();
+                        __tokens.Add(getNextToken());
                     }
                 }
             }
         } catch(Exception ex) {
             Console.WriteLine(ex);
         }
+        return __tokens;
     }
 
-    // This is the dispatcher
-    private int getNextToken() {
-        return 0; // change this
-    }
-
-    private int getLineNumber() {
-        return 0; // change this
-    }
-
-    private int getColumnNumber() {
-        return 0; // change this
+    private Token getNextToken() {
+        char next = __bytes[__curByte];
+        if(Constants.DIGITS.Contains("" + next)){
+            return fsaDigit();
+        } else if(Constants.PUNCTUATION.Contains("" + next)){
+            return fsaPunct();
+        } else if(Constants.LETTERS.Contains("" + next) || next == '_'){
+            return fsaLetter();
+        } else if(next == '\''){
+            return fsaString();
+        } else {
+            __curByte++;
+            __column++;
+            return new Token("" + next, TOKENS.ERROR, __column - 1, __line);
+        }
     }
 
     // Finite State Automatons
-    private int fsaLetter() {
-        return 0; // change this
+    private Token fsaLetter() {
+        return null; // change this
     }
 
     private Token fsaDigit() {
+        int column = __column;
         string lexeme = "";
         string DIGITS = Constants.DIGITS;
         char next;
@@ -101,7 +107,7 @@ public class Scanner {
             } else { // This is a success state, so reset the fp and return the lexeme
                 __curByte--; // reset the fp
                 __column--;
-                return new Token(lexeme, token, __column, __line);
+                return new Token(lexeme, token, column, __line);
             }
         S2: // A '.' has been read
             next = __bytes[__curByte];
@@ -115,7 +121,7 @@ public class Scanner {
                 lexeme.Remove(lexeme.Length - 1);
                 __curByte -= 2;
                 __column -=2;
-                return new Token(lexeme, token, __column, __line);
+                return new Token(lexeme, token, column, __line);
             }
         S3: // Digits have followed a valid '.'
             token = TOKENS.FIXED_LIT;
@@ -148,7 +154,7 @@ public class Scanner {
                 lexeme = lexeme.Remove(lexeme.Length - 1);
                 __curByte -= 2;
                 __column -= 2;
-                return new Token(lexeme, token, __column, __line);
+                return new Token(lexeme, token, column, __line);
             }
         S5: // A + or - has followed a valid 'e' or 'E'
             next = __bytes[__curByte];
@@ -162,7 +168,7 @@ public class Scanner {
                 lexeme = lexeme.Remove(lexeme.Length - 2);
                 __curByte -= 3;
                 __column -= 3;
-                return new Token(lexeme, token, __column, __line);
+                return new Token(lexeme, token, column, __line);
             }
         S6: // A float has been found, keep parsing digits
             token = TOKENS.FLOAT_LIT;
@@ -175,11 +181,12 @@ public class Scanner {
             } else {
                 __curByte--;
                 __column--;
-                return new Token(lexeme, token, __column, __line);
+                return new Token(lexeme, token, column, __line);
             }
     }
 
     private Token fsaPunct() { // doesn't include quotes
+        int column = __column;
         string  lexeme = "",
                 PUNCTUATION = Constants.PUNCTUATION;
         char    next;
@@ -194,29 +201,29 @@ public class Scanner {
                     case ':':
                         goto S1;
                     case ',':
-                        return new Token(lexeme, TOKENS.COMMA, __column, __line);
+                        return new Token(lexeme, TOKENS.COMMA, column, __line);
                     case '=':
-                        return new Token(lexeme, TOKENS.EQUAL, __column, __line);
+                        return new Token(lexeme, TOKENS.EQUAL, column, __line);
                     case '/':
-                        return new Token(lexeme, TOKENS.FLOAT_DIVIDE, __column, __line);
+                        return new Token(lexeme, TOKENS.FLOAT_DIVIDE, column, __line);
                     case '>':
                         goto S3;
                     case '<':
                         goto S2;
                     case '(':
-                        return new Token(lexeme, TOKENS.LPAREN, __column, __line);
+                        return new Token(lexeme, TOKENS.LPAREN, column, __line);
                     case '-':
-                        return new Token(lexeme, TOKENS.MINUS, __column, __line);
+                        return new Token(lexeme, TOKENS.MINUS, column, __line);
                     case '.':
-                        return new Token(lexeme, TOKENS.PERIOD, __column, __line);
+                        return new Token(lexeme, TOKENS.PERIOD, column, __line);
                     case '+':
-                        return new Token(lexeme, TOKENS.PLUS, __column, __line);
+                        return new Token(lexeme, TOKENS.PLUS, column, __line);
                     case ')':
-                        return new Token(lexeme, TOKENS.RPAREN, __column, __line);
+                        return new Token(lexeme, TOKENS.RPAREN, column, __line);
                     case ';':
-                        return new Token(lexeme, TOKENS.SCOLON, __column, __line);
+                        return new Token(lexeme, TOKENS.SCOLON, column, __line);
                     case '*':
-                        return new Token(lexeme, TOKENS.TIMES, __column, __line);
+                        return new Token(lexeme, TOKENS.TIMES, column, __line);
                 }
             } else {
                 __curByte--;
@@ -230,11 +237,11 @@ public class Scanner {
             __curByte++;
             if(next == '=') {
                 lexeme += next;
-                return new Token(lexeme, TOKENS.ASSIGN, __column, __line);
+                return new Token(lexeme, TOKENS.ASSIGN, column, __line);
             } else {
                 __column--;
                 __curByte--;
-                return new Token(lexeme, TOKENS.COLON, __column, __line);
+                return new Token(lexeme, TOKENS.COLON, column, __line);
             }
         S2: // "<"
             next = __bytes[__curByte];
@@ -242,14 +249,14 @@ public class Scanner {
             __curByte++;
             if(next == '=') {
                 lexeme += next;
-                return new Token(lexeme, TOKENS.LEQUAL, __column, __line);
+                return new Token(lexeme, TOKENS.LEQUAL, column, __line);
             } else if(next == '>') {
                 lexeme += next;
-                return new Token(lexeme, TOKENS.NEQUAL, __column, __line);
+                return new Token(lexeme, TOKENS.NEQUAL, column, __line);
             } else {
                 __column--;
                 __curByte--;
-                return new Token(lexeme, TOKENS.LTHAN, __column, __line);
+                return new Token(lexeme, TOKENS.LTHAN, column, __line);
             }
         S3: // ">"
             next = __bytes[__curByte];
@@ -257,11 +264,11 @@ public class Scanner {
             __curByte++;
             if(next == '=') {
                 lexeme += next;
-                return new Token(lexeme, TOKENS.GEQUAL, __column, __line);
+                return new Token(lexeme, TOKENS.GEQUAL, column, __line);
             } else {
                 __column--;
                 __curByte--;
-                return new Token(lexeme, TOKENS.GTHAN, __column, __line);
+                return new Token(lexeme, TOKENS.GTHAN, column, __line);
             }
     }
 
