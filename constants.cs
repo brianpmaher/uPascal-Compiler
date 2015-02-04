@@ -74,6 +74,7 @@ public enum TOKENS {
 public static class Constants {
     // Generic string messages
     public const string USAGE_HELP = "Usage: mono YµP.exe <µPascal filename> <output filename>";
+    public const string TOKEN_TABLE_HEADER = "token\t\tlexeme\tline\tcolumn";
 
     // Error messages
     public const string ERROR_FILE_FORMAT = "ERROR: File format does not conform to format: <filename>.mp; ";
