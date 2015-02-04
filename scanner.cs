@@ -113,7 +113,7 @@ public class Scanner {
             } else {
                 __column--;
                 __curByte--;
-                if (Constants.RESERVE_WORDS.ContainsKey(lexeme)){
+                if (Constants.RESERVE_WORDS.ContainsKey(lexeme.ToLower())){
                     return new Token (lexeme, Constants.RESERVE_WORDS[lexeme], column, __line);
                 } else {
                     return new Token (lexeme, TOKENS.IDENTIFIER, column, __line);
