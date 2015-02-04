@@ -13,10 +13,12 @@ public class Driver {
         Console.WriteLine(Constants.TOKEN_TABLE_HEADER);
         foreach(Token token in tokens){
             Console.WriteLine(
-                token.Type.ToString() + "\t" +
-                token.Lexeme + "\t" +
-                token.Line + "\t" +
-                token.Column);
+                "{0,-12}{1,8}{2,8}\t{3}",
+                token.Type.ToString(),
+                token.Line,
+                token.Column,
+                token.Lexeme
+            );
         }
     }
 }
