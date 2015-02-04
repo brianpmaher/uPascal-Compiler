@@ -60,8 +60,58 @@ public class Scanner {
     }
 
     // Finite State Automatons
-    private int fsaLetter() {
-        return 0; // change this
+    private Token fsaLetter() {
+        string lexeme = "",
+        LETTERS = Constants.LETTERS,
+        DIGITS = Constants.DIGITS;
+        char next;
+        goto S0;
+        S0: //start state
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if(next == '_') {
+                lexeme += next;
+                goto S1;
+            } else if (LETTERS.Contains("" + next)) {
+                lexeme += next;
+                goto S2;
+            } else {
+                __column--;
+                __curByte--;
+                throw new Exception(String.Format(Constants.ERROR_DISPATCHER_LETTERS, next));
+            }
+        S1: // underscore route
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if (LETTERS.Contains("" + next) || DIGITS.Contains("" + next)) {
+                lexeme += next;
+                goto S2;
+            } else {
+                __column--;
+                __curByte--;
+                throw new Exception(String.Format(Constants.ERROR_DISPATCHER_LETTERS, next));
+            }
+        S2: // letter/digit
+            next = __bytes[__curByte];
+            __column++;
+            __curByte++;
+            if (LETTERS.Contains("" + next) || DIGITS.Contains("" + next)) {
+                lexeme += next;
+                goto S2;
+            } else if (next == '_') {
+                lexeme += next;
+                goto S1;
+            } else {
+                __column--;
+                __curByte--;
+                if (Constants.RESERVE_WORDS.ContainsKey(lexeme)){
+                    return new Token (lexeme, Constants.RESERVE_WORDS[lexeme], __column, __line);
+                } else {
+                    return new Token (lexeme, TOKENS.IDENTIFIER, __column, __line);
+                } 
+            }
     }
 
     private Token fsaDigit() {
