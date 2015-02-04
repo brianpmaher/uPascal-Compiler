@@ -7,24 +7,23 @@ public class Scanner {
     private int __column = 1;
     private int __line = 1;
     private char[] __bytes;
-    private List<Token> __tokens;
+    private List<Token> __tokens = new List<Token>();
 
     // Initializes the scanner and checks for file format
-    public void initializeScanner(string fileName) {
+    public List<Token> initializeScanner(string fileName) {
         try {
             if(!fileName.EndsWith(".mp")) {
                 // File format exception
                 throw new Exception(Constants.ERROR_FILE_FORMAT);
             } else {
                 // Grab all bytes from the file
-                StreamReader reader = new StreamReader(fileName);
+                StreamReader reader = new StreamReader(
+                    Path.GetFullPath(fileName));
                 string temp = reader.ReadToEnd();
                 __bytes = temp.ToCharArray();
-
                 // Caching variables to save memory
                 int length = __bytes.Length;
                 string ws = Constants.WHITESPACE;
-
                 // Loop until EOF, ignoring whitespace
                 while(__curByte < length){
                     // TODO: Handle comments like we handle whitespace
@@ -45,6 +44,7 @@ public class Scanner {
         } catch(Exception ex) {
             Console.WriteLine(ex);
         }
+        return __tokens;
     }
 
     private Token getNextToken() {
