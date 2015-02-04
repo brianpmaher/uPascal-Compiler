@@ -95,13 +95,23 @@ public static class Constants {
     // List of letters
     public const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     // Dictionary of reserved words
-    public static readonly Dictionary<string, int> DICTIONARY = new Dictionary<string, int>() 
+    public static readonly Dictionary<string, TOKENS> RESERVE_WORDS = new Dictionary<string, TOKENS>() 
     {
-        {"and", 1}, {"begin", 2}, {"Boolean", 3}, {"div", 4}, {"do", 5}, {"downto", 6},
-        {"else", 7}, {"end", 8}, {"false", 9}, {"fixed", 10}, {"float", 11}, {"for", 12},
-        {"function", 13}, {"if", 14}, {"integer", 15}, {"mod", 16}, {"not", 17}, 
-        {"or", 18}, {"procedure", 19}, {"program", 20}, {"read", 21}, {"repeat", 22},
-        {"string", 23}, {"then", 24}, {"true", 25}, {"to", 26}, {"type", 27}, {"until", 28}, 
-        {"var", 29}, {"while", 30}, {"write", 31}, {"writeln", 32}
+        {"and", TOKENS.AND},            {"begin", TOKENS.BEGIN}, 
+        {"Boolean", TOKENS.BOOLEAN},    {"downto", TOKENS.DOWNTO},
+        {"div", TOKENS.DIV},            {"do", TOKENS.DO}, 
+        {"else", TOKENS.ELSE},          {"end", TOKENS.END}, 
+        {"false", TOKENS.FALSE},        {"for", TOKENS.FOR},
+        {"fixed", TOKENS.FIXED},        {"float", TOKENS.FLOAT}, 
+        {"function", TOKENS.FUNCTION},  {"if", TOKENS.IF}, 
+        {"integer", TOKENS.INTEGER},    {"mod", TOKENS.MOD}, 
+        {"not", TOKENS.NOT},            {"then", TOKENS.THEN}, 
+        {"or", TOKENS.OR},              {"procedure", TOKENS.PROCEDURE}, 
+        {"program", TOKENS.PROGRAM},    {"read", TOKENS.READ}, 
+        {"repeat", TOKENS.REPEAT},      {"string", TOKENS.STRING}, 
+        {"true", TOKENS.TRUE},          {"to", TOKENS.TO}, 
+        {"type", TOKENS.TYPE},          {"while", TOKENS.WHILE}, 
+        {"until", TOKENS.UNTIL},        {"var", TOKENS.VAR}, 
+        {"write", TOKENS.WRITE},        {"writeln", TOKENS.WRITELN}
     };
 }

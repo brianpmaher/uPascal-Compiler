@@ -106,52 +106,11 @@ public class Scanner {
             } else {
                 __column--;
                 __curByte--;
-                if (Constants.DICTIONARY.ContainsKey(lexeme)){
-                    switch (lexeme)
-                    {
-                        case "and": return new Token (lexeme, TOKENS.AND, __column, __line);
-                        case "begin": return new Token (lexeme, TOKENS.BEGIN, __column, __line);
-                        case "Boolean": 
-                            return new Token (lexeme, TOKENS.BOOLEAN, __column, __line);
-                        case "div": return new Token (lexeme, TOKENS.DIV, __column, __line);
-                        case "do": return new Token (lexeme, TOKENS.DO, __column, __line);
-                        case "downto": return new Token (lexeme, TOKENS.DOWNTO, __column, __line);
-                        case "else": return new Token (lexeme, TOKENS.ELSE, __column, __line);
-                        case "end": return new Token (lexeme, TOKENS.END, __column, __line);
-                        case "false": return new Token (lexeme, TOKENS.FALSE, __column, __line);
-                        case "fixed": return new Token (lexeme, TOKENS.FIXED, __column, __line);
-                        case "float": return new Token (lexeme, TOKENS.FLOAT, __column, __line);
-                        case "for": return new Token (lexeme, TOKENS.FOR, __column, __line);
-                        case "function": 
-                            return new Token (lexeme, TOKENS.FUNCTION, __column, __line);
-                        case "if": return new Token (lexeme, TOKENS.IF, __column, __line);
-                        case "integer": 
-                            return new Token (lexeme, TOKENS.INTEGER, __column, __line);
-                        case "mod": return new Token (lexeme, TOKENS.MOD, __column, __line);
-                        case "not": return new Token (lexeme, TOKENS.NOT, __column, __line);
-                        case "or": return new Token (lexeme, TOKENS.OR, __column, __line);
-                        case "procedure": 
-                            return new Token (lexeme, TOKENS.PROCEDURE, __column, __line);
-                        case "program": 
-                            return new Token (lexeme, TOKENS.PROGRAM, __column, __line);
-                        case "read": return new Token (lexeme, TOKENS.READ, __column, __line);
-                        case "repeat": return new Token (lexeme, TOKENS.REPEAT, __column, __line);
-                        case "string": return new Token (lexeme, TOKENS.STRING, __column, __line);
-                        case "then": return new Token (lexeme, TOKENS.THEN, __column, __line);
-                        case "true": return new Token (lexeme, TOKENS.TRUE, __column, __line);
-                        case "to": return new Token (lexeme, TOKENS.TO, __column, __line);
-                        case "type": return new Token (lexeme, TOKENS.TYPE, __column, __line);
-                        case "until": return new Token (lexeme, TOKENS.UNTIL, __column, __line);
-                        case "var": return new Token (lexeme, TOKENS.VAR, __column, __line);
-                        case "while": return new Token (lexeme, TOKENS.WHILE, __column, __line);
-                        case "write": return new Token (lexeme, TOKENS.WRITE, __column, __line);
-                        case "writeln": 
-                            return new Token (lexeme, TOKENS.WRITELN, __column, __line);
-                    }
+                if (Constants.RESERVE_WORDS.ContainsKey(lexeme)){
+                    return new Token (lexeme, Constants.RESERVE_WORDS[lexeme], __column, __line);
                 } else {
                     return new Token (lexeme, TOKENS.IDENTIFIER, __column, __line);
                 } 
-                throw new Exception(String.Format(Constants.ERROR_DISPATCHER_LETTERS, next));
             }
     }
 
