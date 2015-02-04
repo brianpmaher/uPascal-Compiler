@@ -66,6 +66,7 @@ public class Scanner {
 
     // Finite State Automatons
     private Token fsaLetter() {
+        int column = __column;
         string lexeme = "",
         LETTERS = Constants.LETTERS,
         DIGITS = Constants.DIGITS;
@@ -112,9 +113,9 @@ public class Scanner {
                 __column--;
                 __curByte--;
                 if (Constants.RESERVE_WORDS.ContainsKey(lexeme)){
-                    return new Token (lexeme, Constants.RESERVE_WORDS[lexeme], __column, __line);
+                    return new Token (lexeme, Constants.RESERVE_WORDS[lexeme], column, __line);
                 } else {
-                    return new Token (lexeme, TOKENS.IDENTIFIER, __column, __line);
+                    return new Token (lexeme, TOKENS.IDENTIFIER, column, __line);
                 } 
             }
     }
