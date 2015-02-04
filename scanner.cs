@@ -83,9 +83,10 @@ public class Scanner {
                 lexeme += next;
                 goto S2;
             } else {
+                lexeme += next;
                 __column--;
                 __curByte--;
-                throw new Exception(String.Format(Constants.ERROR_DISPATCHER_LETTERS, next));
+                return new Token (lexeme, TOKENS.ERROR, column, __line);
             }
         S1: // underscore route
             next = __bytes[__curByte];
@@ -97,7 +98,7 @@ public class Scanner {
             } else {
                 __column--;
                 __curByte--;
-                throw new Exception(String.Format(Constants.ERROR_DISPATCHER_LETTERS, next));
+                return new Token (lexeme, TOKENS.ERROR, column, __line);
             }
         S2: // letter/digit
             next = __bytes[__curByte];
@@ -116,7 +117,7 @@ public class Scanner {
                     return new Token (lexeme, Constants.RESERVE_WORDS[lexeme], column, __line);
                 } else {
                     return new Token (lexeme, TOKENS.IDENTIFIER, column, __line);
-                } 
+                }
             }
     }
 
