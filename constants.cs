@@ -12,7 +12,7 @@ public enum TOKENS {
     DOWNTO,         // "downto"
     ELSE,           // "else"
     END,            // "end"
-    FALSE,          // "False"
+    FALSE,          // "false"
     FIXED,          // "fixed"
     FLOAT,          // "float"
     FOR,            // "for"
@@ -90,29 +90,29 @@ public static class Constants {
     public const string WHITESPACE = " \r\n\t";
     // List of digit characters
     public const string DIGITS = "0123456789";
-    
+
     // List of punctuation characters
     public const string PUNCTUATION = ":,=/><(-.+);*";
     // List of letters
     public const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     // Dictionary of reserved words
-    public static readonly Dictionary<string, TOKENS> RESERVE_WORDS = new Dictionary<string, TOKENS>() 
+    public static readonly Dictionary<string, TOKENS> RESERVE_WORDS = new Dictionary<string, TOKENS>()
     {
-        {"and", TOKENS.AND},            {"begin", TOKENS.BEGIN}, 
-        {"Boolean", TOKENS.BOOLEAN},    {"downto", TOKENS.DOWNTO},
-        {"div", TOKENS.DIV},            {"do", TOKENS.DO}, 
-        {"else", TOKENS.ELSE},          {"end", TOKENS.END}, 
+        {"and", TOKENS.AND},            {"begin", TOKENS.BEGIN},
+        {"boolean", TOKENS.BOOLEAN},    {"downto", TOKENS.DOWNTO},
+        {"div", TOKENS.DIV},            {"do", TOKENS.DO},
+        {"else", TOKENS.ELSE},          {"end", TOKENS.END},
         {"false", TOKENS.FALSE},        {"for", TOKENS.FOR},
-        {"fixed", TOKENS.FIXED},        {"float", TOKENS.FLOAT}, 
-        {"function", TOKENS.FUNCTION},  {"if", TOKENS.IF}, 
-        {"integer", TOKENS.INTEGER},    {"mod", TOKENS.MOD}, 
-        {"not", TOKENS.NOT},            {"then", TOKENS.THEN}, 
-        {"or", TOKENS.OR},              {"procedure", TOKENS.PROCEDURE}, 
-        {"program", TOKENS.PROGRAM},    {"read", TOKENS.READ}, 
-        {"repeat", TOKENS.REPEAT},      {"string", TOKENS.STRING}, 
-        {"true", TOKENS.TRUE},          {"to", TOKENS.TO}, 
-        {"type", TOKENS.TYPE},          {"while", TOKENS.WHILE}, 
-        {"until", TOKENS.UNTIL},        {"var", TOKENS.VAR}, 
+        {"fixed", TOKENS.FIXED},        {"float", TOKENS.FLOAT},
+        {"function", TOKENS.FUNCTION},  {"if", TOKENS.IF},
+        {"integer", TOKENS.INTEGER},    {"mod", TOKENS.MOD},
+        {"not", TOKENS.NOT},            {"then", TOKENS.THEN},
+        {"or", TOKENS.OR},              {"procedure", TOKENS.PROCEDURE},
+        {"program", TOKENS.PROGRAM},    {"read", TOKENS.READ},
+        {"repeat", TOKENS.REPEAT},      {"string", TOKENS.STRING},
+        {"true", TOKENS.TRUE},          {"to", TOKENS.TO},
+        {"type", TOKENS.TYPE},          {"while", TOKENS.WHILE},
+        {"until", TOKENS.UNTIL},        {"var", TOKENS.VAR},
         {"write", TOKENS.WRITE},        {"writeln", TOKENS.WRITELN}
     };
 }
