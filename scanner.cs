@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-public class Scanner {
+public partial class Scanner {
     private int __curByte = 0;
     private int __column = 1;
     private int __line = 1;
@@ -135,6 +135,7 @@ public class Scanner {
                 );
             }
         S1: // One or more digits have been read
+            Console.WriteLine("__curByte = " + __curByte);
             token = TOKENS.INTEGER_LIT;
             next = __bytes[__curByte];
             __column++;
@@ -149,8 +150,10 @@ public class Scanner {
                 lexeme += next;
                 goto S4;
             } else { // This is a success state, so reset the fp and return the lexeme
+                Console.WriteLine("else statement");
                 __curByte--; // reset the fp
                 __column--;
+                Console.WriteLine("Were about to exit");
                 return new Token(lexeme, token, __column, __line);
             }
         S2: // A '.' has been read
