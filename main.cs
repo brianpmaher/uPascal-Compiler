@@ -10,13 +10,17 @@ public class Driver {
         }
         Scanner scanner = new Scanner();
         List<Token> tokens = scanner.initializeScanner(args[0]);
-        Console.WriteLine(Constants.TOKEN_TABLE_HEADER);
+        Console.WriteLine(Constants.TOKEN_TABLE_HEADER_FORMAT,
+            "TOKEN", "LINE", "COLUMN", "LEXEME"
+        );
         foreach(Token token in tokens){
             Console.WriteLine(
-                token.Type.ToString() + "\t" +
-                token.Lexeme + "\t" +
-                token.Line + "\t" +
-                token.Column);
+                "{0,-12}{1,8}{2,8}\t{3}",
+                token.Type.ToString(),
+                token.Line,
+                token.Column,
+                token.Lexeme
+            );
         }
     }
 }
