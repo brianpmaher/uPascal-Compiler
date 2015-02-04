@@ -87,4 +87,6 @@ public static class Constants {
     public const string DIGITS = "0123456789";
     // List of punctuation characters
     public const string PUNCTUATION = ":,=/><(-.+);*";
+    // List of letter characters
+    public const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 }
