@@ -87,7 +87,6 @@ public class Scanner {
                 __column--;
                 __curByte--;
                 return new Token (lexeme, TOKENS.ERROR, column, __line);
-                throw new Exception(String.Format(Constants.ERROR_DISPATCHER_LETTERS, next));
             }
         S1: // underscore route
             next = __bytes[__curByte];
