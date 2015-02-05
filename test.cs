@@ -184,6 +184,26 @@ public partial class Scanner {
 		__testResults += testToken.Type == TOKENS.INTEGER ? true : false;
 		__testResults += Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
 		__testResults += "\n";
+
+		// validReserveWord2 Test
+		__testResults += validReserveWord2 + "\nValid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?: ";
+		__bytes = (validReserveWord2 + "\n").ToCharArray();
+		__curByte = 0;
+		testToken = fsaLetter();
+		__testResults += testToken.Lexeme == validReserveWord2 ? true : false;
+		__testResults += testToken.Type == TOKENS.BEGIN ? true : false;
+		__testResults += Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
+		__testResults += "\n";
+
+		// validReserveWord3 Test
+		__testResults += validReserveWord3 + "\nValid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?: ";
+		__bytes = (validReserveWord3 + "\n").ToCharArray();
+		__curByte = 0;
+		testToken = fsaLetter();
+		__testResults += testToken.Lexeme == validReserveWord3 ? true : false;
+		__testResults += testToken.Type == TOKENS.END ? true : false;
+		__testResults += Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
+		__testResults += "\n";
 	}
 
 	public void TestStringFSA(){
