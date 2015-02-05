@@ -6,6 +6,7 @@ public partial class Scanner {
 	public void TestDriver() {
 		this.__testResults = "";
 		TestDigitFSA();
+		TestLetterFSA();
 		Console.WriteLine(__testResults);
 	}
 
@@ -117,12 +118,72 @@ public partial class Scanner {
 	}
 
 	public void TestLetterFSA(){
+		Token testToken;
 		string validIdentifier1 = "worksGood";
 		string validIdentifier2 = "thisWorksExcellentRight";
 		string validIdentifier3 = "does_this_work";
 		string validIdentifier4 = "th1s_sh0u1d_w0rk_too";
 		string validIdentifier5 = "1_";
-		string validReserveWord1 = "int";
+		string validReserveWord1 = "integer";
+		string validReserveWord2 = "begin";
+		string validReserveWord3 = "end";
+
+
+		__testResults += "\nTesting LetterFSA...\n";
+		// validIdentifier1 Test
+		__testResults += validIdentifier1 + "\nValid identifier? Valid identifier Token?: ";
+		__bytes = (validIdentifier1 + "\n").ToCharArray();
+		__curByte = 0;
+		testToken = fsaLetter();
+		__testResults += testToken.Lexeme == validIdentifier1 ? true : false;
+		__testResults += testToken.Type == TOKENS.IDENTIFIER ? true : false;
+		__testResults += "\n";
+
+		// validIdentifier2 Test
+		__testResults += validIdentifier2 + "\nValid identifier? Valid identifier Token?: ";
+		__bytes = (validIdentifier2 + "\n").ToCharArray();
+		__curByte = 0;
+		testToken = fsaLetter();
+		__testResults += testToken.Lexeme == validIdentifier2 ? true : false;
+		__testResults += testToken.Type == TOKENS.IDENTIFIER ? true : false;
+		__testResults += "\n";
+
+		// validIdentifier3 Test
+		__testResults += validIdentifier3 + "\nValid identifier? Valid identifier Token?: ";
+		__bytes = (validIdentifier3 + "\n").ToCharArray();
+		__curByte = 0;
+		testToken = fsaLetter();
+		__testResults += testToken.Lexeme == validIdentifier3 ? true : false;
+		__testResults += testToken.Type == TOKENS.IDENTIFIER ? true : false;
+		__testResults += "\n";
+
+		// validIdentifier4 Test
+		__testResults += validIdentifier4 + "\nValid identifier? Valid identifier Token?: ";
+		__bytes = (validIdentifier4 + "\n").ToCharArray();
+		__curByte = 0;
+		testToken = fsaLetter();
+		__testResults += testToken.Lexeme == validIdentifier4 ? true : false;
+		__testResults += testToken.Type == TOKENS.IDENTIFIER ? true : false;
+		__testResults += "\n";
+
+		// validIdentifier5 Test
+		__testResults += validIdentifier5 + "\nValid identifier? Valid identifier Token?: ";
+		__bytes = (validIdentifier5 + "\n").ToCharArray();
+		__curByte = 0;
+		testToken = fsaLetter();
+		__testResults += testToken.Lexeme == validIdentifier5 ? true : false;
+		__testResults += testToken.Type == TOKENS.IDENTIFIER ? true : false;
+		__testResults += "\n";
+
+		// validReserveWord1 Test
+		__testResults += validReserveWord1 + "\nValid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?: ";
+		__bytes = (validReserveWord1 + "\n").ToCharArray();
+		__curByte = 0;
+		testToken = fsaLetter();
+		__testResults += testToken.Lexeme == validReserveWord1 ? true : false;
+		__testResults += testToken.Type == TOKENS.INTEGER ? true : false;
+		__testResults += Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
+		__testResults += "\n";
 	}
 
 	public void TestStringFSA(){
