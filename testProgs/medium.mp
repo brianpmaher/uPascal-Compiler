@@ -1,12 +1,12 @@
-(* 		Author: 	Sean Rogers
+{* 		Author: 	Sean Rogers
 		Date: 		Jan 27, 2015
 		Description: Finds the average of five predetermined numbers. 
 		Version: 1.0 - the original
-*)
+*}
  
 program Medium;
 
-(* Constant Declarations are first *)
+{* Constant Declarations are first *}
 const
 	first = 45;
 	second = 7;
@@ -14,7 +14,7 @@ const
 	fourth = 2;
 	fifth = 34;
 	
-(* Then the variable/subprogram declarations/definitions *)
+{* Then the variable/subprogram declarations/definitions *}
 var
 	average : real;
 	sum : integer; 
@@ -34,4 +34,4 @@ begin
 	
 	average := sum / 5;
 	writeln ('Average = ', average);
-end. 
+end.
