@@ -117,7 +117,12 @@ public partial class Scanner {
 	}
 
 	public void TestLetterFSA(){
-
+		string validIdentifier1 = "worksGood";
+		string validIdentifier2 = "thisWorksExcellentRight";
+		string validIdentifier3 = "does_this_work";
+		string validIdentifier4 = "th1s_sh0u1d_w0rk_too";
+		string validIdentifier5 = "1_";
+		string validReserveWord1 = "int";
 	}
 
 	public void TestStringFSA(){
