@@ -27,10 +27,36 @@ public class Scanner {
                     throw new Exception(Constants.ERROR_NO_NEWLINE);
                 }
                 string ws = Constants.WHITESPACE;
+                bool commentFlag = false;
                 // Loop until EOF, ignoring whitespace
                 while(__curByte < length){
-                    // TODO: Handle comments like we handle whitespace
-                    if(ws.Contains("" + __bytes[__curByte])) {
+                    // handle comments
+                    if(__bytes[__curByte] == '{') {
+                        // check for run on comment error
+                        if(commentFlag) {
+                            __tokens.Add(new Token("{", TOKENS.RUN_COMMENT, __column, __line));
+                        }
+                        commentFlag = true;
+                        __line++;
+                        __curByte++;
+                        continue;
+                    }
+                    // in comment mode, skip everything, look for end of comment
+                    else if(commentFlag) {
+                        if(__bytes[__curByte] == '}') {
+                            commentFlag = false;
+                            __column++;
+                        } else if(__bytes[__curByte] == '\n') {
+                            __line++;
+                            __column = 0;
+                        } else {
+                            __column++;
+                        }
+                        __curByte++;
+                        continue;
+                    }
+                    // handle whitespace
+                    else if(ws.Contains("" + __bytes[__curByte])) {
                         if(__bytes[__curByte] == '\n'){
                             __line++;
                             __column = 0;
@@ -39,7 +65,9 @@ public class Scanner {
                         }
                         __curByte++;
                         continue;
-                    } else {
+                    }
+                    // handle tokens
+                    else {
                         __tokens.Add(getNextToken());
                     }
                 }
