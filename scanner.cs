@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-public class Scanner {
+public partial class Scanner {
     private int __curByte = 0;
     private int __column = 1;
     private int __line = 1;
