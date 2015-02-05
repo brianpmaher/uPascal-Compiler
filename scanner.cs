@@ -23,6 +23,9 @@ public class Scanner {
                 __bytes = temp.ToCharArray();
                 // Caching variables to save memory
                 int length = __bytes.Length;
+                if(__bytes[length-1] != '\n'){
+                    throw new Exception(Constants.ERROR_NO_NEWLINE);
+                }
                 string ws = Constants.WHITESPACE;
                 bool commentFlag = false;
                 // Loop until EOF, ignoring whitespace
@@ -68,6 +71,7 @@ public class Scanner {
                         __tokens.Add(getNextToken());
                     }
                 }
+                __tokens.Add(new Token("EOF", TOKENS.EOF, __column, __line));
             }
         } catch(Exception ex) {
             Console.WriteLine(ex);

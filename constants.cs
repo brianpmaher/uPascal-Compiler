@@ -78,7 +78,7 @@ public static class Constants {
 
     // Error messages
     public const string ERROR_FILE_FORMAT = "ERROR: File format does not conform to format: <filename>.mp; ";
-
+    public const string ERROR_NO_NEWLINE = "ERROR: File must end in a newline character;";
     public const string ERROR_DISPATCHER_DIGIT =
         "ERROR: Dispatcher done goofed. Passed {0} to the digit FSA, but {0} is not a digit.";
     public const string ERROR_DISPATCHER_PUNCTUATION =
