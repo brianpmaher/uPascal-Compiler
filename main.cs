@@ -9,10 +9,6 @@ public class Driver {
         if(args.Length == 0 || args.Length > 2) {
             Console.WriteLine(Constants.USAGE_HELP);
             Environment.Exit(0);
-        } else { // Begin compiling
-            Scanner scanner = new Scanner();
-            scanner.TestDriver();
-            scanner.initializeScanner(args[0]);
         }
         Scanner scanner = new Scanner();
         List<Token> tokens = scanner.initializeScanner(args[0]);
@@ -28,5 +24,6 @@ public class Driver {
                 token.Lexeme
             );
         }
+        scanner.TestDriver();
     }
 }
