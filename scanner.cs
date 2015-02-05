@@ -143,6 +143,7 @@ public partial class Scanner {
                 );
             }
         S1: // One or more digits have been read
+            Console.WriteLine("__curByte = " + __curByte);
             token = TOKENS.INTEGER_LIT;
             next = __bytes[__curByte];
             __column++;
@@ -157,6 +158,7 @@ public partial class Scanner {
                 lexeme += next;
                 goto S4;
             } else { // This is a success state, so reset the fp and return the lexeme
+                Console.WriteLine("else statement");
                 __curByte--; // reset the fp
                 __column--;
                 return new Token(lexeme, token, column, __line);

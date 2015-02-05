@@ -127,6 +127,4 @@ public partial class Scanner {
 	public void TestPunctFSA(){
 
 	}
-
-
 }
