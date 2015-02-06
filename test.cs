@@ -1,6 +1,18 @@
+/*
+ *  CSCI 468
+ *  Group 2
+ *  Jesse Brown
+ *  Brian Maher
+ *  Sean Rogers
+ */
+
 using System;
 
+/*
+ *  Scanner tests : contains unit tests for the Scanner class
+ */
 public partial class Scanner {
+    // Test output
 	private string __testResults;
 
 	public void TestDriver() {
@@ -12,7 +24,7 @@ public partial class Scanner {
 		Console.WriteLine(__testResults);
 	}
 
-	public void TestDigitFSA(){
+	public void TestDigitFSA() {
 		Token testToken;
 		string validInteger = "1234567890";
 		string validFixed = "1234567890.1234567890";
@@ -119,7 +131,7 @@ public partial class Scanner {
 		__testResults += "\n";
 	}
 
-	public void TestLetterFSA(){
+	public void TestLetterFSA() {
 		Token testToken;
 		string validIdentifier1 = "worksGood";
 		string validIdentifier2 = "thisWorksExcellentRight";
@@ -183,9 +195,9 @@ public partial class Scanner {
 		testToken = fsaLetter();
 		__testResults += testToken.Lexeme == validReserveWord1 ? true : false;
 		__testResults += testToken.Type == TOKENS.INTEGER ? true : false;
-		__testResults += 
+		__testResults +=
 			Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
-		//__testResults += " " + validReserveWord1 + 
+		//__testResults += " " + validReserveWord1 +
 		//	" Valid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?";
 		__testResults += "\n";
 
@@ -195,9 +207,9 @@ public partial class Scanner {
 		testToken = fsaLetter();
 		__testResults += testToken.Lexeme == validReserveWord2 ? true : false;
 		__testResults += testToken.Type == TOKENS.BEGIN ? true : false;
-		__testResults += 
+		__testResults +=
 			Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
-		//__testResults += " " + validReserveWord2 + 
+		//__testResults += " " + validReserveWord2 +
 		//	" Valid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?";
 		__testResults += "\n";
 
@@ -207,14 +219,14 @@ public partial class Scanner {
 		testToken = fsaLetter();
 		__testResults += testToken.Lexeme == validReserveWord3 ? true : false;
 		__testResults += testToken.Type == TOKENS.END ? true : false;
-		__testResults += 
+		__testResults +=
 			Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
-		//__testResults += " " + validReserveWord3 + 
+		//__testResults += " " + validReserveWord3 +
 		//	" Valid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?";
 		__testResults += "\n";
 	}
 
-	public void TestStringFSA(){
+	public void TestStringFSA() {
 		Token testToken;
 		string validString1 = "'Sean''s string should look good.'";
 		string validString2 = "'Stephens'' string has many apostrophes'";
@@ -226,7 +238,7 @@ public partial class Scanner {
 		testToken = fsaString();
 		__testResults += testToken.Lexeme == "Sean's string should look good." ? true : false;
 		__testResults += testToken.Type == TOKENS.STRING_LIT ? true : false;
-		//__testResults += " " + 
+		//__testResults += " " +
 		// 	"Sean's string should look good." + " Valid string? Valid string token?";
 		__testResults += "\n";
 
@@ -236,12 +248,12 @@ public partial class Scanner {
 		testToken = fsaString();
 		__testResults += testToken.Lexeme == "Stephens' string has many apostrophes" ? true : false;
 		__testResults += testToken.Type == TOKENS.STRING_LIT ? true : false;
-		//__testResults += " " + 
+		//__testResults += " " +
 		//	"Stephens' string has many apostrophes" + " Valid string? Valid string token? ";
 		__testResults += "\n";
 	}
 
-	public void TestPunctFSA(){
+	public void TestPunctFSA() {
 		Token testToken;
 		string validPunct1 = "<";
 		string validPunct2 = "<=";
