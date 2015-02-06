@@ -83,7 +83,7 @@ public class Scanner {
         char next = __bytes[__curByte];
         if(Constants.DIGITS.Contains("" + next)){
             return fsaDigit();
-        } else if(Constants.PUNCTUATION.Contains("" + next)){
+        } else if(Constants.PUNCTUATION.ContainsKey("" + next)){
             return fsaPunct();
         } else if(Constants.LETTERS.Contains("" + next) || next == '_'){
             return fsaLetter();
@@ -271,43 +271,24 @@ public class Scanner {
 
     private Token fsaPunct() { // doesn't include quotes
         int column = __column;
-        string  lexeme = "",
-                PUNCTUATION = Constants.PUNCTUATION;
+        string  lexeme = "";
+        Dictionary<string, TOKENS> PUNCTUATION = Constants.PUNCTUATION;
         char    next;
         goto S0; // Smothers warning about S0 label not used
         S0: // Start state
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(PUNCTUATION.Contains("" + next)){
+            if(PUNCTUATION.ContainsKey("" + next)){
                 lexeme += next;
-                switch(next) {
-                    case ':':
-                        goto S1;
-                    case ',':
-                        return new Token(lexeme, TOKENS.COMMA, column, __line);
-                    case '=':
-                        return new Token(lexeme, TOKENS.EQUAL, column, __line);
-                    case '/':
-                        return new Token(lexeme, TOKENS.FLOAT_DIVIDE, column, __line);
-                    case '>':
-                        goto S3;
-                    case '<':
-                        goto S2;
-                    case '(':
-                        return new Token(lexeme, TOKENS.LPAREN, column, __line);
-                    case '-':
-                        return new Token(lexeme, TOKENS.MINUS, column, __line);
-                    case '.':
-                        return new Token(lexeme, TOKENS.PERIOD, column, __line);
-                    case '+':
-                        return new Token(lexeme, TOKENS.PLUS, column, __line);
-                    case ')':
-                        return new Token(lexeme, TOKENS.RPAREN, column, __line);
-                    case ';':
-                        return new Token(lexeme, TOKENS.SCOLON, column, __line);
-                    case '*':
-                        return new Token(lexeme, TOKENS.TIMES, column, __line);
+                if(next == ':') {
+                    goto S1;
+                } else if(next == '<') {
+                    goto S2;
+                } else if(next == '>') {
+                    goto S3;
+                } else {
+                    return new Token(lexeme, Constants.PUNCTUATION[lexeme], column, __line);
                 }
             } else {
                 __curByte--;
