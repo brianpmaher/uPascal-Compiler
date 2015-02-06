@@ -77,27 +77,42 @@ public static class Constants {
     public const string TOKEN_TABLE_HEADER_FORMAT = "{0,-12}{1,8}{2,8}\t{3}";
 
     // Error messages
-    public const string ERROR_FILE_FORMAT = "ERROR: File format does not conform to format: <filename>.mp; ";
+    public const string ERROR_FILE_FORMAT =
+        "ERROR: File format does not conform to format: <filename>.mp; ";
     public const string ERROR_NO_NEWLINE = "ERROR: File must end in a newline character;";
     public const string ERROR_DISPATCHER_DIGIT =
         "ERROR: Dispatcher done goofed. Passed {0} to the digit FSA, but {0} is not a digit.";
     public const string ERROR_DISPATCHER_PUNCTUATION =
-        "ERROR: Dispatcher done goofed. Passed {0} to the punctuation FSA, but {0} is not punctuation.";
+        "ERROR: Dispatcher done goofed. Passed {0} to the punctuation FSA, but {0} is not " +
+        "punctuation.";
     public const string ERROR_DISPATCHER_LETTERS =
         "ERROR: Dispatcher done goofed. Passed {0} to the letters FSA, but {0} is not a letter";
 
     // List of whitespace characters
     public const string WHITESPACE = " \r\n\t";
+
     // List of digit characters
     public const string DIGITS = "0123456789";
 
-    // List of punctuation characters
-    public const string PUNCTUATION = ":,=/><(-.+);*";
     // List of letters
     public const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    // Dictionary of reserved words
-    public static readonly Dictionary<string, TOKENS> RESERVE_WORDS = new Dictionary<string, TOKENS>()
+
+    // Dictionary of punctuation
+    public static readonly Dictionary<string, TOKENS> PUNCTUATION = new Dictionary<string, TOKENS>()
     {
+        {":=", TOKENS.ASSIGN},          {":", TOKENS.COLON},
+        {",", TOKENS.COMMA},            {"=", TOKENS.EQUAL},
+        {"/", TOKENS.FLOAT_DIVIDE},     {">=", TOKENS.GEQUAL},
+        {">", TOKENS.GTHAN},            {"<=", TOKENS.LEQUAL},
+        {"(", TOKENS.LPAREN},           {"<", TOKENS.LTHAN},
+        {"-", TOKENS.MINUS},            {"<>", TOKENS.NEQUAL},
+        {".", TOKENS.PERIOD},           {"+", TOKENS.PLUS},
+        {")", TOKENS.RPAREN},           {";", TOKENS.SCOLON},
+        {"*", TOKENS.TIMES}
+    };
+
+    // Dictionary of reserved words
+    public static readonly Dictionary<string, TOKENS> RESERVE_WORDS = new Dictionary<string, TOKENS>(){
         {"and", TOKENS.AND},            {"begin", TOKENS.BEGIN},
         {"boolean", TOKENS.BOOLEAN},    {"downto", TOKENS.DOWNTO},
         {"div", TOKENS.DIV},            {"do", TOKENS.DO},
