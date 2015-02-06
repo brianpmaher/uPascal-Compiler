@@ -183,8 +183,10 @@ public partial class Scanner {
 		testToken = fsaLetter();
 		__testResults += testToken.Lexeme == validReserveWord1 ? true : false;
 		__testResults += testToken.Type == TOKENS.INTEGER ? true : false;
-		__testResults += Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
-		//__testResults += " " + validReserveWord1 + " Valid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?";
+		__testResults += 
+			Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
+		//__testResults += " " + validReserveWord1 + 
+		//	" Valid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?";
 		__testResults += "\n";
 
 		// validReserveWord2 Test
@@ -193,8 +195,10 @@ public partial class Scanner {
 		testToken = fsaLetter();
 		__testResults += testToken.Lexeme == validReserveWord2 ? true : false;
 		__testResults += testToken.Type == TOKENS.BEGIN ? true : false;
-		__testResults += Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
-		//__testResults += " " + validReserveWord2 + " Valid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?";
+		__testResults += 
+			Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
+		//__testResults += " " + validReserveWord2 + 
+		//	" Valid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?";
 		__testResults += "\n";
 
 		// validReserveWord3 Test
@@ -203,8 +207,10 @@ public partial class Scanner {
 		testToken = fsaLetter();
 		__testResults += testToken.Lexeme == validReserveWord3 ? true : false;
 		__testResults += testToken.Type == TOKENS.END ? true : false;
-		__testResults += Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
-		//__testResults += " " + validReserveWord3 + " Valid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?";
+		__testResults += 
+			Constants.RESERVE_WORDS.ContainsKey(testToken.Lexeme.ToLower()) ? true : false;
+		//__testResults += " " + validReserveWord3 + 
+		//	" Valid reserve word? Valid reserve word Token? In RESERVE_WORDS dictionary?";
 		__testResults += "\n";
 	}
 
@@ -220,7 +226,8 @@ public partial class Scanner {
 		testToken = fsaString();
 		__testResults += testToken.Lexeme == "Sean's string should look good." ? true : false;
 		__testResults += testToken.Type == TOKENS.STRING_LIT ? true : false;
-		//__testResults += " " + "Sean's string should look good." + " Valid string? Valid string token?";
+		//__testResults += " " + 
+		// 	"Sean's string should look good." + " Valid string? Valid string token?";
 		__testResults += "\n";
 
 		// validString2 Test
@@ -229,7 +236,8 @@ public partial class Scanner {
 		testToken = fsaString();
 		__testResults += testToken.Lexeme == "Stephens' string has many apostrophes" ? true : false;
 		__testResults += testToken.Type == TOKENS.STRING_LIT ? true : false;
-		//__testResults += " " + "Stephens' string has many apostrophes" + " Valid string? Valid string token? ";
+		//__testResults += " " + 
+		//	"Stephens' string has many apostrophes" + " Valid string? Valid string token? ";
 		__testResults += "\n";
 	}
 
