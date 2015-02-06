@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-public class Scanner {
+public partial class Scanner {
     private int __curByte = 0;
     private int __column = 1;
     private int __line = 1;
@@ -174,7 +174,7 @@ public class Scanner {
                     String.Format(Constants.ERROR_DISPATCHER_DIGIT, next)
                 );
             }
-        S1: // One or more digits have been read
+        S1: // One or more digits have been read\
             token = TOKENS.INTEGER_LIT;
             next = __bytes[__curByte];
             __column++;
