@@ -1,12 +1,29 @@
+/*
+ *  CSCI 468
+ *  Group 2
+ *  Jesse Brown
+ *  Brian Maher
+ *  Sean Rogers
+ */
+
 using System;
 using System.IO;
 using System.Collections.Generic;
 
+/*
+ *  Scanner : Iterates through every character in the µPascal file generating a list of tokens for
+ *          : each matched token type.
+ */
 public partial class Scanner {
-    private int __curByte = 0;
-    private int __column = 1;
-    private int __line = 1;
-    private char[] __bytes;
+    // Current byte pointer in the file µPascal file
+    private int     __curByte = 0,
+    // Current column number in the µPascal file
+                    __column = 1,
+    // Current line number in the µPascal file
+                    __line = 1;
+    // Array of all bytes in the µPascal file
+    private char[]  __bytes;
+    // Array of tokens as they are set by the scanner during iteration
     private List<Token> __tokens = new List<Token>();
 
     // Initializes the scanner and checks for file format
@@ -16,23 +33,27 @@ public partial class Scanner {
                 // File format exception
                 throw new Exception(Constants.ERROR_FILE_FORMAT);
             } else {
-                // Grab all bytes from the file
-                StreamReader reader = new StreamReader(
-                    Path.GetFullPath(fileName));
+                // Grab all bytes from the file and store them in the __bytes character array
+                StreamReader reader = new StreamReader(Path.GetFullPath(fileName));
                 string temp = reader.ReadToEnd();
                 __bytes = temp.ToCharArray();
-                // Caching variables to save memory
+
+                // Caching length to save memory
                 int length = __bytes.Length;
                 if(__bytes[length-1] != '\n'){
                     throw new Exception(Constants.ERROR_NO_NEWLINE);
                 }
+
+                // String of whitespace characters
                 string ws = Constants.WHITESPACE;
+                // Flag for if the current byte being read is contained within a comment
                 bool commentFlag = false;
+
                 // Loop until EOF, ignoring whitespace
                 while(__curByte < length){
-                    // handle comments
+                    // Handle comments
                     if(__bytes[__curByte] == '{') {
-                        // check for run on comment error
+                        // Check for run on comment error
                         if(commentFlag) {
                             __tokens.Add(new Token("{", TOKENS.RUN_COMMENT, __column, __line));
                         }
@@ -41,7 +62,7 @@ public partial class Scanner {
                         __curByte++;
                         continue;
                     }
-                    // in comment mode, skip everything, look for end of comment
+                    // In comment mode, skip everything, look for end of comment
                     else if(commentFlag) {
                         if(__bytes[__curByte] == '}') {
                             commentFlag = false;
@@ -55,18 +76,18 @@ public partial class Scanner {
                         __curByte++;
                         continue;
                     }
-                    // handle whitespace
+                    // Handle whitespace
                     else if(ws.Contains("" + __bytes[__curByte])) {
                         if(__bytes[__curByte] == '\n'){
                             __line++;
                             __column = 0;
-                        } else if(__bytes[__curByte] == ' '){
+                        } else if(__bytes[__curByte] == ' ') {
                             __column++;
                         }
                         __curByte++;
                         continue;
                     }
-                    // handle tokens
+                    // Handle tokens
                     else {
                         __tokens.Add(getNextToken());
                     }
@@ -79,13 +100,17 @@ public partial class Scanner {
         return __tokens;
     }
 
+    // Dispatches the current character to the appropriate FSA
     private Token getNextToken() {
+        // Current/Next byte to look at from the array of bytes
         char next = __bytes[__curByte];
-        if(Constants.DIGITS.Contains("" + next)){
+
+        // Dispatch to appropriate FSA
+        if(Constants.DIGITS.Contains("" + next)) {
             return fsaDigit();
-        } else if(Constants.PUNCTUATION.ContainsKey("" + next)){
+        } else if(Constants.PUNCTUATION.ContainsKey("" + next)) {
             return fsaPunct();
-        } else if(Constants.LETTERS.Contains("" + next) || next == '_'){
+        } else if(Constants.LETTERS.Contains("" + next) || next == '_') {
             return fsaLetter();
         } else if(next == '\''){
             return fsaString();
@@ -96,15 +121,17 @@ public partial class Scanner {
         }
     }
 
-    // Finite State Automatons
+    // ===== Finite State Automatons =====
+    // Letter FSA to handle identifiers and keywords and return appropriate tokens for each
     private Token fsaLetter() {
-        int column = __column;
-        string lexeme = "",
-        LETTERS = Constants.LETTERS,
-        DIGITS = Constants.DIGITS;
-        char next;
+        int     column = __column;
+        string  lexeme = "",
+                LETTERS = Constants.LETTERS,
+                DIGITS = Constants.DIGITS;
+        char    next;
+
         goto S0;
-        S0: //start state
+        S0: // Start state
             next = __bytes[__curByte];
             __column++;
             __curByte++;
@@ -120,7 +147,7 @@ public partial class Scanner {
                 __curByte--;
                 return new Token (lexeme, TOKENS.ERROR, column, __line);
             }
-        S1: // underscore route
+        S1: // Underscore route
             next = __bytes[__curByte];
             __column++;
             __curByte++;
@@ -132,7 +159,7 @@ public partial class Scanner {
                 __curByte--;
                 return new Token (lexeme, TOKENS.ERROR, column, __line);
             }
-        S2: // letter/digit
+        S2: // Letter/digit
             next = __bytes[__curByte];
             __column++;
             __curByte++;
@@ -145,7 +172,7 @@ public partial class Scanner {
             } else {
                 __column--;
                 __curByte--;
-                if (Constants.RESERVE_WORDS.ContainsKey(lexeme.ToLower())){
+                if (Constants.RESERVE_WORDS.ContainsKey(lexeme.ToLower())) {
                     return new Token (lexeme, Constants.RESERVE_WORDS[lexeme], column, __line);
                 } else {
                     return new Token (lexeme, TOKENS.IDENTIFIER, column, __line);
@@ -153,18 +180,20 @@ public partial class Scanner {
             }
     }
 
+    // Digit FSA to handle tokens beginning with digits and returns appropriate tokens for each
     private Token fsaDigit() {
-        int column = __column;
-        string lexeme = "";
-        string DIGITS = Constants.DIGITS;
-        char next;
-        TOKENS token;
-        goto S0; // Smothers warning about S0 label not used
+        int     column = __column;
+        string  lexeme = "",
+                DIGITS = Constants.DIGITS;
+        char    next;
+        TOKENS  token;
+
+        goto S0;
         S0: // Start state
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(DIGITS.Contains("" + next)){
+            if(DIGITS.Contains("" + next)) {
                 lexeme += next;
                 goto S1;
             } else {
@@ -174,18 +203,18 @@ public partial class Scanner {
                     String.Format(Constants.ERROR_DISPATCHER_DIGIT, next)
                 );
             }
-        S1: // One or more digits have been read\
+        S1: // One or more digits have been read
             token = TOKENS.INTEGER_LIT;
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(DIGITS.Contains("" + next)){
+            if(DIGITS.Contains("" + next)) {
                 lexeme += next;
                 goto S1;
             } else if(next == '.'){
                 lexeme += next;
                 goto S2;
-            } else if(next == 'e' || next == 'E'){
+            } else if(next == 'e' || next == 'E') {
                 lexeme += next;
                 goto S4;
             } else { // This is a success state, so reset the fp and return the lexeme
@@ -197,14 +226,14 @@ public partial class Scanner {
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(DIGITS.Contains("" + next)){
+            if(DIGITS.Contains("" + next)) {
                 lexeme += next;
                 goto S3;
             } else {
                 // Must remove the last character (.) from lexeme
                 lexeme.Remove(lexeme.Length - 1);
                 __curByte -= 2;
-                __column -=2;
+                __column -= 2;
                 return new Token(lexeme, token, column, __line);
             }
         S3: // Digits have followed a valid '.'
@@ -212,10 +241,10 @@ public partial class Scanner {
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(DIGITS.Contains("" + next)){
+            if(DIGITS.Contains("" + next)) {
                 lexeme += next;
                 goto S3;
-            } else if(next == 'e' || next == 'E'){
+            } else if(next == 'e' || next == 'E') {
                 lexeme += next;
                 goto S4;
             } else {
@@ -227,10 +256,10 @@ public partial class Scanner {
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(next == '+' || next == '-'){
+            if(next == '+' || next == '-') {
                 lexeme += next;
                 goto S5;
-            } else if (DIGITS.Contains("" + next)){
+            } else if (DIGITS.Contains("" + next)) {
                 lexeme += next;
                 goto S6;
             } else {
@@ -244,7 +273,7 @@ public partial class Scanner {
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(DIGITS.Contains("" + next)){
+            if(DIGITS.Contains("" + next)) {
                 lexeme += next;
                 goto S6;
             } else {
@@ -259,7 +288,7 @@ public partial class Scanner {
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(DIGITS.Contains("" + next)){
+            if(DIGITS.Contains("" + next)) {
                 lexeme += next;
                 goto S6;
             } else {
@@ -269,17 +298,18 @@ public partial class Scanner {
             }
     }
 
+    // Punctuation FSA handles punctuation and returns appropriate tokens for each
     private Token fsaPunct() { // doesn't include quotes
-        int column = __column;
+        int     column = __column;
         string  lexeme = "";
-        Dictionary<string, TOKENS> PUNCTUATION = Constants.PUNCTUATION;
         char    next;
+
         goto S0; // Smothers warning about S0 label not used
         S0: // Start state
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(PUNCTUATION.ContainsKey("" + next)){
+            if(Constants.PUNCTUATION.ContainsKey("" + next)) {
                 lexeme += next;
                 if(next == ':') {
                     goto S1;
@@ -337,16 +367,18 @@ public partial class Scanner {
             }
     }
 
-    private Token fsaString() { // surrounded by quotes
-        string lexeme = "";
-        char next;
-        int column = __column;
+    // String FSA handles constant strings that begin and end with single quotes
+    private Token fsaString() { // Surrounded by quotes
+        string  lexeme = "";
+        char    next;
+        int     column = __column;
+
         goto S0;
         S0:
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(next == '\''){
+            if(next == '\'') {
                 // We don't include the opening apostrophe
                 goto S1;
             } else {
@@ -359,7 +391,7 @@ public partial class Scanner {
             if(next == '\''){
                 // Closing apostrophe, don't include
                 goto S2;
-            } else if(next == '\n'){
+            } else if(next == '\n') {
                 __column--;
                 __curByte--;
                 return new Token(lexeme, TOKENS.RUN_STRING, column, __line);
@@ -371,7 +403,7 @@ public partial class Scanner {
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(next == '\''){
+            if(next == '\'') {
                 // This apostrophe we include
                 lexeme += next;
                 goto S1;
@@ -386,10 +418,10 @@ public partial class Scanner {
             next = __bytes[__curByte];
             __column++;
             __curByte++;
-            if(next == '\''){
+            if(next == '\'') {
                 // Potentially closing apostrophe, don't include
                 goto S2;
-            } else if( next == '\n'){
+            } else if( next == '\n') {
                 __column--;
                 __curByte--;
                 return new Token(lexeme, TOKENS.RUN_STRING, column, __line);

@@ -1,7 +1,15 @@
+/*
+ *  CSCI 468
+ *  Group 2
+ *  Jesse Brown
+ *  Brian Maher
+ *  Sean Rogers
+ */
+
 using System;
 using System.Collections.Generic;
 
-// All token IDs (add more as we come across them)
+// All token IDs
 public enum TOKENS {
     // Reserved Words
     AND = 0,        // "and"
@@ -90,16 +98,14 @@ public static class Constants {
 
     // List of whitespace characters
     public const string WHITESPACE = " \r\n\t";
-
     // List of digit characters
     public const string DIGITS = "0123456789";
-
     // List of letters
     public const string LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     // Dictionary of punctuation
-    public static readonly Dictionary<string, TOKENS> PUNCTUATION = new Dictionary<string, TOKENS>()
-    {
+    public static readonly Dictionary<string, TOKENS> PUNCTUATION =
+        new Dictionary<string, TOKENS>() {
         {":=", TOKENS.ASSIGN},          {":", TOKENS.COLON},
         {",", TOKENS.COMMA},            {"=", TOKENS.EQUAL},
         {"/", TOKENS.FLOAT_DIVIDE},     {">=", TOKENS.GEQUAL},
@@ -110,9 +116,9 @@ public static class Constants {
         {")", TOKENS.RPAREN},           {";", TOKENS.SCOLON},
         {"*", TOKENS.TIMES}
     };
-
     // Dictionary of reserved words
-    public static readonly Dictionary<string, TOKENS> RESERVE_WORDS = new Dictionary<string, TOKENS>(){
+    public static readonly Dictionary<string, TOKENS> RESERVE_WORDS =
+        new Dictionary<string, TOKENS>() {
         {"and", TOKENS.AND},            {"begin", TOKENS.BEGIN},
         {"boolean", TOKENS.BOOLEAN},    {"downto", TOKENS.DOWNTO},
         {"div", TOKENS.DIV},            {"do", TOKENS.DO},
