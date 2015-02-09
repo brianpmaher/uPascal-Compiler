@@ -14,4 +14,4 @@ Set your editor up to recognize .editorconfig, to maintain style settings.
 Instructions can be found at [EditorConfig](http://editorconfig.org)
 
 A list of editors known to support .editorconfig files can be found
-at http://editorconfig.org/#download
+at: http://editorconfig.org/#download
