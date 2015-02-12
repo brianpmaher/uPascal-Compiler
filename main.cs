@@ -39,6 +39,8 @@ public class Driver {
                     token.Lexeme
                 );
             }
+
+            Parser parser = new Parser(tokens);
         }
     }
 }

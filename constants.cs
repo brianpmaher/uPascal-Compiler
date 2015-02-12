@@ -95,6 +95,8 @@ public static class Constants {
         "punctuation.";
     public const string ERROR_DISPATCHER_LETTERS =
         "ERROR: Dispatcher done goofed. Passed {0} to the letters FSA, but {0} is not a letter";
+    public const string ERROR_PARSER =
+        "ERROR: Expected {0}, got {1}";
 
     // List of whitespace characters
     public const string WHITESPACE = " \r\n\t";
