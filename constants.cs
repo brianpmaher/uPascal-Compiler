@@ -97,6 +97,8 @@ public static class Constants {
         "ERROR: Dispatcher done goofed. Passed {0} to the letters FSA, but {0} is not a letter";
     public const string ERROR_PARSER =
         "ERROR: Expected {0}, got {1}";
+    public const string ERROR_SYNTAX =
+        "Syntax error found on line {0}, column {1} -> ";
 
     // List of whitespace characters
     public const string WHITESPACE = " \r\n\t";

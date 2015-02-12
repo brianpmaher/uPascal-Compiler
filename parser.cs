@@ -18,6 +18,11 @@ public class Parser {
     private void error(string expected){
         throw new Exception(
             String.Format(
+                Constants.ERROR_SYNTAX,
+                __lookahead.Line,
+                __lookahead.Column
+            ) +
+            String.Format(
                 Constants.ERROR_PARSER,
                 expected,
                 __lookahead
@@ -28,10 +33,7 @@ public class Parser {
     // Match
     private void match(TOKENS token){
         if(__e.Current.Type == token){
-            if(token == TOKENS.EOF){
-                Console.WriteLine("Finished parsing");
-            }
-            else if(__e.MoveNext()){
+            if(__e.MoveNext()){
                 __lookahead = __e.Current;
             }
             else{
@@ -50,6 +52,7 @@ public class Parser {
             case TOKENS.PROGRAM:
                 program();
                 match(TOKENS.EOF);
+                Console.WriteLine("The input program parses!");
                 break;
             default:
                 error("'program'");
