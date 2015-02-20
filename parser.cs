@@ -449,86 +449,479 @@ public class Parser {
     }
 
     private void actualParameterTail(){
-
+        switch(__lookahead.Type){
+            case TOKENS.COMMA:
+                // Rule 70
+                match(TOKENS.COMMA);
+                actualParameter();
+                actualParameterTail();
+                break;
+            case TOKENS.RPAREN:
+                // Rule 71
+                break;
+            default:
+                error("An error with actualParameterTail");
+                break;
+        }
     }
 
     private void actualParameter(){
-
+        switch(__lookahead.Type){
+            case TOKENS.FALSE:
+            case TOKENS.NOT:
+            case TOKENS.TRUE:
+            case TOKENS.IDENTIFIER:
+            case TOKENS.INTEGER_LIT:
+            case TOKENS.FIXED_LIT:
+            case TOKENS.FLOAT_LIT:
+            case TOKENS.STRING_LIT:
+            case TOKENS.LPAREN:
+            case TOKENS.MINUS:
+            case TOKENS.PLUS:
+                // Rule 72
+                ordinalExpression();
+                break;
+            default:
+                error("An error with actualParameter");
+                break;
+        }
     }
 
     private void expression(){
-
+        switch(__lookahead.Type){
+            case TOKENS.FALSE:
+            case TOKENS.NOT:
+            case TOKENS.TRUE:
+            case TOKENS.IDENTIFIER:
+            case TOKENS.INTEGER_LIT:
+            case TOKENS.FIXED_LIT:
+            case TOKENS.FLOAT_LIT:
+            case TOKENS.STRING_LIT:
+            case TOKENS.LPAREN:
+            case TOKENS.MINUS:
+            case TOKENS.PLUS:
+                // Rule 73
+                simpleExpression();
+                optionalRelationalPart();
+                break;
+            default:
+                error("An error with expression");
+                break;
+        }
     }
 
     private void optionalRelationalPart(){
-
+        switch(__lookahead.Type){
+            case TOKENS.DO:
+            case TOKENS.DOWNTO:
+            case TOKENS.END:
+            case TOKENS.THEN:
+            case TOKENS.TO:
+            case TOKENS.COMMA:
+            case TOKENS.RPAREN:
+            case TOKENS.SCOLON:
+                // Rule 75
+                break;
+            case TOKENS.EQUAL:
+            case TOKENS.GEQUAL:
+            case TOKENS.GTHAN:
+            case TOKENS.LEQUAL:
+            case TOKENS.LTHAN:
+            case TOKENS.NEQUAL:
+                // Rule 74
+                relationalOperator();
+                simpleExpression();
+                break;
+            default:
+                error("An error with optionalRelationalPart");
+                break;
+        }
     }
 
     private void relationalOperator(){
-
+        switch(__lookahead.Type){
+            case TOKENS.EQUAL:
+                // Rule 76
+                match(TOKENS.EQUAL);
+                break;
+            case TOKENS.LTHAN:
+                // Rule 77
+                match(TOKENS.LTHAN);
+                break;
+            case TOKENS.GTHAN:
+                // Rule 78
+                match(TOKENS.GTHAN);
+                break;
+            case TOKENS.LEQUAL:
+                // Rule 79
+                match(TOKENS.LEQUAL);
+                break;
+            case TOKENS.GEQUAL:
+                // Rule 80
+                match(TOKENS.GEQUAL);
+                break;
+            case TOKENS.NEQUAL:
+                // Rule 81
+                match(TOKENS.NEQUAL);
+                break;
+            default:
+                error("An error with relationalOperator");
+                break;
+        }
     }
 
     private void simpleExpression(){
-
+        switch(__lookahead.Type){
+            case TOKENS.FALSE:
+            case TOKENS.NOT:
+            case TOKENS.TRUE:
+            case TOKENS.IDENTIFIER:
+            case TOKENS.INTEGER_LIT:
+            case TOKENS.FIXED_LIT:
+            case TOKENS.FLOAT_LIT:
+            case TOKENS.STRING_LIT:
+            case TOKENS.LPAREN:
+            case TOKENS.MINUS:
+            case TOKENS.PLUS:
+                // Rule 82
+                optionalSign();
+                term();
+                termTail();
+                break;
+            default:
+                error("An error with simpleExpression");
+                break;
+        }
     }
 
     private void termTail(){
-
+        switch(__lookahead.Type){
+            case TOKENS.DO:
+            case TOKENS.DOWNTO:
+            case TOKENS.END:
+            case TOKENS.THEN:
+            case TOKENS.TO:
+            case TOKENS.COMMA:
+            case TOKENS.EQUAL:
+            case TOKENS.GEQUAL:
+            case TOKENS.GTHAN:
+            case TOKENS.LEQUAL:
+            case TOKENS.LTHAN:
+            case TOKENS.NEQUAL:
+            case TOKENS.RPAREN:
+            case TOKENS.SCOLON:
+                // Rule 84
+                break;
+            case TOKENS.OR:
+            case TOKENS.MINUS:
+            case TOKENS.PLUS:
+                // Rule 83
+                addingOperator();
+                term();
+                termTail();
+                break;
+            default:
+                error("An error with termTail");
+                break;
+        }
     }
 
     private void optionalSign(){
-
+        switch(__lookahead.Type){
+            case TOKENS.FALSE:
+            case TOKENS.NOT:
+            case TOKENS.TRUE:
+            case TOKENS.IDENTIFIER:
+            case TOKENS.INTEGER_LIT:
+            case TOKENS.FIXED_LIT:
+            case TOKENS.FLOAT_LIT:
+            case TOKENS.STRING_LIT:
+            case TOKENS.LPAREN:
+                // Rule 87
+                break;
+            case TOKENS.MINUS:
+                // Rule 86
+                match(TOKENS.MINUS);
+                break;
+            case TOKENS.PLUS:
+                // Rule 85
+                match(TOKENS.PLUS);
+                break;
+            default:
+                error("An error with optionalSign");
+                break;
+        }
     }
 
     private void addingOperator(){
-
+        switch(__lookahead.Type){
+            case TOKENS.OR:
+                // Rule 90
+                match(TOKENS.OR);
+                break;
+            case TOKENS.MINUS:
+                // Rule 89
+                match(TOKENS.MINUS);
+                break;
+            case TOKENS.PLUS:
+                // Rule 88
+                match(TOKENS.PLUS);
+                break;
+            default:
+                error("An error with addingOperator");
+                break;
+        }
     }
 
     private void term(){
-
+        switch(__lookahead.Type){
+            case TOKENS.FALSE:
+            case TOKENS.NOT:
+            case TOKENS.TRUE:
+            case TOKENS.IDENTIFIER:
+            case TOKENS.INTEGER_LIT:
+            case TOKENS.FIXED_LIT:
+            case TOKENS.FLOAT_LIT:
+            case TOKENS.STRING_LIT:
+            case TOKENS.LPAREN:
+                // Rule 91
+                factor();
+                factorTail();
+                break;
+            default:
+                error("An error with term");
+                break;
+        }
     }
 
     private void factorTail(){
-
+        switch(__lookahead.Type){
+            case TOKENS.AND:
+            case TOKENS.DIV:
+            case TOKENS.MOD:
+            case TOKENS.FLOAT_DIVIDE:
+            case TOKENS.TIMES:
+                // Rule 92
+                multiplyingOperator();
+                factor();
+                factorTail();
+                break;
+            case TOKENS.DO:
+            case TOKENS.DOWNTO:
+            case TOKENS.END:
+            case TOKENS.OR:
+            case TOKENS.THEN:
+            case TOKENS.TO:
+            case TOKENS.COMMA:
+            case TOKENS.EQUAL:
+            case TOKENS.GEQUAL:
+            case TOKENS.GTHAN:
+            case TOKENS.LEQUAL:
+            case TOKENS.LTHAN:
+            case TOKENS.MINUS:
+            case TOKENS.NEQUAL:
+            case TOKENS.PLUS:
+            case TOKENS.RPAREN:
+            case TOKENS.SCOLON:
+                // Rule 93
+                break;
+            default:
+                error("An error with factorTail");
+                break;
+        }
     }
 
     private void multiplyingOperator(){
-
+        switch(__lookahead.Type){
+            case TOKENS.AND:
+                // Rule 98
+                match(TOKENS.AND);
+                break;
+            case TOKENS.DIV:
+                // Rule 96
+                match(TOKENS.DIV);
+                break;
+            case TOKENS.MOD:
+                //Rule 97
+                match(TOKENS.MOD);
+                break;
+            case TOKENS.FLOAT_DIVIDE:
+                // Rule 95
+                match(TOKENS.FLOAT_DIVIDE);
+                break;
+            case TOKENS.TIMES:
+                // Rule 94
+                match(TOKENS.TIMES);
+                break;
+            default:
+                error("An error with multiplyingOperator");
+                break;
+        }
     }
 
     private void factor(){
-
+        switch(__lookahead.Type){
+            case TOKENS.FALSE:
+                // Rule 103
+                match(TOKENS.FALSE);
+                break;
+            case TOKENS.NOT:
+                // Rule 104
+                match(TOKENS.NOT);
+                factor();
+                break;
+            case TOKENS.TRUE:
+                // Rule 102
+                match(TOKENS.TRUE);
+                break;
+            case TOKENS.IDENTIFIER:
+                // Rule 106
+                functionIdentifier();
+                optionalActualParameterList();
+                break;
+            case TOKENS.INTEGER_LIT:
+                // unsigned integer? Rule 99?
+                match(TOKENS.INTEGER_LIT);
+                break;
+            case TOKENS.FIXED_LIT:
+                // Question mark on table? rule 100? not sure
+                // unsigned float?
+                match(TOKENS.FLOAT_LIT);
+                break;
+            case TOKENS.FLOAT_LIT:
+                // Rule 100
+                match(TOKENS.FLOAT_LIT);
+                break;
+            case TOKENS.STRING_LIT:
+                // Rule 101
+                match(TOKENS.STRING_LIT);
+                break;
+            case TOKENS.LPAREN:
+                // Rule 105
+                match(TOKENS.LPAREN);
+                expression();
+                match(TOKENS.RPAREN);
+                break;
+            default:
+                error("An error with factor");
+                break;
+        }
     }
 
     private void programIdentifier(){
-
+        switch(__lookahead.Type){
+            case TOKENS.IDENTIFIER:
+                // Rule 107
+                match(TOKENS.IDENTIFIER);
+                break;
+            default:
+                error("An error with programIdentifier");
+                break;
+        }
     }
 
     private void variableIdentifier(){
-
+        switch(__lookahead.Type){
+            case TOKENS.IDENTIFIER:
+                // Rule 108
+                match(TOKENS.IDENTIFIER);
+                break;
+            default:
+                error("An error with variableIdentifier");
+                break;
+        }
     }
 
     private void procedureIdentifier(){
-
+        switch(__lookahead.Type){
+            case TOKENS.IDENTIFIER:
+                // Rule 109
+                match(TOKENS.IDENTIFIER);
+                break;
+            default:
+                error("An error with procedureIdentifier");
+                break;
+        }
     }
 
     private void functionIdentifier(){
-
+        switch(__lookahead.Type){
+            case TOKENS.IDENTIFIER:
+                // Rule 110
+                match(TOKENS.IDENTIFIER);
+                break;
+            default:
+                error("An error with functionIdentifier");
+                break;
+        }
     }
 
     private void booleanExpression(){
-
+        switch(__lookahead.Type){
+            case TOKENS.FALSE:
+            case TOKENS.NOT:
+            case TOKENS.TRUE:
+            case TOKENS.IDENTIFIER:
+            case TOKENS.FIXED_LIT:
+            case TOKENS.FLOAT_LIT:
+            case TOKENS.STRING_LIT:
+            case TOKENS.LPAREN:
+                // Rule 111
+                expression();
+                break;
+            default:
+                error("An error with booleanExpression");
+                break;
+        }
     }
 
     private void ordinalExpression(){
-
+        switch(__lookahead.Type){
+            case TOKENS.FALSE:
+            case TOKENS.NOT:
+            case TOKENS.TRUE:
+            case TOKENS.IDENTIFIER:
+            case TOKENS.INTEGER_LIT:
+            case TOKENS.FIXED_LIT:
+            case TOKENS.FLOAT_LIT:
+            case TOKENS.STRING_LIT:
+            case TOKENS.LPAREN:
+                // Rule 112
+                expression();
+                break;
+            default:
+                error("An error with ordinalExpression");
+                break;
+        }
     }
 
     private void identifierList(){
-
+        switch(__lookahead.Type){
+            case TOKENS.IDENTIFIER:
+                // Rule 113
+                match(TOKENS.IDENTIFIER);
+                identifierTail();
+                break;
+            default:
+                error("An error with identifierList");
+                break;
+        }
     }
 
     private void identifierTail(){
-
+        switch(__lookahead.Type){
+            case TOKENS.COLON:
+                // Rule 115
+                break;
+            case TOKENS.COMMA:
+                // Rule 114
+                match(TOKENS.COMMA);
+                match(TOKENS.IDENTIFIER);
+                identifierTail();
+                break;
+            default:
+                error("An error with identifierTail");
+                break;
+        }
     }
 }
