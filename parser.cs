@@ -150,14 +150,14 @@ public class Parser {
 
     private void type(){
         switch(__lookahead.Type){
-            case TOKENS.INTEGER_LIT:
-                match(TOKENS.INTEGER_LIT);
+            case TOKENS.INTEGER:
+                match(TOKENS.INTEGER);
                 break;
             case TOKENS.FLOAT:
-                match(TOKENS.FLOAT_LIT);
+                match(TOKENS.FLOAT);
                 break;
             case TOKENS.STRING:
-                match(TOKENS.STRING_LIT);
+                match(TOKENS.STRING);
                 break;
             case TOKENS.BOOLEAN:
                 match(TOKENS.BOOLEAN);
