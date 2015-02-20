@@ -150,14 +150,14 @@ public class Parser {
 
     private void type(){
         switch(__lookahead.Type){
-            case TOKENS.INTEGER:
-                match(TOKENS.INTEGER);
+            case TOKENS.INTEGER_LIT:
+                match(TOKENS.INTEGER_LIT);
                 break;
             case TOKENS.FLOAT:
-                match(TOKENS.FLOAT);
+                match(TOKENS.FLOAT_LIT);
                 break;
             case TOKENS.STRING:
-                match(TOKENS.STRING);
+                match(TOKENS.STRING_LIT);
                 break;
             case TOKENS.BOOLEAN:
                 match(TOKENS.BOOLEAN);
@@ -365,87 +365,363 @@ public class Parser {
     }
 
     private void statementTail(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.END:
+                break;
+            case TOKENS.SCOLON:
+                match(TOKENS.SCOLON);
+                statement();
+                statementTail();
+                break;
+            default:
+                error("end of line or ';'");
+                break;
+        }
     }
 
     private void statement(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.BEGIN:
+                compoundStatement();
+                break;
+            case TOKENS.FOR:
+                forStatement();
+                break;
+            case TOKENS.IF:
+                ifStatement();
+                break;
+            case TOKENS.READ:
+                readStatement();
+                break;
+            case TOKENS.REPEAT:
+                repeatStatement();
+                break;
+            case TOKENS.WHILE:
+                whileStatement();
+                break;
+            case TOKENS.WRITE:
+            case TOKENS.WRITELN:
+                writeStatement();
+                break;
+            case TOKENS.IDENTIFIER:
+                assignmentStatement();
+                // OR procedureStatement();
+                break;
+            case TOKENS.END:
+            case TOKENS.SCOLON:
+                emptyStatement();
+                break;
+            default:
+                error("an identifier or one of: " +
+                    "'begin', 'end', 'for', 'if', 'read', 'repeat', " +
+                    "'while', 'write', 'writeln', ':'"
+                );
+                break;
+        }
     }
 
     private void emptyStatement(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.SCOLON:
+                break;
+            default:
+                error("';'");
+                break;
+        }
     }
 
     private void readStatement(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.READ:
+                match(TOKENS.READ);
+                match(TOKENS.LPAREN);
+                readParameter();
+                readParameterTail();
+                match(TOKENS.RPAREN);
+                break;
+            default:
+                error("'read'");
+                break;
+        }
     }
 
     private void readParameterTail(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.COMMA:
+                match(TOKENS.COMMA);
+                readParameter();
+                readParameterTail();
+                break;
+            case TOKENS.RPAREN:
+                break;
+            default:
+                error("',',')'");
+                break;
+        }
     }
 
     private void readParameter(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.IDENTIFIER:
+                variableIdentifier();
+                break;
+            default:
+                error("An identifier");
+                break;
+        }
     }
 
     private void writeStatement(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.WRITE:
+                match(TOKENS.WRITE);
+                match(TOKENS.LPAREN);
+                writeParameter();
+                writeParameterTail();
+                match(TOKENS.RPAREN);
+                break;
+            case TOKENS.WRITELN:
+                match(TOKENS.WRITELN);
+                match(TOKENS.LPAREN);
+                writeParameter();
+                writeParameterTail();
+                match(TOKENS.RPAREN);
+                break;
+            default:
+                error("'write','writeln'");
+                break;
+        }
     }
 
     private void writeParameterTail(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.COMMA:
+                match(TOKENS.COMMA);
+                writeParameter();
+                writeParameterTail();
+                break;
+            case TOKENS.RPAREN:
+                break;
+            default:
+                error("',',')'");
+                break;
+        }
     }
 
     private void writeParameter(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.FALSE:
+            case TOKENS.NOT:
+            case TOKENS.TRUE:
+            case TOKENS.IDENTIFIER:
+            case TOKENS.INTEGER_LIT:
+            case TOKENS.FIXED_LIT:
+            case TOKENS.FLOAT_LIT:
+            case TOKENS.STRING_LIT:
+            case TOKENS.LPAREN:
+            case TOKENS.MINUS:
+            case TOKENS.PLUS:
+                ordinalExpression();
+                break;
+            default:
+                error(
+                    "An identifier, integer, float, fixed, string, or any of the following: " +
+                    "'false','not','true','(','-','+'"
+                );
+                break;
+        }
     }
 
     private void assignmentStatement(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.IDENTIFIER:
+                variableIdentifier();
+                // OR functionIdentifier();
+                match(TOKENS.ASSIGN);
+                expression();
+                break;
+            default:
+                error("An identifier");
+                break;
+        }
     }
 
     private void ifStatement(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.IF:
+                match(TOKENS.IF);
+                booleanExpression();
+                match(TOKENS.THEN);
+                statement();
+                optionalElsePart();
+                break;
+            default:
+                error("'if'");
+                break;
+        }
     }
 
     private void optionalElsePart(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.ELSE:
+                match(TOKENS.ELSE);
+                statement();
+                break;
+            case TOKENS.END:
+            case TOKENS.SCOLON:
+                break;
+            default:
+                error("end of line or 'else',';'");
+                break;
+        }
     }
 
     private void repeatStatement(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.REPEAT:
+                match(TOKENS.REPEAT);
+                statementSequence();
+                match(TOKENS.UNTIL);
+                booleanExpression();
+                break;
+            default:
+                error("'repeat'");
+                break;
+        }
     }
 
     private void whileStatement(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.WHILE:
+                match(TOKENS.WHILE);
+                booleanExpression();
+                match(TOKENS.DO);
+                statement();
+                break;
+            default:
+                error("'while'");
+                break;
+        }
     }
 
     private void forStatement(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.FOR:
+                match(TOKENS.FOR);
+                controlVariable();
+                match(TOKENS.ASSIGN);
+                initialValue();
+                stepValue();
+                finalValue();
+                match(TOKENS.DO);
+                statement();
+                break;
+            default:
+                error("'for'");
+                break;
+        }
     }
 
     private void controlVariable(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.IDENTIFIER:
+                variableIdentifier();
+                break;
+            default:
+                error("An identifier");
+                break;
+        }
     }
 
     private void initialValue(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.FALSE:
+            case TOKENS.NOT:
+            case TOKENS.TRUE:
+            case TOKENS.IDENTIFIER:
+            case TOKENS.INTEGER_LIT:
+            case TOKENS.FIXED_LIT:
+            case TOKENS.FLOAT_LIT:
+            case TOKENS.STRING_LIT:
+            case TOKENS.LPAREN:
+            case TOKENS.MINUS:
+            case TOKENS.PLUS:
+                ordinalExpression();
+                break;
+            default:
+                error(
+                    "An identifier, integer, fixed, float, string or any of the following: " +
+                    "'false','not','true','(','-','+'"
+                );
+                break;
+        }
     }
 
     private void stepValue(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.DOWNTO:
+                match(TOKENS.DOWNTO);
+                break;
+            case TOKENS.TO:
+                match(TOKENS.TO);
+                break;
+            default:
+                error("'downto','to'");
+                break;
+        }
     }
 
     private void finalValue(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.FALSE:
+            case TOKENS.NOT:
+            case TOKENS.TRUE:
+            case TOKENS.IDENTIFIER:
+            case TOKENS.INTEGER_LIT:
+            case TOKENS.FIXED_LIT:
+            case TOKENS.FLOAT_LIT:
+            case TOKENS.STRING_LIT:
+            case TOKENS.LPAREN:
+            case TOKENS.MINUS:
+            case TOKENS.PLUS:
+                ordinalExpression();
+                break;
+            default:
+                error(
+                    "An identifier, integer, fixed, float, string or any of the following: " +
+                    "'false','not','true','(','-','+'"
+                );
+                break;
+        }
     }
 
     private void procedureStatement(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.IDENTIFIER:
+                procedureIdentifier();
+                optionalActualParameterList();
+                break;
+            default:
+                error("An identifier");
+                break;
+        }
     }
 
     private void optionalActualParameterList(){
-
+        switch(__lookahead.Type) {
+            case TOKENS.END:
+            case TOKENS.SCOLON:
+                break;
+            case TOKENS.LPAREN:
+                match(TOKENS.LPAREN);
+                actualParameter();
+                actualParameterTail();
+                match(TOKENS.RPAREN);
+                break;
+            default:
+                error("End of line or ';','('");
+                break;
+        }
     }
 
     private void actualParameterTail(){
