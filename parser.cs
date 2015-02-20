@@ -780,13 +780,12 @@ public class Parser {
                 optionalActualParameterList();
                 break;
             case TOKENS.INTEGER_LIT:
-                // unsigned integer? Rule 99?
+                // Rule 99
                 match(TOKENS.INTEGER_LIT);
                 break;
             case TOKENS.FIXED_LIT:
-                // Question mark on table? rule 100? not sure
-                // unsigned float?
-                match(TOKENS.FLOAT_LIT);
+                // Rule 100?
+                match(TOKENS.FIXED_LIT);
                 break;
             case TOKENS.FLOAT_LIT:
                 // Rule 100
