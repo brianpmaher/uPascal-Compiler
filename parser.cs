@@ -58,6 +58,7 @@ public class Parser {
     private void systemGoal(){
         switch(__lookahead.Type){
             case TOKENS.PROGRAM:
+                // Rule 1
                 program();
                 match(TOKENS.EOF);
                 Console.WriteLine("The input program parses!");
@@ -71,6 +72,7 @@ public class Parser {
     private void program(){
         switch(__lookahead.Type){
             case TOKENS.PROGRAM:
+                // Rule 2
                 programHeading();
                 match(TOKENS.SCOLON);
                 block();
@@ -85,6 +87,7 @@ public class Parser {
     private void programHeading(){
         switch(__lookahead.Type){
             case TOKENS.PROGRAM:
+                // Rule 3
                 match(TOKENS.PROGRAM);
                 programIdentifier();
                 break;
@@ -100,6 +103,7 @@ public class Parser {
             case TOKENS.FUNCTION:
             case TOKENS.PROCEDURE:
             case TOKENS.VAR:
+                // Rule 4
                 variableDeclarationPart();
                 procedureAndFunctionDeclarationPart();
                 statementPart();
@@ -113,6 +117,7 @@ public class Parser {
     private void variableDeclarationPart(){
         switch(__lookahead.Type){
             case TOKENS.VAR:
+                // Rule 5
                 match(TOKENS.VAR);
                 variableDeclaration();
                 match(TOKENS.SCOLON);
@@ -121,6 +126,7 @@ public class Parser {
             case TOKENS.BEGIN:
             case TOKENS.FUNCTION:
             case TOKENS.PROCEDURE:
+                // Rule 6
                 break;
             default:
                 error("one of: 'var', 'begin', 'function', 'procedure'");
@@ -131,11 +137,13 @@ public class Parser {
     private void variableDeclarationTail(){
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
+                // Rule 7
                 variableDeclaration();
                 match(TOKENS.SCOLON);
                 variableDeclarationTail();
                 break;
             case TOKENS.PROCEDURE:
+                // Rule 8
                 break;
             default:
                 error("an identifier or 'procedure'");
@@ -146,6 +154,7 @@ public class Parser {
     private void variableDeclaration(){
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
+                // Rule 9
                 identifierList();
                 match(TOKENS.COLON);
                 type();
@@ -159,15 +168,19 @@ public class Parser {
     private void type(){
         switch(__lookahead.Type){
             case TOKENS.INTEGER:
+                // Rule 10
                 match(TOKENS.INTEGER);
                 break;
             case TOKENS.FLOAT:
+                // Rule 11
                 match(TOKENS.FLOAT);
                 break;
             case TOKENS.STRING:
+                // Rule 12
                 match(TOKENS.STRING);
                 break;
             case TOKENS.BOOLEAN:
+                // Rule 13
                 match(TOKENS.BOOLEAN);
                 break;
             default:
@@ -179,14 +192,17 @@ public class Parser {
     private void procedureAndFunctionDeclarationPart(){
         switch(__lookahead.Type){
             case TOKENS.PROCEDURE:
+                // Rule 14
                 procedureDeclaration();
                 procedureAndFunctionDeclarationPart();
                 break;
             case TOKENS.FUNCTION:
+                // Rule 15
                 functionDeclaration();
                 procedureAndFunctionDeclarationPart();
                 break;
             case TOKENS.BEGIN:
+                // Rule 16
                 break;
             default:
                 error("one of: 'procedure', 'function', 'begin'");
@@ -197,6 +213,7 @@ public class Parser {
     private void procedureDeclaration(){
         switch(__lookahead.Type){
             case TOKENS.PROCEDURE:
+                // Rule 17
                 procedureHeading();
                 match(TOKENS.SCOLON);
                 block();
@@ -211,6 +228,7 @@ public class Parser {
     private void functionDeclaration(){
         switch(__lookahead.Type){
             case TOKENS.FUNCTION:
+                // Rule 18
                 functionHeading();
                 match(TOKENS.SCOLON);
                 block();
@@ -225,6 +243,7 @@ public class Parser {
     private void procedureHeading(){
         switch(__lookahead.Type){
             case TOKENS.PROCEDURE:
+                // Rule 19
                 match(TOKENS.PROCEDURE);
                 procedureIdentifier();
                 optionalFormalParameterList();
@@ -238,6 +257,7 @@ public class Parser {
     private void functionHeading(){
         switch(__lookahead.Type){
             case TOKENS.FUNCTION:
+                // Rule 20
                 match(TOKENS.FUNCTION);
                 functionIdentifier();
                 optionalFormalParameterList();
@@ -253,6 +273,7 @@ public class Parser {
     private void optionalFormalParameterList(){
         switch(__lookahead.Type){
             case TOKENS.LPAREN:
+                // Rule 21
                 match(TOKENS.LPAREN);
                 formalParameterSection();
                 formalParameterSectionTail();
@@ -260,6 +281,7 @@ public class Parser {
                 break;
             case TOKENS.COLON:
             case TOKENS.SCOLON:
+                // Rule 22
                 break;
             default:
                 error("one of: '(', ':', ';'");
@@ -270,11 +292,13 @@ public class Parser {
     private void formalParameterSectionTail(){
         switch(__lookahead.Type){
             case TOKENS.SCOLON:
+                // Rule 23
                 match(TOKENS.SCOLON);
                 formalParameterSection();
                 formalParameterSectionTail();
                 break;
             case TOKENS.RPAREN:
+                // Rule 24
                 break;
             default:
                 error("one of: ';', ')'");
@@ -285,9 +309,11 @@ public class Parser {
     private void formalParameterSection(){
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
+                // Rule 25
                 valueParameterSection();
                 break;
             case TOKENS.VAR:
+                // Rule 26
                 variableParameterSection();
                 break;
             default:
@@ -299,6 +325,7 @@ public class Parser {
     private void valueParameterSection(){
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
+                // Rule 27
                 identifierList();
                 match(TOKENS.COLON);
                 type();
@@ -312,6 +339,7 @@ public class Parser {
     private void variableParameterSection(){
         switch(__lookahead.Type){
             case TOKENS.VAR:
+                // Rule 28
                 match(TOKENS.VAR);
                 identifierList();
                 match(TOKENS.COLON);
@@ -326,6 +354,7 @@ public class Parser {
     private void statementPart(){
         switch(__lookahead.Type){
             case TOKENS.BEGIN:
+                // Rule 29
                 compoundStatement();
                 break;
             default:
@@ -337,6 +366,7 @@ public class Parser {
     private void compoundStatement(){
         switch(__lookahead.Type){
             case TOKENS.BEGIN:
+                // Rule 30
                 match(TOKENS.BEGIN);
                 statementSequence();
                 match(TOKENS.END);
@@ -360,6 +390,7 @@ public class Parser {
             case TOKENS.WRITELN:
             case TOKENS.IDENTIFIER:
             case TOKENS.SCOLON:
+                // Rule 31
                 statement();
                 statementTail();
                 break;
@@ -375,8 +406,10 @@ public class Parser {
     private void statementTail(){
         switch(__lookahead.Type) {
             case TOKENS.END:
+                // Rule 33
                 break;
             case TOKENS.SCOLON:
+                // Rule 32
                 match(TOKENS.SCOLON);
                 statement();
                 statementTail();
@@ -390,33 +423,43 @@ public class Parser {
     private void statement(){
         switch(__lookahead.Type) {
             case TOKENS.BEGIN:
+                // Rule 35
                 compoundStatement();
                 break;
             case TOKENS.FOR:
+                // Rule 42
                 forStatement();
                 break;
             case TOKENS.IF:
+                // Rule 39
                 ifStatement();
                 break;
             case TOKENS.READ:
+                // Rule 36
                 readStatement();
                 break;
             case TOKENS.REPEAT:
+                // Rule 41
                 repeatStatement();
                 break;
             case TOKENS.WHILE:
+                // Rule 40
                 whileStatement();
                 break;
             case TOKENS.WRITE:
             case TOKENS.WRITELN:
+                // Rule 37
                 writeStatement();
                 break;
             case TOKENS.IDENTIFIER:
+                // Rule 38
                 assignmentStatement();
+                // Rule 43
                 // OR procedureStatement();
                 break;
             case TOKENS.END:
             case TOKENS.SCOLON:
+                // Rule 34
                 emptyStatement();
                 break;
             default:
@@ -430,7 +473,9 @@ public class Parser {
 
     private void emptyStatement(){
         switch(__lookahead.Type) {
+            case TOKENS.END:
             case TOKENS.SCOLON:
+                // Rule 44
                 break;
             default:
                 error("';'");
@@ -441,6 +486,7 @@ public class Parser {
     private void readStatement(){
         switch(__lookahead.Type) {
             case TOKENS.READ:
+                // Rule 45
                 match(TOKENS.READ);
                 match(TOKENS.LPAREN);
                 readParameter();
@@ -456,11 +502,13 @@ public class Parser {
     private void readParameterTail(){
         switch(__lookahead.Type) {
             case TOKENS.COMMA:
+                // Rule 46
                 match(TOKENS.COMMA);
                 readParameter();
                 readParameterTail();
                 break;
             case TOKENS.RPAREN:
+                // Rule 47
                 break;
             default:
                 error("',',')'");
@@ -471,6 +519,7 @@ public class Parser {
     private void readParameter(){
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
+                // Rule 48
                 variableIdentifier();
                 break;
             default:
@@ -482,6 +531,7 @@ public class Parser {
     private void writeStatement(){
         switch(__lookahead.Type) {
             case TOKENS.WRITE:
+                // Rule 49
                 match(TOKENS.WRITE);
                 match(TOKENS.LPAREN);
                 writeParameter();
@@ -489,6 +539,7 @@ public class Parser {
                 match(TOKENS.RPAREN);
                 break;
             case TOKENS.WRITELN:
+                // Rule 50
                 match(TOKENS.WRITELN);
                 match(TOKENS.LPAREN);
                 writeParameter();
@@ -504,11 +555,13 @@ public class Parser {
     private void writeParameterTail(){
         switch(__lookahead.Type) {
             case TOKENS.COMMA:
+                // Rule 51
                 match(TOKENS.COMMA);
                 writeParameter();
                 writeParameterTail();
                 break;
             case TOKENS.RPAREN:
+                // Rule 52
                 break;
             default:
                 error("',',')'");
@@ -529,6 +582,7 @@ public class Parser {
             case TOKENS.LPAREN:
             case TOKENS.MINUS:
             case TOKENS.PLUS:
+                // Rule 53
                 ordinalExpression();
                 break;
             default:
@@ -543,7 +597,9 @@ public class Parser {
     private void assignmentStatement(){
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
+                // Rule 54
                 variableIdentifier();
+                // Rule 55
                 // OR functionIdentifier();
                 match(TOKENS.ASSIGN);
                 expression();
@@ -557,6 +613,7 @@ public class Parser {
     private void ifStatement(){
         switch(__lookahead.Type) {
             case TOKENS.IF:
+                // Rule 56
                 match(TOKENS.IF);
                 booleanExpression();
                 match(TOKENS.THEN);
@@ -572,11 +629,13 @@ public class Parser {
     private void optionalElsePart(){
         switch(__lookahead.Type) {
             case TOKENS.ELSE:
+                // Rule 57
                 match(TOKENS.ELSE);
                 statement();
                 break;
             case TOKENS.END:
             case TOKENS.SCOLON:
+                // Rule 58
                 break;
             default:
                 error("end of line or 'else',';'");
@@ -587,6 +646,7 @@ public class Parser {
     private void repeatStatement(){
         switch(__lookahead.Type) {
             case TOKENS.REPEAT:
+                // Rule 59
                 match(TOKENS.REPEAT);
                 statementSequence();
                 match(TOKENS.UNTIL);
@@ -601,6 +661,7 @@ public class Parser {
     private void whileStatement(){
         switch(__lookahead.Type) {
             case TOKENS.WHILE:
+                // Rule 60
                 match(TOKENS.WHILE);
                 booleanExpression();
                 match(TOKENS.DO);
@@ -615,6 +676,7 @@ public class Parser {
     private void forStatement(){
         switch(__lookahead.Type) {
             case TOKENS.FOR:
+                // Rule 61
                 match(TOKENS.FOR);
                 controlVariable();
                 match(TOKENS.ASSIGN);
@@ -633,6 +695,7 @@ public class Parser {
     private void controlVariable(){
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
+                // Rule 62
                 variableIdentifier();
                 break;
             default:
@@ -654,6 +717,7 @@ public class Parser {
             case TOKENS.LPAREN:
             case TOKENS.MINUS:
             case TOKENS.PLUS:
+                // Rule 63
                 ordinalExpression();
                 break;
             default:
@@ -668,9 +732,11 @@ public class Parser {
     private void stepValue(){
         switch(__lookahead.Type) {
             case TOKENS.DOWNTO:
+                // Rule 65
                 match(TOKENS.DOWNTO);
                 break;
             case TOKENS.TO:
+                // Rule 64
                 match(TOKENS.TO);
                 break;
             default:
@@ -692,6 +758,7 @@ public class Parser {
             case TOKENS.LPAREN:
             case TOKENS.MINUS:
             case TOKENS.PLUS:
+                // Rule 66
                 ordinalExpression();
                 break;
             default:
@@ -706,6 +773,7 @@ public class Parser {
     private void procedureStatement(){
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
+                // Rule 67
                 procedureIdentifier();
                 optionalActualParameterList();
                 break;
@@ -719,8 +787,10 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.END:
             case TOKENS.SCOLON:
+                // Rule 69
                 break;
             case TOKENS.LPAREN:
+                // Rule 68
                 match(TOKENS.LPAREN);
                 actualParameter();
                 actualParameterTail();
