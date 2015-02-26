@@ -11,7 +11,12 @@ public class Parser {
     public Parser(List<Token> tokens){
         this.__tokens = tokens;
         this.__e = __tokens.GetEnumerator();
+        this.__e.MoveNext();
         this.__lookahead = __e.Current;
+    }
+
+    public void Parse(){
+        systemGoal();
     }
 
     // Error
@@ -25,23 +30,26 @@ public class Parser {
             String.Format(
                 Constants.ERROR_PARSER,
                 expected,
-                __lookahead
+                __lookahead.Lexeme
             )
         );
     }
 
     // Match
     private void match(TOKENS token){
-        if(__e.Current.Type == token){
+        // Simple output
+        Console.WriteLine("Matching " + __lookahead.Lexeme);
+        if(token == TOKENS.EOF){
+            return;
+        } else if(__e.Current.Type == token){
             if(__e.MoveNext()){
                 __lookahead = __e.Current;
-            }
-            else{
+            } else {
                 throw new Exception(
                     "Expected token, got null!"
                 );
             }
-        } else{
+        } else {
             throw new Exception("Match called on nonmatching token!");
         }
     }
