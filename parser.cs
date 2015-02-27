@@ -785,8 +785,29 @@ public class Parser {
 
     private void optionalActualParameterList(){
         switch(__lookahead.Type) {
+            case TOKENS.AND:
+            case TOKENS.DIV:
+            case TOKENS.DO:
+            case TOKENS.DOWNTO:
+            case TOKENS.ELSE:
             case TOKENS.END:
+            case TOKENS.MOD:
+            case TOKENS.OR:
+            case TOKENS.THEN:
+            case TOKENS.TO:
+            case TOKENS.COMMA:
+            case TOKENS.EQUAL:
+            case TOKENS.FLOAT_DIVIDE:
+            case TOKENS.GEQUAL:
+            case TOKENS.GTHAN:
+            case TOKENS.LEQUAL:
+            case TOKENS.LTHAN:
+            case TOKENS.MINUS:
+            case TOKENS.NEQUAL:
+            case TOKENS.PLUS:
+            case TOKENS.RPAREN:
             case TOKENS.SCOLON:
+            case TOKENS.TIMES:
                 // Rule 69
                 break;
             case TOKENS.LPAREN:

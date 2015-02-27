@@ -41,6 +41,7 @@ public class Driver {
             }
 
             Parser parser = new Parser(tokens);
+            parser.Parse();
         }
     }
 }
