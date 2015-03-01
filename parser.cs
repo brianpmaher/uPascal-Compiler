@@ -20,19 +20,30 @@ public class Parser {
     }
 
     // Error
-    private void error(string expected){
-        throw new Exception(
-            String.Format(
-                Constants.ERROR_SYNTAX,
-                __lookahead.Line,
-                __lookahead.Column
-            ) +
-            String.Format(
-                Constants.ERROR_PARSER,
-                expected,
-                __lookahead.Lexeme
-            )
-        );
+    private void error(List<string> expected){
+        string exception = "PARSE ERROR: expected ("; // Message to be displayed
+
+        int i = 1,
+            count = expected.Count(); // Size of expected list
+
+        // There will always be at least one expected to pass in, doing this in order to make
+        // displaying the expected tokens simpler (so we can separate by commas)
+        exception += expected[0];
+
+        // Iterate over every expected token after the first (this will not enter if there is only
+        // one expected token)
+        for(i = 1; i < count; i++) {
+            exception += ", " + expected[i];
+        }
+
+        // Build our exception message with details about our current __lookahead to see what could
+        // have gone wrong with as much information as possible.
+        exception += "), but saw \"" + __lookahead.Lexeme +
+                     "\" of type " + __lookahead.Type.ToString() +
+                     " at column " + __lookahead.Column +
+                     " and line " + __lookahead.Line;
+
+        throw new Exception(exception);
     }
 
     // Match
