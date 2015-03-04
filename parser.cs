@@ -23,8 +23,7 @@ public class Parser {
     private void error(List<string> expected){
         string exception = "PARSE ERROR: expected ("; // Message to be displayed
 
-        int i = 1,
-            count = expected.Count(); // Size of expected list
+        int count = expected.Count(); // Size of expected list
 
         // There will always be at least one expected to pass in, doing this in order to make
         // displaying the expected tokens simpler (so we can separate by commas)
@@ -32,7 +31,7 @@ public class Parser {
 
         // Iterate over every expected token after the first (this will not enter if there is only
         // one expected token)
-        for(i = 1; i < count; i++) {
+        for(int i = 1; i < count; i++) {
             exception += ", " + expected[i];
         }
 
