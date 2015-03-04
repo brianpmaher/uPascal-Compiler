@@ -21,7 +21,17 @@ public class Parser {
 
     // Error
     private void error(List<TOKENS> expected){
-        string exception = "PARSE ERROR: expected ("; // Message to be displayed
+        string exception; // Message to be displayed
+
+        // First check if a scan error token was found and throw an exception accordingly
+        if(__lookahead.Type == TOKENS.ERROR) {
+            exception = "SCAN ERROR: \"" +__lookahead.Lexeme +
+                "\" at column " + __lookahead.Column +
+                " and line " + __lookahead.Line;
+                throw new Exception(exception);
+        } else {
+            exception = "PARSE ERROR: expected (";
+        }
 
         int count = expected.Count; // Size of expected list
 
@@ -38,9 +48,11 @@ public class Parser {
         // Build our exception message with details about our current __lookahead to see what could
         // have gone wrong with as much information as possible.
         exception += "), but saw \"" + __lookahead.Lexeme +
-                     "\" of type " + __lookahead.Type.ToString() +
-                     " at column " + __lookahead.Column +
-                     " and line " + __lookahead.Line;
+            "\" of type " + __lookahead.Type.ToString() +
+            " at column " + __lookahead.Column +
+            " and line " + __lookahead.Line;
+
+
 
         throw new Exception(exception);
     }
