@@ -41,7 +41,11 @@ public class Driver {
             }
 
             Parser parser = new Parser(tokens);
-            parser.Parse();
+            try {
+                parser.Parse();
+            } catch (Exception ex) {
+                Console.WriteLine(ex);
+            }
         }
     }
 }
