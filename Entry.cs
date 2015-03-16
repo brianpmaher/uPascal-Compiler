@@ -15,12 +15,12 @@ using System;
  */
 public class Entry {
     public string Lexeme {get; private set};
-    public TOKEN Type {get; private set};
-    public TOKEN Kind {get; private set};
+    public TYPES Type {get; private set};
+    public KINDS Kind {get; private set};
     public int Size {get; private set};
     public List<string> Parameters {get; private set};
 
-    public Entry(string lexeme, TOKEN type, TOKEN kind, int size, List<string> parameters) {
+    public Entry(string lexeme, TYPES type, KINDS kind, int size, List<string> parameters) {
         Lexeme     = lexeme;
         Type       = type;
         Kind       = kind;
