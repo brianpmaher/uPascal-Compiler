@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 /*
  *  SymbolTable : SymbolTable object to contain Entries. In addition to the information stored
@@ -14,19 +15,19 @@ using System;
  *              : nesting level, and a label.
  */
 public class SymbolTable {
-    public string Name {get; private set};
-    public int NestingLevel {get; private set};
-    public int Label {get; private set};
-    List<Entry> Entries {get; private set};
+    public string Name {get; private set;}
+    public int NestingLevel {get; private set;}
+    public int Label {get; private set;}
+    public List<Entry> Entries {get; private set;}
 
-    SymbolTable(string name, int nestingLevel, int label, List<Entry> entries) {
+    public SymbolTable(string name, int nestingLevel, int label, List<Entry> entries) {
         Name         = name;
         NestingLevel = nestingLevel;
         Label        = label;
         Entries      = entries;
     }
 
-    addEntry(Entry entry) {
-        Entries.add(entry);
+    void addEntry(Entry entry) {
+        Entries.Add(entry);
     }
 }

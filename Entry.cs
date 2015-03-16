@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 /*
  *  Entry : Entry object to contain a single entry into the SymbolTable. This entry will represent
@@ -14,11 +15,11 @@ using System;
  *        : token type, token kind, size, and a list of parameters.
  */
 public class Entry {
-    public string Lexeme {get; private set};
-    public TYPES Type {get; private set};
-    public KINDS Kind {get; private set};
-    public int Size {get; private set};
-    public List<string> Parameters {get; private set};
+    public string Lexeme {get; private set;}
+    public TYPES Type {get; private set;}
+    public KINDS Kind {get; private set;}
+    public int Size {get; private set;}
+    public List<string> Parameters {get; private set;}
 
     public Entry(string lexeme, TYPES type, KINDS kind, int size, List<string> parameters) {
         Lexeme     = lexeme;
