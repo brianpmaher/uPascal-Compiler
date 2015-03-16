@@ -40,7 +40,7 @@ public partial class Scanner {
 
                 // Caching length to save memory
                 int length = __bytes.Length;
-                if(__bytes[length-1] != '\n'){
+                if(__bytes[length - 1] != '\n'){
                     throw new Exception(Constants.ERROR_NO_NEWLINE);
                 }
 
@@ -51,28 +51,29 @@ public partial class Scanner {
 
                 // Loop until EOF, ignoring whitespace
                 while(__curByte < length){
-                    // Handle comments
-                    if(__bytes[__curByte] == '{') {
-                        // Check for run on comment error
-                        if(commentFlag) {
-                            __tokens.Add(new Token("{", TOKENS.RUN_COMMENT, __column, __line));
+                    // In comment mode, ignore everything
+                    if(commentFlag) {
+                        if(__bytes[__curByte] == '\n') {
+                            __line++;
+                            __column = 1;
                         }
-                        commentFlag = true;
-                        __line++;
-                        __curByte++;
-                        continue;
-                    }
-                    // In comment mode, skip everything, look for end of comment
-                    else if(commentFlag) {
-                        if(__bytes[__curByte] == '}') {
+                        // Look for end of comments
+                        else if (__bytes[__curByte] == '}') {
                             commentFlag = false;
                             __column++;
-                        } else if(__bytes[__curByte] == '\n') {
-                            __line++;
-                            __column = 0;
+                        }
+                        // Handle run on comment error
+                        else if (__curByte == __bytes.Length - 1) {
+                            __tokens.Add(new Token("{", TOKENS.RUN_COMMENT, __column, __line));
                         } else {
                             __column++;
                         }
+                        __curByte++;
+                        continue;
+                    }
+                    // Look for comments
+                    else if(__bytes[__curByte] == '{') {
+                        commentFlag = true;
                         __curByte++;
                         continue;
                     }
@@ -80,7 +81,7 @@ public partial class Scanner {
                     else if(ws.Contains("" + __bytes[__curByte])) {
                         if(__bytes[__curByte] == '\n'){
                             __line++;
-                            __column = 0;
+                            __column = 1;
                         } else if(__bytes[__curByte] == ' ') {
                             __column++;
                         }
