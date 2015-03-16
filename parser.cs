@@ -20,19 +20,41 @@ public class Parser {
     }
 
     // Error
-    private void error(string expected){
-        throw new Exception(
-            String.Format(
-                Constants.ERROR_SYNTAX,
-                __lookahead.Line,
-                __lookahead.Column
-            ) +
-            String.Format(
-                Constants.ERROR_PARSER,
-                expected,
-                __lookahead.Lexeme
-            )
-        );
+    private void error(List<TOKENS> expected){
+        string exception; // Message to be displayed
+
+        // First check if a scan error token was found and throw an exception accordingly
+        if(__lookahead.Type == TOKENS.ERROR) {
+            exception = "SCAN ERROR: \"" +__lookahead.Lexeme +
+                "\" at column " + __lookahead.Column +
+                " and line " + __lookahead.Line;
+                throw new Exception(exception);
+        } else {
+            exception = "PARSE ERROR: expected (";
+        }
+
+        int count = expected.Count; // Size of expected list
+
+        // There will always be at least one expected to pass in, doing this in order to make
+        // displaying the expected tokens simpler (so we can separate by commas)
+        exception += expected[0];
+
+        // Iterate over every expected token after the first (this will not enter if there is only
+        // one expected token)
+        for(int i = 1; i < count; i++) {
+            exception += ", " + expected[i].ToString();
+        }
+
+        // Build our exception message with details about our current __lookahead to see what could
+        // have gone wrong with as much information as possible.
+        exception += "), but saw \"" + __lookahead.Lexeme +
+            "\" of type " + __lookahead.Type.ToString() +
+            " at column " + __lookahead.Column +
+            " and line " + __lookahead.Line;
+
+
+
+        throw new Exception(exception);
     }
 
     // Match
@@ -50,7 +72,7 @@ public class Parser {
                 );
             }
         } else {
-            throw new Exception("Match called on nonmatching token!");
+            error(new List<TOKENS>{token});
         }
     }
 
@@ -64,7 +86,7 @@ public class Parser {
                 Console.WriteLine("The input program parses!");
                 break;
             default:
-                error("'program'");
+                error(new List<TOKENS>{TOKENS.PROGRAM});
                 break;
         }
     }
@@ -79,7 +101,7 @@ public class Parser {
                 match(TOKENS.PERIOD);
                 break;
             default:
-                error("'program'");
+                error(new List<TOKENS>{TOKENS.PROGRAM});
                 break;
         }
     }
@@ -92,7 +114,7 @@ public class Parser {
                 programIdentifier();
                 break;
             default:
-                error("'program'");
+                error(new List<TOKENS>{TOKENS.PROGRAM});
                 break;
         }
     }
@@ -109,7 +131,8 @@ public class Parser {
                 statementPart();
                 break;
             default:
-                error("one of: 'begin', 'function', 'procedure', 'var'");
+                error(new List<TOKENS>{TOKENS.BEGIN, TOKENS.FUNCTION, TOKENS.PROCEDURE,
+                    TOKENS.VAR});
                 break;
         }
     }
@@ -129,7 +152,8 @@ public class Parser {
                 // Rule 6
                 break;
             default:
-                error("one of: 'var', 'begin', 'function', 'procedure'");
+                error(new List<TOKENS>{TOKENS.VAR, TOKENS.BEGIN, TOKENS.FUNCTION,
+                    TOKENS.PROCEDURE});
                 break;
         }
     }
@@ -146,7 +170,7 @@ public class Parser {
                 // Rule 8
                 break;
             default:
-                error("an identifier or 'procedure'");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER, TOKENS.PROCEDURE});
                 break;
         }
     }
@@ -160,7 +184,7 @@ public class Parser {
                 type();
                 break;
             default:
-                error("an identifier");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -184,7 +208,8 @@ public class Parser {
                 match(TOKENS.BOOLEAN);
                 break;
             default:
-                error("a type");
+                error(new List<TOKENS>{TOKENS.INTEGER, TOKENS.FLOAT, TOKENS.STRING,
+                    TOKENS.BOOLEAN});
                 break;
         }
     }
@@ -205,7 +230,7 @@ public class Parser {
                 // Rule 16
                 break;
             default:
-                error("one of: 'procedure', 'function', 'begin'");
+                error(new List<TOKENS>{TOKENS.PROCEDURE, TOKENS.FUNCTION, TOKENS.BEGIN});
                 break;
         }
     }
@@ -220,7 +245,7 @@ public class Parser {
                 match(TOKENS.SCOLON);
                 break;
             default:
-                error("'procedure'");
+                error(new List<TOKENS>{TOKENS.PROCEDURE});
                 break;
         }
     }
@@ -235,7 +260,7 @@ public class Parser {
                 match(TOKENS.SCOLON);
                 break;
             default:
-                error("'function'");
+                error(new List<TOKENS>{TOKENS.FUNCTION});
                 break;
         }
     }
@@ -249,7 +274,7 @@ public class Parser {
                 optionalFormalParameterList();
                 break;
             default:
-                error("'procedure'");
+                error(new List<TOKENS>{TOKENS.PROCEDURE});
                 break;
         }
     }
@@ -265,7 +290,7 @@ public class Parser {
                 type();
                 break;
             default:
-                error("'function'");
+                error(new List<TOKENS>{TOKENS.FUNCTION});
                 break;
         }
     }
@@ -284,7 +309,7 @@ public class Parser {
                 // Rule 22
                 break;
             default:
-                error("one of: '(', ':', ';'");
+                error(new List<TOKENS>{TOKENS.LPAREN, TOKENS.COLON, TOKENS.SCOLON});
                 break;
         }
     }
@@ -301,7 +326,7 @@ public class Parser {
                 // Rule 24
                 break;
             default:
-                error("one of: ';', ')'");
+                error(new List<TOKENS>{TOKENS.SCOLON, TOKENS.RPAREN});
                 break;
         }
     }
@@ -317,7 +342,7 @@ public class Parser {
                 variableParameterSection();
                 break;
             default:
-                error("an identifier or 'var'");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER, TOKENS.VAR});
                 break;
         }
     }
@@ -331,7 +356,7 @@ public class Parser {
                 type();
                 break;
             default:
-                error("an identifier");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -346,7 +371,7 @@ public class Parser {
                 type();
                 break;
             default:
-                error("'var'");
+                error(new List<TOKENS>{TOKENS.VAR});
                 break;
         }
     }
@@ -358,7 +383,7 @@ public class Parser {
                 compoundStatement();
                 break;
             default:
-                error("'begin'");
+                error(new List<TOKENS>{TOKENS.BEGIN});
                 break;
         }
     }
@@ -372,7 +397,7 @@ public class Parser {
                 match(TOKENS.END);
                 break;
             default:
-                error("'begin'");
+                error(new List<TOKENS>{TOKENS.BEGIN});
                 break;
         }
     }
@@ -395,10 +420,9 @@ public class Parser {
                 statementTail();
                 break;
             default:
-                error("an identifier or one of: " +
-                    "'begin', 'end', 'for', 'if', 'read', 'repeat', " +
-                    "'while', 'write', 'writeln', ':'"
-                );
+                error(new List<TOKENS>{TOKENS.BEGIN, TOKENS.END, TOKENS.FOR, TOKENS.IF, TOKENS.READ,
+                    TOKENS.REPEAT, TOKENS.WHILE, TOKENS.WRITE, TOKENS.WRITELN, TOKENS.IDENTIFIER,
+                    TOKENS.SCOLON});
                 break;
         }
     }
@@ -415,7 +439,7 @@ public class Parser {
                 statementTail();
                 break;
             default:
-                error("end of line or ';'");
+                error(new List<TOKENS>{TOKENS.END, TOKENS.SCOLON});
                 break;
         }
     }
@@ -463,10 +487,9 @@ public class Parser {
                 emptyStatement();
                 break;
             default:
-                error("an identifier or one of: " +
-                    "'begin', 'end', 'for', 'if', 'read', 'repeat', " +
-                    "'while', 'write', 'writeln', ':'"
-                );
+                error(new List<TOKENS>{TOKENS.BEGIN, TOKENS.FOR, TOKENS.IF, TOKENS.READ,
+                    TOKENS.REPEAT, TOKENS.WHILE, TOKENS.WRITE, TOKENS.WRITELN, TOKENS.IDENTIFIER,
+                    TOKENS.END, TOKENS.SCOLON});
                 break;
         }
     }
@@ -478,7 +501,7 @@ public class Parser {
                 // Rule 44
                 break;
             default:
-                error("';'");
+                error(new List<TOKENS>{TOKENS.END, TOKENS.SCOLON});
                 break;
         }
     }
@@ -494,7 +517,7 @@ public class Parser {
                 match(TOKENS.RPAREN);
                 break;
             default:
-                error("'read'");
+                error(new List<TOKENS>{TOKENS.READ});
                 break;
         }
     }
@@ -511,7 +534,7 @@ public class Parser {
                 // Rule 47
                 break;
             default:
-                error("',',')'");
+                error(new List<TOKENS>{TOKENS.COMMA, TOKENS.RPAREN});
                 break;
         }
     }
@@ -523,7 +546,7 @@ public class Parser {
                 variableIdentifier();
                 break;
             default:
-                error("An identifier");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -547,7 +570,7 @@ public class Parser {
                 match(TOKENS.RPAREN);
                 break;
             default:
-                error("'write','writeln'");
+                error(new List<TOKENS>{TOKENS.WRITE, TOKENS.WRITELN});
                 break;
         }
     }
@@ -564,7 +587,7 @@ public class Parser {
                 // Rule 52
                 break;
             default:
-                error("',',')'");
+                error(new List<TOKENS>{TOKENS.COMMA, TOKENS.RPAREN});
                 break;
         }
     }
@@ -586,10 +609,9 @@ public class Parser {
                 ordinalExpression();
                 break;
             default:
-                error(
-                    "An identifier, integer, float, fixed, string, or any of the following: " +
-                    "'false','not','true','(','-','+'"
-                );
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
     }
@@ -605,7 +627,7 @@ public class Parser {
                 expression();
                 break;
             default:
-                error("An identifier");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -621,7 +643,7 @@ public class Parser {
                 optionalElsePart();
                 break;
             default:
-                error("'if'");
+                error(new List<TOKENS>{TOKENS.IF});
                 break;
         }
     }
@@ -638,7 +660,7 @@ public class Parser {
                 // Rule 58
                 break;
             default:
-                error("end of line or 'else',';'");
+                error(new List<TOKENS>{TOKENS.ELSE, TOKENS.END, TOKENS.SCOLON});
                 break;
         }
     }
@@ -653,7 +675,7 @@ public class Parser {
                 booleanExpression();
                 break;
             default:
-                error("'repeat'");
+                error(new List<TOKENS>{TOKENS.REPEAT});
                 break;
         }
     }
@@ -668,7 +690,7 @@ public class Parser {
                 statement();
                 break;
             default:
-                error("'while'");
+                error(new List<TOKENS>{TOKENS.WHILE});
                 break;
         }
     }
@@ -687,7 +709,7 @@ public class Parser {
                 statement();
                 break;
             default:
-                error("'for'");
+                error(new List<TOKENS>{TOKENS.FOR});
                 break;
         }
     }
@@ -699,7 +721,7 @@ public class Parser {
                 variableIdentifier();
                 break;
             default:
-                error("An identifier");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -721,10 +743,9 @@ public class Parser {
                 ordinalExpression();
                 break;
             default:
-                error(
-                    "An identifier, integer, fixed, float, string or any of the following: " +
-                    "'false','not','true','(','-','+'"
-                );
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
     }
@@ -740,7 +761,7 @@ public class Parser {
                 match(TOKENS.TO);
                 break;
             default:
-                error("'downto','to'");
+                error(new List<TOKENS>{TOKENS.DOWNTO, TOKENS.TO});
                 break;
         }
     }
@@ -762,10 +783,9 @@ public class Parser {
                 ordinalExpression();
                 break;
             default:
-                error(
-                    "An identifier, integer, fixed, float, string or any of the following: " +
-                    "'false','not','true','(','-','+'"
-                );
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
     }
@@ -778,7 +798,7 @@ public class Parser {
                 optionalActualParameterList();
                 break;
             default:
-                error("An identifier");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -818,7 +838,11 @@ public class Parser {
                 match(TOKENS.RPAREN);
                 break;
             default:
-                error("End of line or ';','('");
+                error(new List<TOKENS>{TOKENS.AND, TOKENS.DIV, TOKENS.DO, TOKENS.DOWNTO,
+                    TOKENS.ELSE, TOKENS.END, TOKENS.MOD, TOKENS.OR, TOKENS.THEN, TOKENS.TO,
+                    TOKENS.COMMA, TOKENS.EQUAL, TOKENS.FLOAT_DIVIDE, TOKENS.GEQUAL, TOKENS.GTHAN,
+                    TOKENS.LEQUAL, TOKENS.LTHAN, TOKENS.MINUS, TOKENS.NEQUAL, TOKENS.PLUS,
+                    TOKENS.RPAREN, TOKENS.SCOLON, TOKENS.TIMES});
                 break;
         }
     }
@@ -835,7 +859,7 @@ public class Parser {
                 // Rule 71
                 break;
             default:
-                error("An error with actualParameterTail");
+                error(new List<TOKENS>{TOKENS.COMMA, TOKENS.RPAREN});
                 break;
         }
     }
@@ -857,7 +881,9 @@ public class Parser {
                 ordinalExpression();
                 break;
             default:
-                error("An error with actualParameter");
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
     }
@@ -880,7 +906,9 @@ public class Parser {
                 optionalRelationalPart();
                 break;
             default:
-                error("An error with expression");
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
     }
@@ -908,7 +936,9 @@ public class Parser {
                 simpleExpression();
                 break;
             default:
-                error("An error with optionalRelationalPart");
+                error(new List<TOKENS>{TOKENS.DO, TOKENS.DOWNTO, TOKENS.END, TOKENS.THEN,
+                    TOKENS.TO, TOKENS.COMMA, TOKENS.RPAREN, TOKENS.SCOLON, TOKENS.EQUAL,
+                    TOKENS.GEQUAL, TOKENS.GTHAN, TOKENS.LEQUAL, TOKENS.LTHAN, TOKENS.NEQUAL});
                 break;
         }
     }
@@ -940,7 +970,8 @@ public class Parser {
                 match(TOKENS.NEQUAL);
                 break;
             default:
-                error("An error with relationalOperator");
+                error(new List<TOKENS>{TOKENS.EQUAL, TOKENS.LTHAN, TOKENS.GTHAN, TOKENS.LEQUAL,
+                    TOKENS.GEQUAL, TOKENS.NEQUAL});
                 break;
         }
     }
@@ -964,7 +995,9 @@ public class Parser {
                 termTail();
                 break;
             default:
-                error("An error with simpleExpression");
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
     }
@@ -996,7 +1029,10 @@ public class Parser {
                 termTail();
                 break;
             default:
-                error("An error with termTail");
+                error(new List<TOKENS>{TOKENS.DO, TOKENS.DOWNTO, TOKENS.END, TOKENS.THEN, TOKENS.TO,
+                    TOKENS.COMMA, TOKENS.EQUAL, TOKENS.GEQUAL, TOKENS.GTHAN, TOKENS.LEQUAL,
+                    TOKENS.LTHAN, TOKENS.NEQUAL, TOKENS.RPAREN, TOKENS.SCOLON, TOKENS.OR,
+                    TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
     }
@@ -1023,7 +1059,9 @@ public class Parser {
                 match(TOKENS.PLUS);
                 break;
             default:
-                error("An error with optionalSign");
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.LPAREN});
                 break;
         }
     }
@@ -1043,7 +1081,7 @@ public class Parser {
                 match(TOKENS.PLUS);
                 break;
             default:
-                error("An error with addingOperator");
+                error(new List<TOKENS>{TOKENS.OR, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
     }
@@ -1064,7 +1102,9 @@ public class Parser {
                 factorTail();
                 break;
             default:
-                error("An error with term");
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.LPAREN});
                 break;
         }
     }
@@ -1101,7 +1141,11 @@ public class Parser {
                 // Rule 93
                 break;
             default:
-                error("An error with factorTail");
+                error(new List<TOKENS>{TOKENS.AND, TOKENS.DIV, TOKENS.MOD, TOKENS.FLOAT_DIVIDE,
+                    TOKENS.TIMES, TOKENS.DO, TOKENS.DOWNTO, TOKENS.END, TOKENS.OR, TOKENS.THEN,
+                    TOKENS.TO, TOKENS.COMMA, TOKENS.EQUAL, TOKENS.GEQUAL, TOKENS.LEQUAL,
+                    TOKENS.LTHAN, TOKENS.MINUS, TOKENS.NEQUAL, TOKENS.PLUS, TOKENS.RPAREN,
+                    TOKENS.SCOLON});
                 break;
         }
     }
@@ -1129,7 +1173,8 @@ public class Parser {
                 match(TOKENS.TIMES);
                 break;
             default:
-                error("An error with multiplyingOperator");
+                error(new List<TOKENS>{TOKENS.AND, TOKENS.DIV, TOKENS.MOD, TOKENS.FLOAT_DIVIDE,
+                    TOKENS.TIMES});
                 break;
         }
     }
@@ -1177,7 +1222,9 @@ public class Parser {
                 match(TOKENS.RPAREN);
                 break;
             default:
-                error("An error with factor");
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.LPAREN});
                 break;
         }
     }
@@ -1189,7 +1236,7 @@ public class Parser {
                 match(TOKENS.IDENTIFIER);
                 break;
             default:
-                error("An error with programIdentifier");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -1201,7 +1248,7 @@ public class Parser {
                 match(TOKENS.IDENTIFIER);
                 break;
             default:
-                error("An error with variableIdentifier");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -1213,7 +1260,7 @@ public class Parser {
                 match(TOKENS.IDENTIFIER);
                 break;
             default:
-                error("An error with procedureIdentifier");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -1225,7 +1272,7 @@ public class Parser {
                 match(TOKENS.IDENTIFIER);
                 break;
             default:
-                error("An error with functionIdentifier");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -1244,7 +1291,8 @@ public class Parser {
                 expression();
                 break;
             default:
-                error("An error with booleanExpression");
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT, TOKENS.LPAREN});
                 break;
         }
     }
@@ -1264,7 +1312,9 @@ public class Parser {
                 expression();
                 break;
             default:
-                error("An error with ordinalExpression");
+                error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
+                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.LPAREN});
                 break;
         }
     }
@@ -1277,7 +1327,7 @@ public class Parser {
                 identifierTail();
                 break;
             default:
-                error("An error with identifierList");
+                error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
@@ -1294,7 +1344,7 @@ public class Parser {
                 identifierTail();
                 break;
             default:
-                error("An error with identifierTail");
+                error(new List<TOKENS>{TOKENS.COLON, TOKENS.COMMA});
                 break;
         }
     }
