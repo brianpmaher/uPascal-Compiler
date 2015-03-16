@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 
 public class Parser {
-    // Dunders because derp
     private List<Token> __tokens;
     private Token __lookahead;
     private List<Token>.Enumerator __e;
