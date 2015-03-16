@@ -6,7 +6,6 @@
 
 program parseError;
 
-
 const
   one = 1;
   two = 2;

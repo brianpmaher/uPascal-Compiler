@@ -74,7 +74,6 @@ public partial class Scanner {
                     // Look for comments
                     else if(__bytes[__curByte] == '{') {
                         commentFlag = true;
-                        __line++;
                         __curByte++;
                         continue;
                     }
