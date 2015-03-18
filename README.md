@@ -8,6 +8,16 @@ To compile: `mcs -out:YµP.exe *.cs`
 
 To run: `mono YµP.exe <µPascal file> <output filename>`
 
+### To compile with Vagrant
+If you find that it is frustrating install the mono compiler, you may wish to use our vagrant setup. This creates a virtual machine set to Ubuntu Trusty Tahr, with the mono complete installation.
+
+- Install vagrant on your machine as per instructions on the [Vagrant website](https://www.vagrantup.com/downloads.html)
+- run `vagrant up` from the root directory
+- run `vagrant ssh` when vagrant has finished provisioning
+- (within vagrant) `cd /vagrant`
+- follow compile steps above
+
+
 ### Style ALL the things
 
 Set your editor up to recognize .editorconfig, to maintain style settings.
