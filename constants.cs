@@ -154,10 +154,4 @@ public static class Constants {
         {"until", TOKENS.UNTIL},        {"var", TOKENS.VAR},
         {"write", TOKENS.WRITE},        {"writeln", TOKENS.WRITELN}
     };
-    // Dictionary of type sizes
-    public static readonly Dictionary<TYPES, int> TYPE_SIZES = new Dictionary<TYPES, int>() {
-        {TYPES.BOOLEAN, 1},             {TYPES.FIXED, 8},
-        {TYPES.FLOAT, 8},               {TYPES.INTEGER, 4},
-        {TYPES.STRING, 1}
-    };
 }
