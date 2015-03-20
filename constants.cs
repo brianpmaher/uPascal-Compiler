@@ -78,6 +78,20 @@ public enum TOKENS {
     ERROR,          // token for other scan errors
 };
 
+public enum TYPES {
+    BOOLEAN   =     TOKENS.BOOLEAN,
+    FIXED     =     TOKENS.FIXED,
+    FLOAT     =     TOKENS.FLOAT,
+    INTEGER   =     TOKENS.INTEGER,
+    STRING    =     TOKENS.STRING
+};
+
+public enum KINDS {
+    VAR       =     TOKENS.VAR,
+    PROCEDURE =     TOKENS.PROCEDURE,
+    FUNCTION  =     TOKENS.FUNCTION
+};
+
 // Contains all constants for our program. Put any large and/or repeated strings here.
 public static class Constants {
     // Generic string messages
