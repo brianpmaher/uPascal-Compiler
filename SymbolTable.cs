@@ -30,4 +30,18 @@ public class SymbolTable {
     void addEntry(Entry entry) {
         Entries.Add(entry);
     }
+
+    int getSize(){
+        int totalSize = 0;
+        foreach(Entry entry in Entries){
+            totalSize += entry.Size;
+        }
+        return totalSize;
+    }
+
+    KINDS getKind(String identifier){
+        for(Entry entry in Entries){
+            if(entry.Lexeme == identifier) return entry.Kind;
+        }
+    }
 }

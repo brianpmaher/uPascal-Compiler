@@ -238,7 +238,7 @@ public partial class Scanner {
                 return new Token(lexeme, token, column, __line);
             }
         S3: // Digits have followed a valid '.'
-            token = TOKENS.FIXED_LIT;
+            token = TOKENS.FLOAT_LIT;
             next = __bytes[__curByte];
             __column++;
             __curByte++;

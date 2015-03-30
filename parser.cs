@@ -6,6 +6,8 @@ public class Parser {
     private List<Token> __tokens;
     private Token __lookahead;
     private List<Token>.Enumerator __e;
+    private Stack<SymbolTable> __symbolTableStack;
+    private int __forCount = 0; // Used for labeling purposes
 
     public Parser(List<Token> tokens){
         this.__tokens = tokens;
@@ -57,14 +59,16 @@ public class Parser {
     }
 
     // Match
-    private void match(TOKENS token){
+    private String match(TOKENS token){
         // Simple output
-        Console.WriteLine("\nMatching " + __lookahead.Lexeme);
+        String matchedLexeme = __lookahead.Lexeme;
+        Console.WriteLine("\nMatching " + matchedLexeme);
         if(token == TOKENS.EOF){
             return;
         } else if(__e.Current.Type == token){
             if(__e.MoveNext()){
                 __lookahead = __e.Current;
+                return matchedLexeme;
             } else {
                 throw new Exception(
                     "Expected token, got null!"
@@ -110,7 +114,8 @@ public class Parser {
             case TOKENS.PROGRAM:
                 Console.Write(3 + " ");
                 match(TOKENS.PROGRAM);
-                programIdentifier();
+                String programName = programIdentifier();
+                __symbolTableStack.Push(new SymbolTable(programName, 0, programName, null));
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROGRAM});
@@ -165,6 +170,8 @@ public class Parser {
                 match(TOKENS.SCOLON);
                 variableDeclarationTail();
                 break;
+            case TOKENS.BEGIN:
+            case TOKENS.FUNCTION:
             case TOKENS.PROCEDURE:
                 Console.Write(8 + " ");
                 break;
@@ -178,9 +185,15 @@ public class Parser {
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
                 Console.Write(9 + " ");
-                identifierList();
+                List<String> identifiers = identifierList();
                 match(TOKENS.COLON);
-                type();
+                TYPES type = type();
+                SymbolTable top = __symbolTableStack.Peek();
+                if(type != null){
+                    for(String identifier in identifiers){
+                        top.AddEntry(new Entry(identifier, type, KINDS.VAR, 1, null));
+                    }
+                }
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
@@ -188,29 +201,30 @@ public class Parser {
         }
     }
 
-    private void type(){
+    private TYPES type(){
         switch(__lookahead.Type){
             case TOKENS.INTEGER:
                 Console.Write(10 + " ");
                 match(TOKENS.INTEGER);
-                break;
+                return TYPES.INTEGER;
             case TOKENS.FLOAT:
                 Console.Write(11 + " ");
                 match(TOKENS.FLOAT);
-                break;
+                return TYPES.FLOAT;
             case TOKENS.STRING:
                 Console.Write(12 + " ");
                 match(TOKENS.STRING);
-                break;
+                return TYPES.STRING;
             case TOKENS.BOOLEAN:
                 Console.Write(13 + " ");
                 match(TOKENS.BOOLEAN);
-                break;
+                return TYPES.BOOLEAN;
             default:
                 error(new List<TOKENS>{TOKENS.INTEGER, TOKENS.FLOAT, TOKENS.STRING,
                     TOKENS.BOOLEAN});
                 break;
         }
+        return null;
     }
 
     private void procedureAndFunctionDeclarationPart(){
@@ -242,6 +256,7 @@ public class Parser {
                 match(TOKENS.SCOLON);
                 block();
                 match(TOKENS.SCOLON);
+                __symbolTableStack.Pop();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROCEDURE});
@@ -257,6 +272,7 @@ public class Parser {
                 match(TOKENS.SCOLON);
                 block();
                 match(TOKENS.SCOLON);
+                __symbolTableStack.Pop();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FUNCTION});
@@ -269,7 +285,20 @@ public class Parser {
             case TOKENS.PROCEDURE:
                 Console.Write(19 + " ");
                 match(TOKENS.PROCEDURE);
-                procedureIdentifier();
+                String procName = procedureIdentifier();
+                __symbolTableStack.Peek().AddEntry(
+                    new Entry(
+                        procName,
+                        null,
+                        KINDS.PROCEDURE,
+                        0,
+                        new List<String>()));
+                __symbolTableStack.Push(
+                    new SymbolTable(
+                        procName,
+                        __symbolTableStack.Peek().NestingLevel + 1,
+                        procName,
+                        new List<Entry>()));
                 optionalFormalParameterList();
                 break;
             default:
@@ -283,7 +312,20 @@ public class Parser {
             case TOKENS.FUNCTION:
                 Console.Write(20 + " ");
                 match(TOKENS.FUNCTION);
-                functionIdentifier();
+                String funcName = functionIdentifier();
+                __symbolTableStack.Peek().AddEntry(
+                    new Entry(
+                        procName,
+                        null,
+                        KINDS.FUNCTION,
+                        0,
+                        new List<String>()));
+                __symbolTableStack.Push(
+                    new SymbolTable(
+                        procName,
+                        __symbolTableStack.Peek().NestingLevel + 1,
+                        procName,
+                        new List<Entry>()));
                 optionalFormalParameterList();
                 match(TOKENS.COLON);
                 type();
@@ -350,9 +392,20 @@ public class Parser {
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
                 Console.Write(27 + " ");
-                identifierList();
+                List<String> idList = identifierList();
                 match(TOKENS.COLON);
-                type();
+                TYPES type = type();
+                for(String identifier in idList){
+                    __symbolTableStack.Peek().AddEntry(
+                        new Entry(
+                            identifier,
+                            type,
+                            KINDS.PARAMETER,
+                            1,
+                            null
+                        )
+                    );
+                }
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
@@ -365,9 +418,20 @@ public class Parser {
             case TOKENS.VAR:
                 Console.Write(28 + " ");
                 match(TOKENS.VAR);
-                identifierList();
+                List<String> idList = identifierList();
                 match(TOKENS.COLON);
-                type();
+                TYPES type = type();
+                for(String identifier in idList){
+                    __symbolTableStack.Peek().AddEntry(
+                        new Entry(
+                            identifier,
+                            type,
+                            KINDS.PARAMETER,
+                            1,
+                            null
+                        )
+                    );
+                }
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.VAR});
@@ -409,6 +473,7 @@ public class Parser {
             case TOKENS.IF:
             case TOKENS.READ:
             case TOKENS.REPEAT:
+            case TOKENS.UNTIL:
             case TOKENS.WHILE:
             case TOKENS.WRITE:
             case TOKENS.WRITELN:
@@ -429,6 +494,7 @@ public class Parser {
     private void statementTail(){
         switch(__lookahead.Type) {
             case TOKENS.END:
+            case TOKENS.UNTIL:
                 Console.Write(33 + " ");
                 break;
             case TOKENS.SCOLON:
@@ -475,13 +541,22 @@ public class Parser {
                 writeStatement();
                 break;
             case TOKENS.IDENTIFIER:
-                Console.Write(38 + " ");
-                assignmentStatement();
-                Console.Write(43 + " ");
-                // OR procedureStatement();
+                String identifier = __lookahead.Lexeme;
+                KINDS identifierKind = __symbolTableStack.Peek().GetKind(identifier);
+                if(identifierKIND == KINDS.VAR){
+                    Console.Write(38 + " ");
+                    assignmentStatement();
+                } else if(identifierKIND == KINDS.PROCEDURE){
+                    Console.Write(43 + " ");
+                    procedureStatement();
+                } else {
+                    // New Kind of Error?
+                }
                 break;
+            case TOKENS.ELSE:
             case TOKENS.END:
             case TOKENS.SCOLON:
+            case TOKENS.UNTIL:
                 Console.Write(34 + " ");
                 emptyStatement();
                 break;
@@ -496,7 +571,9 @@ public class Parser {
     private void emptyStatement(){
         switch(__lookahead.Type) {
             case TOKENS.END:
+            // case TOKENS.ELSE: - Commenting this may resolve the else conflict
             case TOKENS.SCOLON:
+            case TOKENS.UNTIL:
                 Console.Write(44 + " ");
                 break;
             default:
@@ -598,7 +675,6 @@ public class Parser {
             case TOKENS.TRUE:
             case TOKENS.IDENTIFIER:
             case TOKENS.INTEGER_LIT:
-            case TOKENS.FIXED_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
             case TOKENS.LPAREN:
@@ -609,7 +685,7 @@ public class Parser {
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
                     TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
@@ -618,10 +694,17 @@ public class Parser {
     private void assignmentStatement(){
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
-                Console.Write(54 + " ");
-                variableIdentifier();
-                Console.Write(55 + " ");
-                // OR functionIdentifier();
+                String identifer = __lookahead.Lexeme;
+                KINDS identifierKind = __symbolTableStack.Peek().getKind(identifier);
+                if(identifierKind == KINDS.VAR){
+                    Console.Write(54 + " ");
+                    variableIdentifier();
+                } else if(identiferKind == KINDS.FUNCTION){
+                    Console.Write(55 + " ");
+                    functionIdentifier();
+                } else {
+                    throw new Exception("Expected a function or variable, got " + identifierKind);
+                }
                 match(TOKENS.ASSIGN);
                 expression();
                 break;
@@ -656,6 +739,7 @@ public class Parser {
                 break;
             case TOKENS.END:
             case TOKENS.SCOLON:
+            case TOKENS.UNTIL:
                 Console.Write(58 + " ");
                 break;
             default:
@@ -699,13 +783,30 @@ public class Parser {
             case TOKENS.FOR:
                 Console.Write(61 + " ");
                 match(TOKENS.FOR);
-                controlVariable();
+                __forCount++;
+                __symbolTableStack.Push(new SymbolTable(
+                    "For_" + __forCount,
+                    __symbolTableStack.Peek().NestingLevel + 1,
+                    "For_" + __forCount,
+                    null
+                ));
+                String identifier = controlVariable();
                 match(TOKENS.ASSIGN);
-                initialValue();
+                TYPES typeInitial = initialValue();
+                __symbolTableStack.Peek().AddEntry(
+                    new Entry(
+                        identifier,
+                        typeInitial,
+                        KINDS.VAR,
+                        1,
+                        null
+                    )
+                );
                 stepValue();
                 finalValue();
                 match(TOKENS.DO);
                 statement();
+                __symbolTableStack.Pop();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FOR});
@@ -713,12 +814,12 @@ public class Parser {
         }
     }
 
-    private void controlVariable(){
+    private String controlVariable(){
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(62 + " ");
-                variableIdentifier();
-                break;
+                String identifier = variableIdentifier();
+                return identifier;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
@@ -732,7 +833,6 @@ public class Parser {
             case TOKENS.TRUE:
             case TOKENS.IDENTIFIER:
             case TOKENS.INTEGER_LIT:
-            case TOKENS.FIXED_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
             case TOKENS.LPAREN:
@@ -743,7 +843,7 @@ public class Parser {
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
                     TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
@@ -772,7 +872,6 @@ public class Parser {
             case TOKENS.TRUE:
             case TOKENS.IDENTIFIER:
             case TOKENS.INTEGER_LIT:
-            case TOKENS.FIXED_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
             case TOKENS.LPAREN:
@@ -783,7 +882,7 @@ public class Parser {
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
                     TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
@@ -827,6 +926,7 @@ public class Parser {
             case TOKENS.RPAREN:
             case TOKENS.SCOLON:
             case TOKENS.TIMES:
+            case TOKENS.UNTIL:
                 Console.Write(69 + " ");
                 break;
             case TOKENS.LPAREN:
@@ -870,7 +970,6 @@ public class Parser {
             case TOKENS.TRUE:
             case TOKENS.IDENTIFIER:
             case TOKENS.INTEGER_LIT:
-            case TOKENS.FIXED_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
             case TOKENS.LPAREN:
@@ -881,7 +980,7 @@ public class Parser {
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
                     TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
@@ -894,7 +993,6 @@ public class Parser {
             case TOKENS.TRUE:
             case TOKENS.IDENTIFIER:
             case TOKENS.INTEGER_LIT:
-            case TOKENS.FIXED_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
             case TOKENS.LPAREN:
@@ -906,7 +1004,7 @@ public class Parser {
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
                     TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
@@ -916,12 +1014,14 @@ public class Parser {
         switch(__lookahead.Type){
             case TOKENS.DO:
             case TOKENS.DOWNTO:
+            case TOKENS.ELSE:
             case TOKENS.END:
             case TOKENS.THEN:
             case TOKENS.TO:
             case TOKENS.COMMA:
             case TOKENS.RPAREN:
             case TOKENS.SCOLON:
+            case TOKENS.UNTIL:
                 Console.Write(75 + " ");
                 break;
             case TOKENS.EQUAL:
@@ -982,7 +1082,6 @@ public class Parser {
             case TOKENS.TRUE:
             case TOKENS.IDENTIFIER:
             case TOKENS.INTEGER_LIT:
-            case TOKENS.FIXED_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
             case TOKENS.LPAREN:
@@ -995,7 +1094,7 @@ public class Parser {
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
                     TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
@@ -1005,6 +1104,7 @@ public class Parser {
         switch(__lookahead.Type){
             case TOKENS.DO:
             case TOKENS.DOWNTO:
+            case TOKENS.ELSE:
             case TOKENS.END:
             case TOKENS.THEN:
             case TOKENS.TO:
@@ -1017,6 +1117,7 @@ public class Parser {
             case TOKENS.NEQUAL:
             case TOKENS.RPAREN:
             case TOKENS.SCOLON:
+            case TOKENS.UNTIL:
                 Console.Write(84 + " ");
                 break;
             case TOKENS.OR:
@@ -1043,7 +1144,6 @@ public class Parser {
             case TOKENS.TRUE:
             case TOKENS.IDENTIFIER:
             case TOKENS.INTEGER_LIT:
-            case TOKENS.FIXED_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
             case TOKENS.LPAREN:
@@ -1059,7 +1159,7 @@ public class Parser {
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
                     TOKENS.LPAREN});
                 break;
         }
@@ -1092,7 +1192,6 @@ public class Parser {
             case TOKENS.TRUE:
             case TOKENS.IDENTIFIER:
             case TOKENS.INTEGER_LIT:
-            case TOKENS.FIXED_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
             case TOKENS.LPAREN:
@@ -1102,7 +1201,7 @@ public class Parser {
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
                     TOKENS.LPAREN});
                 break;
         }
@@ -1122,6 +1221,7 @@ public class Parser {
                 break;
             case TOKENS.DO:
             case TOKENS.DOWNTO:
+            case TOKENS.ELSE:
             case TOKENS.END:
             case TOKENS.OR:
             case TOKENS.THEN:
@@ -1137,6 +1237,7 @@ public class Parser {
             case TOKENS.PLUS:
             case TOKENS.RPAREN:
             case TOKENS.SCOLON:
+            case TOKENS.UNTIL:
                 Console.Write(93 + " ");
                 break;
             default:
@@ -1160,7 +1261,7 @@ public class Parser {
                 match(TOKENS.DIV);
                 break;
             case TOKENS.MOD:
-                //Rule 97
+                Console.Write(97 + " ");
                 match(TOKENS.MOD);
                 break;
             case TOKENS.FLOAT_DIVIDE:
@@ -1194,17 +1295,22 @@ public class Parser {
                 match(TOKENS.TRUE);
                 break;
             case TOKENS.IDENTIFIER:
-                Console.Write(106 + " ");
-                functionIdentifier();
-                optionalActualParameterList();
+                String identifier = __lookahead.Lexeme;
+                KINDS identifierKind = __symbolTableStack.Peek().getKind(identifier);
+                if(identifierKind == KINDS.VAR){
+                    Console.Write(116 + " ");
+                    variableIdentifier();
+                } else if(identifierKind == KINDS.FUNCTION){
+                    Console.Write(106 + " ");
+                    functionIdentifier();
+                    optionalActualParameterList();
+                } else {
+                    throw new Exception("Expected variable or function identifier");
+                }
                 break;
             case TOKENS.INTEGER_LIT:
                 Console.Write(99 + " ");
                 match(TOKENS.INTEGER_LIT);
-                break;
-            case TOKENS.FIXED_LIT:
-                Console.Write(100 + " ");
-                match(TOKENS.FIXED_LIT);
                 break;
             case TOKENS.FLOAT_LIT:
                 Console.Write(100 + " ");
@@ -1222,54 +1328,50 @@ public class Parser {
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
                     TOKENS.LPAREN});
                 break;
         }
     }
 
-    private void programIdentifier(){
+    private String programIdentifier(){
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
                 Console.Write(107 + " ");
-                match(TOKENS.IDENTIFIER);
-                break;
+                return match(TOKENS.IDENTIFIER);
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
 
-    private void variableIdentifier(){
+    private String variableIdentifier(){
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
                 Console.Write(108 + " ");
-                match(TOKENS.IDENTIFIER);
-                break;
+                return match(TOKENS.IDENTIFIER);
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
 
-    private void procedureIdentifier(){
+    private String procedureIdentifier(){
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
                 Console.Write(109 + " ");
-                match(TOKENS.IDENTIFIER);
-                break;
+                return match(TOKENS.IDENTIFIER);
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
     }
 
-    private void functionIdentifier(){
+    private String functionIdentifier(){
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
                 Console.Write(110 + " ");
-                match(TOKENS.IDENTIFIER);
-                break;
+                return match(TOKENS.IDENTIFIER);
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
@@ -1282,16 +1384,18 @@ public class Parser {
             case TOKENS.NOT:
             case TOKENS.TRUE:
             case TOKENS.IDENTIFIER:
-            case TOKENS.FIXED_LIT:
+            case TOKENS.INTEGER_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
             case TOKENS.LPAREN:
+            case TOKENS.PLUS:
+            case TOKENS.MINUS:
                 Console.Write(111 + " ");
                 expression();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT, TOKENS.LPAREN});
+                    TOKENS.FLOAT_LIT, TOKENS.STRING_LIT, TOKENS.LPAREN});
                 break;
         }
     }
@@ -1303,28 +1407,30 @@ public class Parser {
             case TOKENS.TRUE:
             case TOKENS.IDENTIFIER:
             case TOKENS.INTEGER_LIT:
-            case TOKENS.FIXED_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
             case TOKENS.LPAREN:
+            case TOKENS.PLUS:
+            case TOKENS.MINUS:
                 Console.Write(112 + " ");
                 expression();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
-                    TOKENS.INTEGER_LIT, TOKENS.FIXED_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
+                    TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
                     TOKENS.LPAREN});
                 break;
         }
     }
 
-    private void identifierList(){
+    private List<String> identifierList(){
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
                 Console.Write(113 + " ");
-                match(TOKENS.IDENTIFIER);
-                identifierTail();
-                break;
+                List<String> idList = new List<String>();
+                idList.Add(match(TOKENS.IDENTIFIER));
+                idList.AddRange(identifierTail());
+                return idList;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
@@ -1338,13 +1444,15 @@ public class Parser {
                 break;
             case TOKENS.COMMA:
                 Console.Write(114 + " ");
+                List<String> idList = new List<String>();
                 match(TOKENS.COMMA);
-                match(TOKENS.IDENTIFIER);
-                identifierTail();
-                break;
+                idList.Add(match(TOKENS.IDENTIFIER));
+                idList.AddRange(identifierTail());
+                return idList;
             default:
                 error(new List<TOKENS>{TOKENS.COLON, TOKENS.COMMA});
                 break;
         }
+        return null;
     }
 }

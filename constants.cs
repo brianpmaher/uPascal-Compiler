@@ -89,7 +89,8 @@ public enum TYPES {
 public enum KINDS {
     VAR       =     TOKENS.VAR,
     PROCEDURE =     TOKENS.PROCEDURE,
-    FUNCTION  =     TOKENS.FUNCTION
+    FUNCTION  =     TOKENS.FUNCTION,
+    PARAMETER
 };
 
 // Contains all constants for our program. Put any large and/or repeated strings here.
