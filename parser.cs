@@ -165,6 +165,8 @@ public class Parser {
                 match(TOKENS.SCOLON);
                 variableDeclarationTail();
                 break;
+            case TOKENS.BEGIN:
+            case TOKENS.FUNCTION:
             case TOKENS.PROCEDURE:
                 Console.Write(8 + " ");
                 break;
