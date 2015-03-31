@@ -4,19 +4,16 @@ using System.IO;
 
 public class SemAnalyzer{
     public Stack<SymbolTable> SymbolTableStack{get; private set;}
-    public StreamWriter File{get; private set;}
+    public String File{get; private set;}
     public TYPES topStackType{get; private set;}
 
     public SemAnalyzer(Stack<SymbolTable> symbolTableStack, String progname){
         this.SymbolTableStack = symbolTableStack;
-        this.File = new StreamWriter(progname + ".exe");
-    }
+        this.File = progname + ".exe";
+        using(StreamWriter writer = new StreamWriter(File)){
 
-    // Destructor for ensuring file writer object is destroyed
-    // ~SemAnalyzer(){
-    //     this.File.Close();
-    //     this.File.Dispose();
-    // }
+        }
+    }
 
     // Initializes the register on the stack
     public void genInit(){
@@ -24,8 +21,13 @@ public class SemAnalyzer{
         genLabel();
         output(
             "PUSH D" + top.NestingLevel,
-            "MOV SP D" + top.NestingLevel,
-            "ADD SP #" + top.Size + " SP");
+            "MOV SP D" + top.NestingLevel
+        );
+    }
+
+    public void genSymSize(){
+        SymbolTable top = SymbolTableStack.Peek();
+        output("ADD SP #" + top.Size + " SP");
     }
 
     //Pops the table off the stack
@@ -39,7 +41,9 @@ public class SemAnalyzer{
     }
 
     public void genPushVar(SemRecord toPush){
-        output("PUSH " + toPush.Lexeme);
+        SymbolTable top = SymbolTableStack.Peek();
+        Entry idEntry = top.GetEntry(toPush.Lexeme);
+        output("PUSH " + idEntry.Offset + "(D" + top.NestingLevel + ")");
         topStackType = toPush.Type;
     }
 
@@ -67,6 +71,30 @@ public class SemAnalyzer{
         output("WRTS");
     }
 
+    public void genRead(String identifier){
+        SymbolTable top = SymbolTableStack.Peek();
+        Entry idEntry = top.GetEntry(identifier);
+        if(idEntry.Kind != KINDS.VAR){
+            throw new Exception("Tried to write to a non-variable");
+        } else{
+            String outputString = "RD";
+            switch(idEntry.Type){
+                case TYPES.INTEGER:
+                    outputString += " ";
+                    break;
+                case TYPES.FLOAT:
+                    outputString += "F ";
+                    break;
+                case TYPES.STRING:
+                    outputString += "S ";
+                    break;
+                default:
+                    throw new Exception("Tried to write to an invalid type");
+            }
+            output(outputString + idEntry.Offset + "(D" + top.NestingLevel + ")");
+        }
+    }
+
     public void genWriteLine(){
         output(
             "PUSH #\"\"",
@@ -84,12 +112,14 @@ public class SemAnalyzer{
             throw new Exception("Incompatible types found");
         }
         Entry assigneeSymRec = SymbolTableStack.Peek().GetEntry(assignee.Lexeme);
-        output("POP " + SymbolTableStack.Peek().NestingLevel + "(D" + assigneeSymRec.Offset + ")");
+        output("POP " + assigneeSymRec.Offset + "(D" + SymbolTableStack.Peek().NestingLevel + ")");
     }
 
     private void output(params String[] outputStrings){
-        foreach(String command in outputStrings){
-            this.File.WriteLine(command);
+        using(StreamWriter writer = new StreamWriter(File, true)){
+            foreach(String command in outputStrings){
+                writer.WriteLine(command);
+            }
         }
     }
 }

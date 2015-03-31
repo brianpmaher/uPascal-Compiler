@@ -417,6 +417,7 @@ public partial class Scanner {
                 // We don't include the closing apostrophe
                 __column--;
                 __curByte--;
+                lexeme = "\"" + lexeme + "\"";
                 return new Token(lexeme, TOKENS.STRING_LIT, column, __line);
             }
         S3:

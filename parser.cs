@@ -139,6 +139,7 @@ public class Parser {
                 Console.Write(4 + " ");
                 variableDeclarationPart();
                 procedureAndFunctionDeclarationPart();
+                __analyzer.genSymSize();
                 statementPart();
                 __analyzer.genEnd();
                 break;
@@ -575,7 +576,8 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(48 + " ");
-                variableIdentifier();
+                String id = variableIdentifier();
+                __analyzer.genRead(id);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
