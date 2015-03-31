@@ -40,7 +40,7 @@ public class Driver {
                 );
             }
 
-            Parser parser = new Parser(tokens);
+            Parser parser = new Parser(tokens, args[0]);
             try {
                 parser.Parse();
             } catch (Exception ex) {

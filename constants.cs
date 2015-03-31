@@ -83,7 +83,8 @@ public enum TYPES {
     FIXED     =     TOKENS.FIXED,
     FLOAT     =     TOKENS.FLOAT,
     INTEGER   =     TOKENS.INTEGER,
-    STRING    =     TOKENS.STRING
+    STRING    =     TOKENS.STRING,
+    NONE
 };
 
 public enum KINDS {

@@ -19,13 +19,15 @@ public class Entry {
     public TYPES Type {get; private set;}
     public KINDS Kind {get; private set;}
     public int Size {get; private set;}
+    public int Offset {get; private set;}
     public List<string> Parameters {get; private set;}
 
-    public Entry(string lexeme, TYPES type, KINDS kind, int size, List<string> parameters) {
+    public Entry(string lexeme, TYPES type, KINDS kind, int size, int offset, List<string> parameters) {
         Lexeme     = lexeme;
         Type       = type;
         Kind       = kind;
         Size       = size;
+        Offset     = offset;
         Parameters = parameters;
     }
 }
