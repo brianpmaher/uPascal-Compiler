@@ -9,14 +9,14 @@ public class SemAnalyzer{
 
     public SemAnalyzer(Stack<SymbolTable> symbolTableStack, String progname){
         this.SymbolTableStack = symbolTableStack;
-        this.File = new StreamWriter(progname);
+        this.File = new StreamWriter(progname + ".exe");
     }
 
     // Destructor for ensuring file writer object is destroyed
-    ~SemAnalyzer(){
-        this.File.Close();
-        this.File.Dispose();
-    }
+    // ~SemAnalyzer(){
+    //     this.File.Close();
+    //     this.File.Dispose();
+    // }
 
     // Initializes the register on the stack
     public void genInit(){

@@ -21,7 +21,7 @@ public class SymbolTable {
     public int Size {get; private set;}
     public List<Entry> Entries {get; private set;}
 
-    public SymbolTable(string name, int nestingLevel, int size, int label, List<Entry> entries) {
+    public SymbolTable(String name, int nestingLevel, int size, int label, List<Entry> entries) {
         Name         = name;
         NestingLevel = nestingLevel;
         Size         = size;

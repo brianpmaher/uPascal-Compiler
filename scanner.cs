@@ -94,10 +94,13 @@ public partial class Scanner {
                     }
                 }
                 __tokens.Add(new Token("EOF", TOKENS.EOF, __column, __line));
+                reader.Close();
+                reader.Dispose();
             }
         } catch(Exception ex) {
             Console.WriteLine(ex);
         }
+
         return __tokens;
     }
 

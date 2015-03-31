@@ -14,6 +14,7 @@ public class Parser {
         this.__e = __tokens.GetEnumerator();
         this.__e.MoveNext();
         this.__lookahead = __e.Current;
+        this.__symbolTableStack = new Stack<SymbolTable>();
         this.__analyzer = new SemAnalyzer(__symbolTableStack, progname);
     }
 
@@ -117,7 +118,10 @@ public class Parser {
                 Console.Write(3 + " ");
                 match(TOKENS.PROGRAM);
                 String programName = programIdentifier();
-                __symbolTableStack.Push(new SymbolTable(programName, 0, 0, 0, null));
+                Console.WriteLine("Program name is: " + programName);
+                __symbolTableStack.Push(new SymbolTable(
+                    programName, 0, 0, 0, new List<Entry>()));
+                Console.WriteLine("Pushed new SymbolTable");
                 __analyzer.genInit();
                 break;
             default:
@@ -1403,7 +1407,10 @@ public class Parser {
                 List<String> idList = new List<String>();
                 match(TOKENS.COMMA);
                 idList.Add(match(TOKENS.IDENTIFIER));
-                idList.AddRange(identifierTail());
+                List<String> idTailList = identifierTail();
+                if(idTailList != null){
+                    idList.AddRange(identifierTail());
+                }
                 return idList;
             default:
                 error(new List<TOKENS>{TOKENS.COLON, TOKENS.COMMA});
