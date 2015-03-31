@@ -29,16 +29,16 @@ public class SymbolTable {
         Entries      = entries;
     }
 
-    void addEntry(String lexeme, TYPES type, KINDS kind, int size, List<String> params) {
+    public void AddEntry(String lexeme, TYPES type, KINDS kind, int size, List<String> paras) {
         if(kind == KINDS.VAR){
-            Entries.Add(new Entry(lexeme, type, kind, size, this.Size, params));
+            Entries.Add(new Entry(lexeme, type, kind, size, this.Size, paras));
             this.Size += size;
         } else { //nonvars don't have size
-            Entries.Add(new Entry(lexeme, type, kind, size, null, params));
+            Entries.Add(new Entry(lexeme, type, kind, size, 0, paras));
         }
     }
 
-    int getSize(){
+    public int GetSize(){
         int totalSize = 0;
         foreach(Entry entry in Entries){
             totalSize += entry.Size;
@@ -48,15 +48,25 @@ public class SymbolTable {
 
     // These will need to be recursive descent to find
     // other symbol table entries when we do functions/procs
-    TYPES getType(){
-        for(Entry entry in Entries){
+    public TYPES GetType(String identifier){
+        foreach(Entry entry in Entries){
             if(entry.Lexeme == identifier) return entry.Type;
         }
+        return TYPES.NONE;
     }
 
-    KINDS getKind(String identifier){
-        for(Entry entry in Entries){
+    public KINDS GetKind(String identifier){
+        foreach(Entry entry in Entries){
             if(entry.Lexeme == identifier) return entry.Kind;
         }
+        return KINDS.NONE;
+    }
+
+
+    public Entry GetEntry(String identifier){
+        foreach(Entry entry in Entries){
+            if(entry.Lexeme == identifier) return entry;
+        }
+        return null;
     }
 }

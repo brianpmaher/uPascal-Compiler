@@ -1,14 +1,15 @@
+using System;
 using System.Collections.Generic;
-using Systems.IO;
+using System.IO;
 
 public class SemAnalyzer{
     public Stack<SymbolTable> SymbolTableStack{get; private set;}
     public StreamWriter File{get; private set;}
     public TYPES topStackType{get; private set;}
 
-    SemAnalyzer(SymbolTable symbolTable, String progname){
+    public SemAnalyzer(Stack<SymbolTable> symbolTableStack, String progname){
         this.SymbolTableStack = symbolTableStack;
-        this.StreamWriter = new StreamWriter(progname);
+        this.File = new StreamWriter(progname);
     }
 
     // Destructor for ensuring file writer object is destroyed
@@ -47,8 +48,9 @@ public class SemAnalyzer{
         topStackType = toPush.Type;
     }
 
+    // Do we really need a label? Let's use the Name as the label
     public void genLabel(){
-        String label = SymbolTableStack.Peek().Label;
+        String label = SymbolTableStack.Peek().Name;
         output("L" + label + ":");
     }
 
@@ -73,20 +75,20 @@ public class SemAnalyzer{
     }
 
     public void genAssign(SemRecord assignee, SemRecord expression){
-        if(assignee.Type == expression.Type); //Do nothing
+        if(assignee.Type == expression.Type){} //Do nothing
         else if(assignee.Type == TYPES.INTEGER && expression.Type == TYPES.FLOAT){
             output("CASTSI");
-        } else if(assigneee.Type == TYPES.FLOAT && expression.Type == TYPES.INTEGER){
+        } else if(assignee.Type == TYPES.FLOAT && expression.Type == TYPES.INTEGER){
             output("CASTSF");
         } else{
             throw new Exception("Incompatible types found");
         }
-        Entry assigneeSymRec = symbolStack.GetEntry(assignee.Lexeme);
-        output("POP " + symbolTableStack.Peek().NestingLevel + "(D" + assigneeSymRec.Offset + ")");
+        Entry assigneeSymRec = SymbolTableStack.Peek().GetEntry(assignee.Lexeme);
+        output("POP " + SymbolTableStack.Peek().NestingLevel + "(D" + assigneeSymRec.Offset + ")");
     }
 
     private void output(params String[] outputStrings){
-        for(String command in outputStrings){
+        foreach(String command in outputStrings){
             this.File.WriteLine(command);
         }
     }
@@ -96,7 +98,7 @@ public class SemRecord{
     public TYPES Type {get; private set;}
     public String Lexeme {get; private set;}
 
-    SemRecord(TYPES type, String lexeme){
+    public SemRecord(TYPES type, String lexeme){
         this.Type = type;
         this.Lexeme = lexeme;
     }
