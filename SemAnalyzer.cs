@@ -63,10 +63,156 @@ public class SemAnalyzer{
             output("NOTS");
         } else {
             // TODO: Professionalize exception message
-            throw new Exception("Oh shit, you tried to negate a non-boolean");
+            throw new Exception("You can't not a non-boolean");
         }
     }
 
+    public void genNeg(){
+        if(topStackType == TYPES.INTEGER){
+            output("PUSH #-1", "MULS");
+        } else if(topStackType == TYPES.FLOAT){
+            output("PUSH #-1.0", "MULSF");
+        } else {
+            throw new Exception("You can't negate a non-numeric with '-'");
+        }
+    }
+
+    /**
+    Multiplying Operators
+    */
+    public TYPES genAnd(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.BOOLEAN){
+            output("ANDS");
+        } else {
+            throw new Exception("Can't AND non-booleans, sucka");
+        }
+        topStackType = TYPES.BOOLEAN;
+        return TYPES.BOOLEAN;
+    }
+
+    public TYPES genMul(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.INTEGER){
+            output("MULS");
+            topStackType = TYPES.INTEGER;
+            return TYPES.INTEGER;
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("MULSF");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "MULSF");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "MULSF");
+        } else{
+            throw new Exception("Can't multiply non-numbers");
+        }
+        topStackType = TYPES.FLOAT;
+        return TYPES.FLOAT;
+    }
+
+    public TYPES genIntDiv(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.INTEGER){
+            output("DIVS");
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("DIVSF", "CASTSI");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "DIVSF", "CASTSI");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "DIVSF", "CASTSI");
+        } else{
+            throw new Exception("Can't divide non-numbers, what were you thinking?");
+        }
+        topStackType = TYPES.INTEGER;
+        return TYPES.INTEGER;
+    }
+
+    public TYPES genDiv(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.INTEGER){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "CASTSF", "DIVSF");
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("DIVSF");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "DIVSF");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "DIVSF");
+        } else {
+            throw new Exception("Divide by 0! Just kidding. Although maybe we should check for that");
+        }
+        topStackType = TYPES.FLOAT;
+        return TYPES.FLOAT;
+    }
+
+    public TYPES genMod(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.INTEGER){
+            output("MODS");
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("CASTSI", "SUB SP #1 SP", "CASTSI", "ADD SP #1 SP", "MODS");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("CASTSI", "MODS");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("SUB SP #1 SP", "CASTSI", "ADD SP #1 SP");
+        } else{
+            throw new Exception("Can't modulus non-numeric types");
+        }
+        topStackType = TYPES.INTEGER;
+        return TYPES.INTEGER;
+    }
+
+    /**
+    Adding Operators
+    */
+    public TYPES genOr(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.BOOLEAN){
+            output("ORS");
+        } else {
+            throw new Exception("Can't OR non-booleans");
+        }
+        topStackType = TYPES.BOOLEAN;
+        return TYPES.BOOLEAN;
+    }
+
+    public TYPES genSub(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.INTEGER){
+            output("SUBS");
+            topStackType = TYPES.INTEGER;
+            return TYPES.INTEGER;
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("SUBSF");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "SUBSF");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "SUBSF");
+        } else {
+            throw new Exception("Cannot subtract non-numeric types");
+        }
+        topStackType = TYPES.FLOAT;
+        return TYPES.FLOAT;
+    }
+
+    public TYPES genAdd(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.INTEGER){
+            output("ADDS");
+            topStackType = TYPES.INTEGER;
+            return TYPES.INTEGER;
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("ADDSF");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "ADDSF");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "ADDSF");
+        } else {
+            throw new Exception("Cannot add non-numeric types");
+        }
+        topStackType = TYPES.FLOAT;
+        return TYPES.FLOAT;
+    }
+
+    /**
+    Relational Operators
+    */
+
+
+    /**
+    Write and Read statements
+    */
     public void genWrite(){
         output("WRTS");
     }

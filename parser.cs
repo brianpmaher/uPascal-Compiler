@@ -1033,9 +1033,12 @@ public class Parser {
             case TOKENS.MINUS:
             case TOKENS.PLUS:
                 Console.Write(82 + " ");
-                optionalSign();
+                bool minus = optionalSign();
                 expRec = term();
-                termTail();
+                if(minus){
+                    __analyzer.genNeg();
+                }
+                expRec = termTail(expRec);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
@@ -1046,7 +1049,7 @@ public class Parser {
         return expRec;
     }
 
-    private void termTail(){
+    private SemRecord termTail(SemRecord left){
         switch(__lookahead.Type){
             case TOKENS.DO:
             case TOKENS.DOWNTO:
@@ -1070,10 +1073,10 @@ public class Parser {
             case TOKENS.MINUS:
             case TOKENS.PLUS:
                 Console.Write(83 + " ");
-                addingOperator();
-                term();
-                termTail();
-                break;
+                Func<SemRecord, SemRecord, TYPES> addOp = addingOperator();
+                SemRecord right = term();
+                SemRecord addRec = new SemRecord(addOp(left, right), "");
+                return termTail(addRec);
             default:
                 error(new List<TOKENS>{TOKENS.DO, TOKENS.DOWNTO, TOKENS.END, TOKENS.THEN, TOKENS.TO,
                     TOKENS.COMMA, TOKENS.EQUAL, TOKENS.GEQUAL, TOKENS.GTHAN, TOKENS.LEQUAL,
@@ -1081,9 +1084,12 @@ public class Parser {
                     TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
+        return left;
     }
 
-    private void optionalSign(){
+    // Return true if optional sign exists and is minus
+    // Otherwise, we don't have to do anything
+    private bool optionalSign(){
         switch(__lookahead.Type){
             case TOKENS.FALSE:
             case TOKENS.NOT:
@@ -1098,7 +1104,7 @@ public class Parser {
             case TOKENS.MINUS:
                 Console.Write(86 + " ");
                 match(TOKENS.MINUS);
-                break;
+                return true;
             case TOKENS.PLUS:
                 Console.Write(85 + " ");
                 match(TOKENS.PLUS);
@@ -1109,26 +1115,32 @@ public class Parser {
                     TOKENS.LPAREN});
                 break;
         }
+        return false;
     }
 
-    private void addingOperator(){
+    private Func<SemRecord, SemRecord, TYPES> addingOperator(){
+        Func<SemRecord, SemRecord, TYPES> function = null;
         switch(__lookahead.Type){
             case TOKENS.OR:
                 Console.Write(90 + " ");
                 match(TOKENS.OR);
-                break;
+                function = __analyzer.genOr;
+                return function;
             case TOKENS.MINUS:
                 Console.Write(89 + " ");
                 match(TOKENS.MINUS);
-                break;
+                function = __analyzer.genSub;
+                return function;
             case TOKENS.PLUS:
                 Console.Write(88 + " ");
                 match(TOKENS.PLUS);
-                break;
+                function = __analyzer.genAdd;
+                return function;
             default:
                 error(new List<TOKENS>{TOKENS.OR, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
+        return function;
     }
 
     private SemRecord term(){
@@ -1144,8 +1156,8 @@ public class Parser {
             case TOKENS.LPAREN:
                 Console.Write(91 + " ");
                 termRec = factor();
-                factorTail();
-                break;
+                SemRecord tailRec = factorTail(termRec);
+                return tailRec;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
                     TOKENS.INTEGER_LIT, TOKENS.FLOAT_LIT, TOKENS.STRING_LIT,
@@ -1155,7 +1167,7 @@ public class Parser {
         return termRec;
     }
 
-    private void factorTail(){
+    private SemRecord factorTail(SemRecord left){
         switch(__lookahead.Type){
             case TOKENS.AND:
             case TOKENS.DIV:
@@ -1163,10 +1175,11 @@ public class Parser {
             case TOKENS.FLOAT_DIVIDE:
             case TOKENS.TIMES:
                 Console.Write(92 + " ");
-                multiplyingOperator();
-                factor();
-                factorTail();
-                break;
+                Func<SemRecord, SemRecord, TYPES> mulOp = multiplyingOperator();
+                SemRecord right = factor();
+                SemRecord mulRec = new SemRecord(mulOp(left, right), "");
+                SemRecord tailRec = factorTail(mulRec);
+                return tailRec;
             case TOKENS.DO:
             case TOKENS.DOWNTO:
             case TOKENS.ELSE:
@@ -1196,35 +1209,43 @@ public class Parser {
                     TOKENS.SCOLON});
                 break;
         }
+        return left;
     }
 
-    private void multiplyingOperator(){
+    private Func<SemRecord, SemRecord, TYPES> multiplyingOperator(){
+        Func<SemRecord, SemRecord, TYPES> function = null;
         switch(__lookahead.Type){
             case TOKENS.AND:
                 Console.Write(98 + " ");
                 match(TOKENS.AND);
-                break;
+                function = __analyzer.genAnd;
+                return function;
             case TOKENS.DIV:
                 Console.Write(96 + " ");
                 match(TOKENS.DIV);
-                break;
+                function = __analyzer.genIntDiv;
+                return function;
             case TOKENS.MOD:
                 Console.Write(97 + " ");
                 match(TOKENS.MOD);
-                break;
+                function = __analyzer.genMod;
+                return function;
             case TOKENS.FLOAT_DIVIDE:
                 Console.Write(95 + " ");
                 match(TOKENS.FLOAT_DIVIDE);
-                break;
+                function = __analyzer.genDiv;
+                return function;
             case TOKENS.TIMES:
                 Console.Write(94 + " ");
                 match(TOKENS.TIMES);
-                break;
+                function = __analyzer.genMul;
+                return function;
             default:
                 error(new List<TOKENS>{TOKENS.AND, TOKENS.DIV, TOKENS.MOD, TOKENS.FLOAT_DIVIDE,
                     TOKENS.TIMES});
                 break;
         }
+        return function;
     }
 
     // At the end of factor, whatever the factor is should be at the top of the stack
@@ -1391,7 +1412,11 @@ public class Parser {
                 Console.Write(113 + " ");
                 List<String> idList = new List<String>();
                 idList.Add(match(TOKENS.IDENTIFIER));
-                idList.AddRange(identifierTail());
+                List<String> idTailList = identifierTail();
+                if(idTailList != null){
+                    Console.WriteLine("Attempting the impossible");
+                    idList.AddRange(idTailList);
+                }
                 return idList;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
@@ -1411,7 +1436,7 @@ public class Parser {
                 idList.Add(match(TOKENS.IDENTIFIER));
                 List<String> idTailList = identifierTail();
                 if(idTailList != null){
-                    idList.AddRange(identifierTail());
+                    idList.AddRange(idTailList);
                 }
                 return idList;
             default:
