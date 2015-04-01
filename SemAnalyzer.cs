@@ -55,7 +55,7 @@ public class SemAnalyzer{
     // Do we really need a label? Let's use the Name as the label
     public void genLabel(){
         String label = SymbolTableStack.Peek().Name;
-        output("L" + label + ":");
+        output("L0:");
     }
 
     public void genNot(){
@@ -208,7 +208,110 @@ public class SemAnalyzer{
     /**
     Relational Operators
     */
+    public TYPES genEq(SemRecord left, SemRecord right){
+        if(left.Type == right.Type &&
+            (left.Type == TYPES.INTEGER ||
+             left.Type == TYPES.BOOLEAN))
+        {
+            output("CMPEQS");
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("CMPEQSF");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "CMPEQSF");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "CMPEQSF");
+        } else {
+            throw new Exception("Trying to compare incompatible types");
+        }
+        topStackType = TYPES.BOOLEAN;
+        return TYPES.BOOLEAN;
+    }
 
+    public TYPES genNeq(SemRecord left, SemRecord right){
+        if(left.Type == right.Type &&
+            (left.Type == TYPES.INTEGER ||
+             left.Type == TYPES.BOOLEAN))
+        {
+            output("CMPNES");
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("CMPNESF");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "CMPNESF");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "CMPNESF");
+        } else {
+            throw new Exception("Trying to compare incompatible types");
+        }
+        topStackType = TYPES.BOOLEAN;
+        return TYPES.BOOLEAN;
+    }
+
+    public TYPES genGt(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.INTEGER)
+        {
+            output("CMPGTS");
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("CMPGTSF");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "CMPGTSF");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "CMPGTSF");
+        } else {
+            throw new Exception("Trying to compare incompatible types");
+        }
+        topStackType = TYPES.BOOLEAN;
+        return TYPES.BOOLEAN;
+    }
+
+    public TYPES genLt(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.INTEGER)
+        {
+            output("CMPLTS");
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("CMPLTSF");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "CMPLTSF");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "CMPLTSF");
+        } else {
+            throw new Exception("Trying to compare incompatible types");
+        }
+        topStackType = TYPES.BOOLEAN;
+        return TYPES.BOOLEAN;
+    }
+
+    public TYPES genLte(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.INTEGER)
+        {
+            output("CMPLES");
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("CMPLESF");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "CMPLESF");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "CMPLESF");
+        } else {
+            throw new Exception("Trying to compare incompatible types");
+        }
+        topStackType = TYPES.BOOLEAN;
+        return TYPES.BOOLEAN;
+    }
+
+    public TYPES genGte(SemRecord left, SemRecord right){
+        if(left.Type == right.Type && left.Type == TYPES.INTEGER){
+            output("CMPGES");
+        } else if(left.Type == right.Type && left.Type == TYPES.FLOAT){
+            output("CMPGESF");
+        } else if(left.Type == TYPES.INTEGER && right.Type == TYPES.FLOAT){
+            output("SUB SP #1 SP", "CASTSF", "ADD SP #1 SP", "CMPGESF");
+        } else if(left.Type == TYPES.FLOAT && right.Type == TYPES.INTEGER){
+            output("CASTSF", "CMPGESF");
+        } else {
+            throw new Exception("Trying to compare incompatible types");
+        }
+        topStackType = TYPES.BOOLEAN;
+        return TYPES.BOOLEAN;
+    }
 
     /**
     Write and Read statements

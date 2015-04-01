@@ -950,7 +950,7 @@ public class Parser {
             case TOKENS.PLUS:
                 Console.Write(73 + " ");
                 expRec = simpleExpression();
-                optionalRelationalPart();
+                optionalRelationalPart(expRec);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
@@ -961,7 +961,8 @@ public class Parser {
         return expRec;
     }
 
-    private void optionalRelationalPart(){
+    private SemRecord optionalRelationalPart(SemRecord left){
+        SemRecord relRec = left;
         switch(__lookahead.Type){
             case TOKENS.DO:
             case TOKENS.DOWNTO:
@@ -982,8 +983,9 @@ public class Parser {
             case TOKENS.LTHAN:
             case TOKENS.NEQUAL:
                 Console.Write(74 + " ");
-                relationalOperator();
-                simpleExpression();
+                Func<SemRecord, SemRecord, TYPES> relOp = relationalOperator();
+                SemRecord right = simpleExpression();
+                relRec = new SemRecord(relOp(left, right), "");
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.DO, TOKENS.DOWNTO, TOKENS.END, TOKENS.THEN,
@@ -991,34 +993,48 @@ public class Parser {
                     TOKENS.GEQUAL, TOKENS.GTHAN, TOKENS.LEQUAL, TOKENS.LTHAN, TOKENS.NEQUAL});
                 break;
         }
+        return relRec;
     }
 
-    private String relationalOperator(){
+    private Func<SemRecord, SemRecord, TYPES> relationalOperator(){
+        Func<SemRecord, SemRecord, TYPES> function = null;
         switch(__lookahead.Type){
             case TOKENS.EQUAL:
                 Console.Write(76 + " ");
-                return match(TOKENS.EQUAL);
+                match(TOKENS.EQUAL);
+                function = __analyzer.genEq;
+                return function;
             case TOKENS.LTHAN:
                 Console.Write(77 + " ");
-                return match(TOKENS.LTHAN);
+                match(TOKENS.LTHAN);
+                function = __analyzer.genLt;
+                return function;
             case TOKENS.GTHAN:
                 Console.Write(78 + " ");
-                return match(TOKENS.GTHAN);
+                match(TOKENS.GTHAN);
+                function = __analyzer.genGt;
+                return function;
             case TOKENS.LEQUAL:
                 Console.Write(79 + " ");
-                return match(TOKENS.LEQUAL);
+                match(TOKENS.LEQUAL);
+                function = __analyzer.genLte;
+                return function;
             case TOKENS.GEQUAL:
                 Console.Write(80 + " ");
-                return match(TOKENS.GEQUAL);
+                match(TOKENS.GEQUAL);
+                function = __analyzer.genGte;
+                return function;
             case TOKENS.NEQUAL:
                 Console.Write(81 + " ");
-                return match(TOKENS.NEQUAL);
+                match(TOKENS.NEQUAL);
+                function = __analyzer.genNeq;
+                return function;
             default:
                 error(new List<TOKENS>{TOKENS.EQUAL, TOKENS.LTHAN, TOKENS.GTHAN, TOKENS.LEQUAL,
                     TOKENS.GEQUAL, TOKENS.NEQUAL});
                 break;
         }
-        return null;
+        return function;
     }
 
     private SemRecord simpleExpression(){
@@ -1257,7 +1273,8 @@ public class Parser {
         switch(__lookahead.Type){
             case TOKENS.FALSE:
                 Console.Write(103 + " ");
-                factorRec = new SemRecord(TYPES.BOOLEAN, match(TOKENS.FALSE));
+                match(TOKENS.FALSE);
+                factorRec = new SemRecord(TYPES.BOOLEAN, "0");
                 __analyzer.genPushLit(factorRec);
                 return factorRec;
             case TOKENS.NOT:
@@ -1268,7 +1285,8 @@ public class Parser {
                 return factorRec;
             case TOKENS.TRUE:
                 Console.Write(102 + " ");
-                factorRec = new SemRecord(TYPES.BOOLEAN, match(TOKENS.TRUE));
+                match(TOKENS.TRUE);
+                factorRec = new SemRecord(TYPES.BOOLEAN, "1");
                 __analyzer.genPushLit(factorRec);
                 return factorRec;
             case TOKENS.IDENTIFIER:
