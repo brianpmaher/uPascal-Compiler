@@ -292,6 +292,7 @@ public class Parser {
             case TOKENS.PROCEDURE:
                 Console.Write(19 + " ");
                 match(TOKENS.PROCEDURE);
+                procedureIdentifier();
                 optionalFormalParameterList();
                 break;
             default:
@@ -305,6 +306,7 @@ public class Parser {
             case TOKENS.FUNCTION:
                 Console.Write(20 + " ");
                 match(TOKENS.FUNCTION);
+                functionIdentifier();
                 optionalFormalParameterList();
                 match(TOKENS.COLON);
                 type();
@@ -1414,7 +1416,6 @@ public class Parser {
                 idList.Add(match(TOKENS.IDENTIFIER));
                 List<String> idTailList = identifierTail();
                 if(idTailList != null){
-                    Console.WriteLine("Attempting the impossible");
                     idList.AddRange(idTailList);
                 }
                 return idList;
