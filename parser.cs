@@ -120,8 +120,8 @@ public class Parser {
                 String programName = programIdentifier();
                 Console.WriteLine("Program name is: " + programName);
                 __symbolTableStack.Push(new SymbolTable(
-                    programName, 0, 0, 0, new List<Entry>()));
-                Console.WriteLine("Pushed new SymbolTable");
+                    programName, 0, 0, 0, new List<Entry>(),
+                    null));
                 __analyzer.genInit();
                 break;
             default:
@@ -292,8 +292,34 @@ public class Parser {
             case TOKENS.PROCEDURE:
                 Console.Write(19 + " ");
                 match(TOKENS.PROCEDURE);
-                procedureIdentifier();
-                optionalFormalParameterList();
+                String identifier = procedureIdentifier();
+                List<Entry> entries = optionalFormalParameterList();
+                // Make procedure symbol table entry and table
+                List<String> paras = new List<String>();
+                foreach(Entry entry in entries){
+                    paras.Add(entry.Lexeme);
+                }
+                //Add the entry for the procedure
+                __symbolTableStack.Peek().AddEntry(
+                    identifier,
+                    TYPES.NONE,
+                    KINDS.PROCEDURE,
+                    0,
+                    paras
+                );
+                __symbolTableStack.Push(
+                    new SymbolTable(
+                        identifier,
+                        __symbolTableStack.Peek().NestingLevel +1,
+                        0,
+                        __symbolTableStack.Peek().NestingLevel +1,
+                        new List<Entry>(),
+                        __symbolTableStack.Peek()
+                    )
+                );
+                foreach(Entry entry in entries){
+                    __symbolTableStack.Peek().AddEntry(entry);
+                }
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROCEDURE});
@@ -306,10 +332,40 @@ public class Parser {
             case TOKENS.FUNCTION:
                 Console.Write(20 + " ");
                 match(TOKENS.FUNCTION);
-                functionIdentifier();
-                optionalFormalParameterList();
+                String identifier = functionIdentifier();
+                List<Entry> entries = optionalFormalParameterList();
                 match(TOKENS.COLON);
-                type();
+                TYPES funcRetType = type();
+                // Make function symbol table entry and table
+                List<String> paras = new List<String>();
+                foreach(Entry entry in entries){
+                    if(entry != null){
+                        paras.Add(entry.Lexeme);
+                    }
+                }
+                // Add the entry for the function
+                __symbolTableStack.Peek().AddEntry(
+                    identifier,
+                    funcRetType,
+                    KINDS.FUNCTION,
+                    0,
+                    paras
+                );
+                //Push it on, then add all the parameters as symbols
+                __symbolTableStack.Push(
+                    new SymbolTable(
+                        identifier,
+                        __symbolTableStack.Peek().NestingLevel + 1,
+                        0,
+                        //TODO: Change this to labeling
+                        __symbolTableStack.Peek().NestingLevel + 1,
+                        new List<Entry>(),
+                        __symbolTableStack.Peek()
+                    )
+                );
+                foreach(Entry entry in entries){
+                    __symbolTableStack.Peek().AddEntry(entry);
+                }
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FUNCTION});
@@ -317,13 +373,14 @@ public class Parser {
         }
     }
 
-    private void optionalFormalParameterList(){
+    private List<Entry> optionalFormalParameterList(){
+        List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type){
             case TOKENS.LPAREN:
                 Console.Write(21 + " ");
                 match(TOKENS.LPAREN);
-                formalParameterSection();
-                formalParameterSectionTail();
+                entries.AddRange(formalParameterSection());
+                entries.AddRange(formalParameterSectionTail());
                 match(TOKENS.RPAREN);
                 break;
             case TOKENS.COLON:
@@ -334,15 +391,17 @@ public class Parser {
                 error(new List<TOKENS>{TOKENS.LPAREN, TOKENS.COLON, TOKENS.SCOLON});
                 break;
         }
+        return entries;
     }
 
-    private void formalParameterSectionTail(){
+    private List<Entry> formalParameterSectionTail(){
+        List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type){
             case TOKENS.SCOLON:
                 Console.Write(23 + " ");
                 match(TOKENS.SCOLON);
-                formalParameterSection();
-                formalParameterSectionTail();
+                entries.AddRange(formalParameterSection());
+                entries.AddRange(formalParameterSectionTail());
                 break;
             case TOKENS.RPAREN:
                 Console.Write(24 + " ");
@@ -351,51 +410,64 @@ public class Parser {
                 error(new List<TOKENS>{TOKENS.SCOLON, TOKENS.RPAREN});
                 break;
         }
+        return entries;
     }
 
-    private void formalParameterSection(){
+    private List<Entry> formalParameterSection(){
+        List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
                 Console.Write(25 + " ");
-                valueParameterSection();
+                entries.AddRange(valueParameterSection());
                 break;
             case TOKENS.VAR:
                 Console.Write(26 + " ");
-                variableParameterSection();
+                entries.AddRange(variableParameterSection());
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER, TOKENS.VAR});
                 break;
         }
+        return entries;
     }
 
-    private void valueParameterSection(){
+    private List<Entry> valueParameterSection(){
+        List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type){
             case TOKENS.IDENTIFIER:
                 Console.Write(27 + " ");
-                identifierList();
+                List<String> idList = identifierList();
                 match(TOKENS.COLON);
-                type();
+                TYPES varType = type();
+                foreach(String id in idList){
+                    entries.Add(new Entry(id, varType, KINDS.PARAMETER, 1, 0, null));
+                }
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
+        return entries;
     }
 
-    private void variableParameterSection(){
+    private List<Entry> variableParameterSection(){
+        List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type){
             case TOKENS.VAR:
                 Console.Write(28 + " ");
                 match(TOKENS.VAR);
-                identifierList();
+                List<String> idList = identifierList();
                 match(TOKENS.COLON);
-                type();
+                TYPES varType = type();
+                foreach(String id in idList){
+                    entries.Add(new Entry(id, varType, KINDS.PARAMETER, 1, 0, null));
+                }
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.VAR});
                 break;
         }
+        return entries;
     }
 
     private void statementPart(){
@@ -463,7 +535,7 @@ public class Parser {
                 statementTail();
                 break;
             default:
-                error(new List<TOKENS>{TOKENS.END, TOKENS.SCOLON});
+                error(new List<TOKENS>{TOKENS.END, TOKENS.UNTIL, TOKENS.SCOLON});
                 break;
         }
     }
@@ -502,14 +574,14 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 String identifier = __lookahead.Lexeme;
                 KINDS identifierKind = __symbolTableStack.Peek().GetKind(identifier);
-                if(identifierKind == KINDS.VAR){
+                if(identifierKind == KINDS.VAR || identifierKind == KINDS.PARAMETER || identifierKind == KINDS.FUNCTION){
                     Console.Write(38 + " ");
                     assignmentStatement();
                 } else if(identifierKind == KINDS.PROCEDURE){
                     Console.Write(43 + " ");
                     procedureStatement();
                 } else {
-                    // New Kind of Error?
+                    Console.WriteLine("Error processing " + identifier + " of Kind " + identifierKind);
                 }
                 break;
             case TOKENS.ELSE:
@@ -530,7 +602,7 @@ public class Parser {
     private void emptyStatement(){
         switch(__lookahead.Type) {
             case TOKENS.END:
-            // case TOKENS.ELSE: - Commenting this may resolve the else conflict
+            case TOKENS.ELSE:
             case TOKENS.SCOLON:
             case TOKENS.UNTIL:
                 Console.Write(44 + " ");
@@ -660,13 +732,14 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 String identifier = __lookahead.Lexeme;
                 Entry identifierEntry = __symbolTableStack.Peek().GetEntry(identifier);
-                if(identifierEntry.Kind == KINDS.VAR){
+                if(identifierEntry.Kind == KINDS.VAR || identifierEntry.Kind == KINDS.PARAMETER){
                     Console.Write(54 + " ");
                     variableIdentifier();
                     assigneeRec = new SemRecord(identifierEntry.Type, identifierEntry.Lexeme);
                 } else if(identifierEntry.Kind == KINDS.FUNCTION){
                     Console.Write(55 + " ");
                     functionIdentifier();
+                    assigneeRec = new SemRecord(identifierEntry.Type, identifierEntry.Lexeme);
                 } else {
                     throw new Exception("Expected a function or variable, got " + identifierEntry.Kind);
                 }
@@ -1195,6 +1268,7 @@ public class Parser {
                 Console.Write(92 + " ");
                 Func<SemRecord, SemRecord, TYPES> mulOp = multiplyingOperator();
                 SemRecord right = factor();
+                Console.WriteLine(right.Lexeme + " of Type " + right.Type);
                 SemRecord mulRec = new SemRecord(mulOp(left, right), "");
                 SemRecord tailRec = factorTail(mulRec);
                 return tailRec;
@@ -1292,18 +1366,19 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 String identifier = __lookahead.Lexeme;
                 KINDS identifierKind = __symbolTableStack.Peek().GetKind(identifier);
-                if(identifierKind == KINDS.VAR){
+                if(identifierKind == KINDS.VAR || identifierKind == KINDS.PARAMETER){
                     Console.Write(116 + " ");
                     String factorId = variableIdentifier();
-                    TYPES factorType = __symbolTableStack.Peek().GetType(identifier);
+                    TYPES factorType = __symbolTableStack.Peek().GetType(factorId);
                     factorRec = new SemRecord(factorType, factorId);
                     __analyzer.genPushVar(factorRec);
                     return factorRec;
                 } else if(identifierKind == KINDS.FUNCTION){
                     Console.Write(106 + " ");
-                    functionIdentifier();
+                    String funcId = functionIdentifier();
                     optionalActualParameterList();
-                    return null; // Just a placeholder until we implement functions
+                    TYPES funcType = __symbolTableStack.Peek().GetType(funcId);
+                    return new SemRecord(funcType, funcId); // Just a placeholder until we implement functions
                 } else {
                     throw new Exception("Expected variable or function identifier");
                 }

@@ -20,17 +20,32 @@ public class SymbolTable {
     public int Label {get; private set;}
     public int Size {get; private set;}
     public List<Entry> Entries {get; private set;}
+    public SymbolTable Next {get; private set;}
 
-    public SymbolTable(String name, int nestingLevel, int size, int label, List<Entry> entries) {
+    public SymbolTable(String name, int nestingLevel, int size,
+                       int label, List<Entry> entries, SymbolTable next) {
         Name         = name;
         NestingLevel = nestingLevel;
         Size         = size;
         Label        = label;
         Entries      = entries;
+        Next         = next;
+    }
+
+    public void AddEntry(Entry entry){
+        if(entry != null){
+            if(entry.Kind == KINDS.VAR || entry.Kind == KINDS.PARAMETER){
+                entry.Offset = this.Size;
+                Entries.Add(entry);
+                this.Size += entry.Size;
+            } else {
+                Entries.Add(entry);
+            }
+        }
     }
 
     public void AddEntry(String lexeme, TYPES type, KINDS kind, int size, List<String> paras) {
-        if(kind == KINDS.VAR){
+        if(kind == KINDS.VAR || kind == KINDS.PARAMETER){
             Entries.Add(new Entry(lexeme, type, kind, size, this.Size, paras));
             this.Size += size;
         } else { //nonvars don't have size
@@ -46,27 +61,34 @@ public class SymbolTable {
         return totalSize;
     }
 
-    // These will need to be recursive descent to find
-    // other symbol table entries when we do functions/procs
     public TYPES GetType(String identifier){
-        foreach(Entry entry in Entries){
-            if(entry.Lexeme == identifier) return entry.Type;
+        Entry entry = GetEntry(identifier);
+        if(entry != null){
+            return entry.Type;
+        } else {
+            return TYPES.NONE;
         }
-        return TYPES.NONE;
     }
 
     public KINDS GetKind(String identifier){
-        foreach(Entry entry in Entries){
-            if(entry.Lexeme == identifier) return entry.Kind;
+        Entry entry = GetEntry(identifier);
+        if(entry != null){
+            return entry.Kind;
+        } else {
+            return KINDS.NONE;
         }
-        return KINDS.NONE;
     }
 
-
     public Entry GetEntry(String identifier){
+        Entry result = null;
         foreach(Entry entry in Entries){
-            if(entry.Lexeme == identifier) return entry;
+            if(entry.Lexeme == identifier){
+                result = entry;
+            }
         }
-        return null;
+        if(result == null){
+            result = Next.GetEntry(identifier);
+        }
+        return result;
     }
 }
