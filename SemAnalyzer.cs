@@ -52,9 +52,8 @@ public class SemAnalyzer{
         topStackType = toPush.Type;
     }
 
-    // Do we really need a label? Let's use the Name as the label
+    // TODO: Iteratively generate successively larger labels
     public void genLabel(){
-        String label = SymbolTableStack.Peek().Name;
         output("L0:");
     }
 
