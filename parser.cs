@@ -1023,7 +1023,7 @@ public class Parser {
             case TOKENS.PLUS:
                 Console.Write(73 + " ");
                 expRec = simpleExpression();
-                optionalRelationalPart(expRec);
+                expRec = optionalRelationalPart(expRec);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
