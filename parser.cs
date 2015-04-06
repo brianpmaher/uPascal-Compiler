@@ -792,9 +792,11 @@ public class Parser {
             case TOKENS.REPEAT:
                 Console.Write(59 + " ");
                 match(TOKENS.REPEAT);
+                String lableRec = __analyzer.genLabel();
                 statementSequence();
                 match(TOKENS.UNTIL);
                 booleanExpression();
+                __analyzer.genBrfs(lableRec);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.REPEAT});
@@ -806,6 +808,7 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.WHILE:
                 Console.Write(60 + " ");
+                __analyzer.genLabel();
                 match(TOKENS.WHILE);
                 booleanExpression();
                 match(TOKENS.DO);
@@ -1023,7 +1026,7 @@ public class Parser {
             case TOKENS.PLUS:
                 Console.Write(73 + " ");
                 expRec = simpleExpression();
-                optionalRelationalPart(expRec);
+                expRec = optionalRelationalPart(expRec);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
@@ -1402,6 +1405,7 @@ public class Parser {
                 match(TOKENS.LPAREN);
                 factorRec = expression();
                 match(TOKENS.RPAREN);
+                Console.WriteLine("factorRec is of type " + factorRec.Type);
                 return factorRec;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,

@@ -52,9 +52,10 @@ public class SemAnalyzer{
         topStackType = toPush.Type;
     }
 
-    // TODO: Iteratively generate successively larger labels
-    public void genLabel(){
-        output("L0:");
+    public String genLabel(){
+        String label = "L" + LabelMaker.genLabel();
+        output(label + ":");
+        return label;
     }
 
     public void genNot(){
@@ -77,13 +78,24 @@ public class SemAnalyzer{
     }
 
     /**
+    Branch Statements - These should all take at least one label record (the branch)
+    */
+    public void genBrts(String label){
+        output("BRTS " + label);
+    }
+
+    public void genBrfs(String label){
+        output("BRFS " + label);
+    }
+
+    /**
     Multiplying Operators
     */
     public TYPES genAnd(SemRecord left, SemRecord right){
         if(left.Type == right.Type && left.Type == TYPES.BOOLEAN){
             output("ANDS");
         } else {
-            throw new Exception("Can't AND non-booleans, sucka");
+            throw new Exception("Can't AND non-booleans, sucka " + left.Type + " " + right.Type);
         }
         topStackType = TYPES.BOOLEAN;
         return TYPES.BOOLEAN;
