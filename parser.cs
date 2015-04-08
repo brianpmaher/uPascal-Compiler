@@ -811,11 +811,12 @@ public class Parser {
                 String conditionLabel = "L" + LabelMaker.genLabel();
                 String elseLabel = "L" + LabelMaker.genLabel();
                 match(TOKENS.WHILE);
-                __analyzer.genOut(conditionLabel);
+                __analyzer.genOut(conditionLabel + ":");
                 booleanExpression();
+                __analyzer.genBrfs(elseLabel);
                 match(TOKENS.DO);
                 statement();
-                __analyzer.genOut(elseLabel);
+                __analyzer.genOut(elseLabel + ":");
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.WHILE});
