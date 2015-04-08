@@ -4,7 +4,8 @@ public class LabelMaker{
     private static int label = 0;
 
     public static String genLabel(){
+        string labelStr = "" + label;
         label++;
-        return "" + label;
+        return labelStr;
     }
 }

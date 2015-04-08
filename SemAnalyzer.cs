@@ -15,8 +15,12 @@ public class SemAnalyzer{
         }
     }
 
+    public void genOut(string outputStr) {
+        output(outputStr);
+    }
+
     // Initializes the register on the stack
-    public void genInit(){
+    public void genInit() {
         SymbolTable top = SymbolTableStack.Peek();
         genLabel();
         output(

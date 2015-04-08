@@ -808,11 +808,14 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.WHILE:
                 Console.Write(60 + " ");
-                __analyzer.genLabel();
+                String conditionLabel = "L" + LabelMaker.genLabel();
+                String elseLabel = "L" + LabelMaker.genLabel();
                 match(TOKENS.WHILE);
+                __analyzer.genOut(conditionLabel);
                 booleanExpression();
                 match(TOKENS.DO);
                 statement();
+                __analyzer.genOut(elseLabel);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.WHILE});
