@@ -9,7 +9,7 @@ public class Parser {
     private Stack<SymbolTable> __symbolTableStack;
     private SemAnalyzer __analyzer;
 
-    public Parser(List<Token> tokens, String progname){
+    public Parser(List<Token> tokens, String progname) {
         this.__tokens = tokens;
         this.__e = __tokens.GetEnumerator();
         this.__e.MoveNext();
@@ -18,12 +18,12 @@ public class Parser {
         this.__analyzer = new SemAnalyzer(__symbolTableStack, progname);
     }
 
-    public void Parse(){
+    public void Parse() {
         systemGoal();
     }
 
     // Error
-    private void error(List<TOKENS> expected){
+    private void error(List<TOKENS> expected) {
         string exception; // Message to be displayed
 
         // First check if a scan error token was found and throw an exception accordingly
@@ -61,14 +61,14 @@ public class Parser {
     }
 
     // Match
-    private String match(TOKENS token){
+    private String match(TOKENS token) {
         // Simple output
         String matchedLexeme = __lookahead.Lexeme;
         Console.WriteLine("\nMatching " + matchedLexeme);
-        if(token == TOKENS.EOF){
+        if(token == TOKENS.EOF) {
             return null;
-        } else if(__e.Current.Type == token){
-            if(__e.MoveNext()){
+        } else if(__e.Current.Type == token) {
+            if(__e.MoveNext()) {
                 __lookahead = __e.Current;
                 return matchedLexeme;
             } else {
@@ -83,8 +83,8 @@ public class Parser {
     }
 
     // Non-terminals
-    private void systemGoal(){
-        switch(__lookahead.Type){
+    private void systemGoal() {
+        switch(__lookahead.Type) {
             case TOKENS.PROGRAM:
                 Console.Write(1 + " ");
                 program();
@@ -97,8 +97,8 @@ public class Parser {
         }
     }
 
-    private void program(){
-        switch(__lookahead.Type){
+    private void program() {
+        switch(__lookahead.Type) {
             case TOKENS.PROGRAM:
                 Console.Write(2 + " ");
                 programHeading();
@@ -112,8 +112,8 @@ public class Parser {
         }
     }
 
-    private void programHeading(){
-        switch(__lookahead.Type){
+    private void programHeading() {
+        switch(__lookahead.Type) {
             case TOKENS.PROGRAM:
                 Console.Write(3 + " ");
                 match(TOKENS.PROGRAM);
@@ -130,8 +130,8 @@ public class Parser {
         }
     }
 
-    private void block(){
-        switch(__lookahead.Type){
+    private void block() {
+        switch(__lookahead.Type) {
             case TOKENS.BEGIN:
             case TOKENS.FUNCTION:
             case TOKENS.PROCEDURE:
@@ -150,8 +150,8 @@ public class Parser {
         }
     }
 
-    private void variableDeclarationPart(){
-        switch(__lookahead.Type){
+    private void variableDeclarationPart() {
+        switch(__lookahead.Type) {
             case TOKENS.VAR:
                 Console.Write(5 + " ");
                 match(TOKENS.VAR);
@@ -171,8 +171,8 @@ public class Parser {
         }
     }
 
-    private void variableDeclarationTail(){
-        switch(__lookahead.Type){
+    private void variableDeclarationTail() {
+        switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(7 + " ");
                 variableDeclaration();
@@ -190,16 +190,16 @@ public class Parser {
         }
     }
 
-    private void variableDeclaration(){
-        switch(__lookahead.Type){
+    private void variableDeclaration() {
+        switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(9 + " ");
                 List<String> identifiers = identifierList();
                 match(TOKENS.COLON);
                 TYPES typeRec = type();
                 SymbolTable top = __symbolTableStack.Peek();
-                if(typeRec != TYPES.NONE){
-                    foreach(String identifier in identifiers){
+                if(typeRec != TYPES.NONE) {
+                    foreach(String identifier in identifiers) {
                         top.AddEntry(identifier, typeRec, KINDS.VAR, 1, null);
                     }
                 }
@@ -210,8 +210,8 @@ public class Parser {
         }
     }
 
-    private TYPES type(){
-        switch(__lookahead.Type){
+    private TYPES type() {
+        switch(__lookahead.Type) {
             case TOKENS.INTEGER:
                 Console.Write(10 + " ");
                 match(TOKENS.INTEGER);
@@ -236,8 +236,8 @@ public class Parser {
         return TYPES.NONE;
     }
 
-    private void procedureAndFunctionDeclarationPart(){
-        switch(__lookahead.Type){
+    private void procedureAndFunctionDeclarationPart() {
+        switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
                 Console.Write(14 + " ");
                 procedureDeclaration();
@@ -257,8 +257,8 @@ public class Parser {
         }
     }
 
-    private void procedureDeclaration(){
-        switch(__lookahead.Type){
+    private void procedureDeclaration() {
+        switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
                 Console.Write(17 + " ");
                 procedureHeading();
@@ -272,8 +272,8 @@ public class Parser {
         }
     }
 
-    private void functionDeclaration(){
-        switch(__lookahead.Type){
+    private void functionDeclaration() {
+        switch(__lookahead.Type) {
             case TOKENS.FUNCTION:
                 Console.Write(18 + " ");
                 functionHeading();
@@ -287,8 +287,8 @@ public class Parser {
         }
     }
 
-    private void procedureHeading(){
-        switch(__lookahead.Type){
+    private void procedureHeading() {
+        switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
                 Console.Write(19 + " ");
                 match(TOKENS.PROCEDURE);
@@ -296,7 +296,7 @@ public class Parser {
                 List<Entry> entries = optionalFormalParameterList();
                 // Make procedure symbol table entry and table
                 List<String> paras = new List<String>();
-                foreach(Entry entry in entries){
+                foreach(Entry entry in entries) {
                     paras.Add(entry.Lexeme);
                 }
                 //Add the entry for the procedure
@@ -317,7 +317,7 @@ public class Parser {
                         __symbolTableStack.Peek()
                     )
                 );
-                foreach(Entry entry in entries){
+                foreach(Entry entry in entries) {
                     __symbolTableStack.Peek().AddEntry(entry);
                 }
                 break;
@@ -327,8 +327,8 @@ public class Parser {
         }
     }
 
-    private void functionHeading(){
-        switch(__lookahead.Type){
+    private void functionHeading() {
+        switch(__lookahead.Type) {
             case TOKENS.FUNCTION:
                 Console.Write(20 + " ");
                 match(TOKENS.FUNCTION);
@@ -338,8 +338,8 @@ public class Parser {
                 TYPES funcRetType = type();
                 // Make function symbol table entry and table
                 List<String> paras = new List<String>();
-                foreach(Entry entry in entries){
-                    if(entry != null){
+                foreach(Entry entry in entries) {
+                    if(entry != null) {
                         paras.Add(entry.Lexeme);
                     }
                 }
@@ -363,7 +363,7 @@ public class Parser {
                         __symbolTableStack.Peek()
                     )
                 );
-                foreach(Entry entry in entries){
+                foreach(Entry entry in entries) {
                     __symbolTableStack.Peek().AddEntry(entry);
                 }
                 break;
@@ -373,9 +373,9 @@ public class Parser {
         }
     }
 
-    private List<Entry> optionalFormalParameterList(){
+    private List<Entry> optionalFormalParameterList() {
         List<Entry> entries = new List<Entry>();
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.LPAREN:
                 Console.Write(21 + " ");
                 match(TOKENS.LPAREN);
@@ -394,9 +394,9 @@ public class Parser {
         return entries;
     }
 
-    private List<Entry> formalParameterSectionTail(){
+    private List<Entry> formalParameterSectionTail() {
         List<Entry> entries = new List<Entry>();
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.SCOLON:
                 Console.Write(23 + " ");
                 match(TOKENS.SCOLON);
@@ -413,9 +413,9 @@ public class Parser {
         return entries;
     }
 
-    private List<Entry> formalParameterSection(){
+    private List<Entry> formalParameterSection() {
         List<Entry> entries = new List<Entry>();
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(25 + " ");
                 entries.AddRange(valueParameterSection());
@@ -431,15 +431,15 @@ public class Parser {
         return entries;
     }
 
-    private List<Entry> valueParameterSection(){
+    private List<Entry> valueParameterSection() {
         List<Entry> entries = new List<Entry>();
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(27 + " ");
                 List<String> idList = identifierList();
                 match(TOKENS.COLON);
                 TYPES varType = type();
-                foreach(String id in idList){
+                foreach(String id in idList) {
                     entries.Add(new Entry(id, varType, KINDS.PARAMETER, 1, 0, null));
                 }
                 break;
@@ -450,16 +450,16 @@ public class Parser {
         return entries;
     }
 
-    private List<Entry> variableParameterSection(){
+    private List<Entry> variableParameterSection() {
         List<Entry> entries = new List<Entry>();
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.VAR:
                 Console.Write(28 + " ");
                 match(TOKENS.VAR);
                 List<String> idList = identifierList();
                 match(TOKENS.COLON);
                 TYPES varType = type();
-                foreach(String id in idList){
+                foreach(String id in idList) {
                     entries.Add(new Entry(id, varType, KINDS.PARAMETER, 1, 0, null));
                 }
                 break;
@@ -470,8 +470,8 @@ public class Parser {
         return entries;
     }
 
-    private void statementPart(){
-        switch(__lookahead.Type){
+    private void statementPart() {
+        switch(__lookahead.Type) {
             case TOKENS.BEGIN:
                 Console.Write(29 + " ");
                 compoundStatement();
@@ -482,8 +482,8 @@ public class Parser {
         }
     }
 
-    private void compoundStatement(){
-        switch(__lookahead.Type){
+    private void compoundStatement() {
+        switch(__lookahead.Type) {
             case TOKENS.BEGIN:
                 Console.Write(30 + " ");
                 match(TOKENS.BEGIN);
@@ -496,8 +496,8 @@ public class Parser {
         }
     }
 
-    private void statementSequence(){
-        switch(__lookahead.Type){
+    private void statementSequence() {
+        switch(__lookahead.Type) {
             case TOKENS.BEGIN:
             case TOKENS.END:
             case TOKENS.FOR:
@@ -522,7 +522,7 @@ public class Parser {
         }
     }
 
-    private void statementTail(){
+    private void statementTail() {
         switch(__lookahead.Type) {
             case TOKENS.END:
             case TOKENS.UNTIL:
@@ -540,7 +540,7 @@ public class Parser {
         }
     }
 
-    private void statement(){
+    private void statement() {
         switch(__lookahead.Type) {
             case TOKENS.BEGIN:
                 Console.Write(35 + " ");
@@ -574,10 +574,10 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 String identifier = __lookahead.Lexeme;
                 KINDS identifierKind = __symbolTableStack.Peek().GetKind(identifier);
-                if(identifierKind == KINDS.VAR || identifierKind == KINDS.PARAMETER || identifierKind == KINDS.FUNCTION){
+                if(identifierKind == KINDS.VAR || identifierKind == KINDS.PARAMETER || identifierKind == KINDS.FUNCTION) {
                     Console.Write(38 + " ");
                     assignmentStatement();
-                } else if(identifierKind == KINDS.PROCEDURE){
+                } else if(identifierKind == KINDS.PROCEDURE) {
                     Console.Write(43 + " ");
                     procedureStatement();
                 } else {
@@ -599,7 +599,7 @@ public class Parser {
         }
     }
 
-    private void emptyStatement(){
+    private void emptyStatement() {
         switch(__lookahead.Type) {
             case TOKENS.END:
             case TOKENS.ELSE:
@@ -613,7 +613,7 @@ public class Parser {
         }
     }
 
-    private void readStatement(){
+    private void readStatement() {
         switch(__lookahead.Type) {
             case TOKENS.READ:
                 Console.Write(45 + " ");
@@ -629,7 +629,7 @@ public class Parser {
         }
     }
 
-    private void readParameterTail(){
+    private void readParameterTail() {
         switch(__lookahead.Type) {
             case TOKENS.COMMA:
                 Console.Write(46 + " ");
@@ -646,7 +646,7 @@ public class Parser {
         }
     }
 
-    private void readParameter(){
+    private void readParameter() {
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(48 + " ");
@@ -659,7 +659,7 @@ public class Parser {
         }
     }
 
-    private void writeStatement(){
+    private void writeStatement() {
         switch(__lookahead.Type) {
             case TOKENS.WRITE:
                 Console.Write(49 + " ");
@@ -684,7 +684,7 @@ public class Parser {
         }
     }
 
-    private void writeParameterTail(){
+    private void writeParameterTail() {
         switch(__lookahead.Type) {
             case TOKENS.COMMA:
                 Console.Write(51 + " ");
@@ -701,7 +701,7 @@ public class Parser {
         }
     }
 
-    private void writeParameter(){
+    private void writeParameter() {
         switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
@@ -725,18 +725,18 @@ public class Parser {
         }
     }
 
-    private void assignmentStatement(){
+    private void assignmentStatement() {
         SemRecord assigneeRec, expressionRec;
         assigneeRec = null;
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 String identifier = __lookahead.Lexeme;
                 Entry identifierEntry = __symbolTableStack.Peek().GetEntry(identifier);
-                if(identifierEntry.Kind == KINDS.VAR || identifierEntry.Kind == KINDS.PARAMETER){
+                if(identifierEntry.Kind == KINDS.VAR || identifierEntry.Kind == KINDS.PARAMETER) {
                     Console.Write(54 + " ");
                     variableIdentifier();
                     assigneeRec = new SemRecord(identifierEntry.Type, identifierEntry.Lexeme);
-                } else if(identifierEntry.Kind == KINDS.FUNCTION){
+                } else if(identifierEntry.Kind == KINDS.FUNCTION) {
                     Console.Write(55 + " ");
                     functionIdentifier();
                     assigneeRec = new SemRecord(identifierEntry.Type, identifierEntry.Lexeme);
@@ -753,7 +753,7 @@ public class Parser {
         }
     }
 
-    private void ifStatement(){
+    private void ifStatement() {
         switch(__lookahead.Type) {
             case TOKENS.IF:
                 Console.Write(56 + " ");
@@ -769,7 +769,7 @@ public class Parser {
         }
     }
 
-    private void optionalElsePart(){
+    private void optionalElsePart() {
         switch(__lookahead.Type) {
             case TOKENS.ELSE:
                 Console.Write(57 + " ");
@@ -787,7 +787,7 @@ public class Parser {
         }
     }
 
-    private void repeatStatement(){
+    private void repeatStatement() {
         switch(__lookahead.Type) {
             case TOKENS.REPEAT:
                 Console.Write(59 + " ");
@@ -804,7 +804,7 @@ public class Parser {
         }
     }
 
-    private void whileStatement(){
+    private void whileStatement() {
         switch(__lookahead.Type) {
             case TOKENS.WHILE:
                 Console.Write(60 + " ");
@@ -820,7 +820,7 @@ public class Parser {
         }
     }
 
-    private void forStatement(){
+    private void forStatement() {
         switch(__lookahead.Type) {
             case TOKENS.FOR:
                 Console.Write(61 + " ");
@@ -839,7 +839,7 @@ public class Parser {
         }
     }
 
-    private void controlVariable(){
+    private void controlVariable() {
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(62 + " ");
@@ -851,7 +851,7 @@ public class Parser {
         }
     }
 
-    private void initialValue(){
+    private void initialValue() {
         switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
@@ -874,7 +874,7 @@ public class Parser {
         }
     }
 
-    private void stepValue(){
+    private void stepValue() {
         switch(__lookahead.Type) {
             case TOKENS.DOWNTO:
                 Console.Write(65 + " ");
@@ -890,7 +890,7 @@ public class Parser {
         }
     }
 
-    private void finalValue(){
+    private void finalValue() {
         switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
@@ -913,7 +913,7 @@ public class Parser {
         }
     }
 
-    private void procedureStatement(){
+    private void procedureStatement() {
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(67 + " ");
@@ -926,7 +926,7 @@ public class Parser {
         }
     }
 
-    private void optionalActualParameterList(){
+    private void optionalActualParameterList() {
         switch(__lookahead.Type) {
             case TOKENS.AND:
             case TOKENS.DIV:
@@ -971,8 +971,8 @@ public class Parser {
         }
     }
 
-    private void actualParameterTail(){
-        switch(__lookahead.Type){
+    private void actualParameterTail() {
+        switch(__lookahead.Type) {
             case TOKENS.COMMA:
                 Console.Write(70 + " ");
                 match(TOKENS.COMMA);
@@ -988,8 +988,8 @@ public class Parser {
         }
     }
 
-    private void actualParameter(){
-        switch(__lookahead.Type){
+    private void actualParameter() {
+        switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
             case TOKENS.TRUE:
@@ -1011,9 +1011,9 @@ public class Parser {
         }
     }
 
-    private SemRecord expression(){
+    private SemRecord expression() {
         SemRecord expRec = null;
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
             case TOKENS.TRUE:
@@ -1037,9 +1037,9 @@ public class Parser {
         return expRec;
     }
 
-    private SemRecord optionalRelationalPart(SemRecord left){
+    private SemRecord optionalRelationalPart(SemRecord left) {
         SemRecord relRec = left;
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.DO:
             case TOKENS.DOWNTO:
             case TOKENS.ELSE:
@@ -1072,9 +1072,9 @@ public class Parser {
         return relRec;
     }
 
-    private Func<SemRecord, SemRecord, TYPES> relationalOperator(){
+    private Func<SemRecord, SemRecord, TYPES> relationalOperator() {
         Func<SemRecord, SemRecord, TYPES> function = null;
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.EQUAL:
                 Console.Write(76 + " ");
                 match(TOKENS.EQUAL);
@@ -1113,9 +1113,9 @@ public class Parser {
         return function;
     }
 
-    private SemRecord simpleExpression(){
+    private SemRecord simpleExpression() {
         SemRecord expRec = null;
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
             case TOKENS.TRUE:
@@ -1129,7 +1129,7 @@ public class Parser {
                 Console.Write(82 + " ");
                 bool minus = optionalSign();
                 expRec = term();
-                if(minus){
+                if(minus) {
                     __analyzer.genNeg();
                 }
                 expRec = termTail(expRec);
@@ -1143,8 +1143,8 @@ public class Parser {
         return expRec;
     }
 
-    private SemRecord termTail(SemRecord left){
-        switch(__lookahead.Type){
+    private SemRecord termTail(SemRecord left) {
+        switch(__lookahead.Type) {
             case TOKENS.DO:
             case TOKENS.DOWNTO:
             case TOKENS.ELSE:
@@ -1183,8 +1183,8 @@ public class Parser {
 
     // Return true if optional sign exists and is minus
     // Otherwise, we don't have to do anything
-    private bool optionalSign(){
-        switch(__lookahead.Type){
+    private bool optionalSign() {
+        switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
             case TOKENS.TRUE:
@@ -1212,9 +1212,9 @@ public class Parser {
         return false;
     }
 
-    private Func<SemRecord, SemRecord, TYPES> addingOperator(){
+    private Func<SemRecord, SemRecord, TYPES> addingOperator() {
         Func<SemRecord, SemRecord, TYPES> function = null;
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.OR:
                 Console.Write(90 + " ");
                 match(TOKENS.OR);
@@ -1237,9 +1237,9 @@ public class Parser {
         return function;
     }
 
-    private SemRecord term(){
+    private SemRecord term() {
         SemRecord termRec = null;
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
             case TOKENS.TRUE:
@@ -1261,8 +1261,8 @@ public class Parser {
         return termRec;
     }
 
-    private SemRecord factorTail(SemRecord left){
-        switch(__lookahead.Type){
+    private SemRecord factorTail(SemRecord left) {
+        switch(__lookahead.Type) {
             case TOKENS.AND:
             case TOKENS.DIV:
             case TOKENS.MOD:
@@ -1307,9 +1307,9 @@ public class Parser {
         return left;
     }
 
-    private Func<SemRecord, SemRecord, TYPES> multiplyingOperator(){
+    private Func<SemRecord, SemRecord, TYPES> multiplyingOperator() {
         Func<SemRecord, SemRecord, TYPES> function = null;
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.AND:
                 Console.Write(98 + " ");
                 match(TOKENS.AND);
@@ -1345,9 +1345,9 @@ public class Parser {
 
     // At the end of factor, whatever the factor is should be at the top of the stack
     // But we need to return the SemRecord for type knowledge and checking
-    private SemRecord factor(){
+    private SemRecord factor() {
         SemRecord factorRec = null;
-        switch(__lookahead.Type){
+        switch(__lookahead.Type) {
             case TOKENS.FALSE:
                 Console.Write(103 + " ");
                 match(TOKENS.FALSE);
@@ -1369,14 +1369,14 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 String identifier = __lookahead.Lexeme;
                 KINDS identifierKind = __symbolTableStack.Peek().GetKind(identifier);
-                if(identifierKind == KINDS.VAR || identifierKind == KINDS.PARAMETER){
+                if(identifierKind == KINDS.VAR || identifierKind == KINDS.PARAMETER) {
                     Console.Write(116 + " ");
                     String factorId = variableIdentifier();
                     TYPES factorType = __symbolTableStack.Peek().GetType(factorId);
                     factorRec = new SemRecord(factorType, factorId);
                     __analyzer.genPushVar(factorRec);
                     return factorRec;
-                } else if(identifierKind == KINDS.FUNCTION){
+                } else if(identifierKind == KINDS.FUNCTION) {
                     Console.Write(106 + " ");
                     String funcId = functionIdentifier();
                     optionalActualParameterList();
@@ -1416,8 +1416,8 @@ public class Parser {
         return factorRec;
     }
 
-    private String programIdentifier(){
-        switch(__lookahead.Type){
+    private String programIdentifier() {
+        switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(107 + " ");
                 return match(TOKENS.IDENTIFIER);
@@ -1427,8 +1427,8 @@ public class Parser {
         }
     }
 
-    private String variableIdentifier(){
-        switch(__lookahead.Type){
+    private String variableIdentifier() {
+        switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(108 + " ");
                 return match(TOKENS.IDENTIFIER);
@@ -1438,8 +1438,8 @@ public class Parser {
         }
     }
 
-    private String procedureIdentifier(){
-        switch(__lookahead.Type){
+    private String procedureIdentifier() {
+        switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(109 + " ");
                 return match(TOKENS.IDENTIFIER);
@@ -1449,8 +1449,8 @@ public class Parser {
         }
     }
 
-    private String functionIdentifier(){
-        switch(__lookahead.Type){
+    private String functionIdentifier() {
+        switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(110 + " ");
                 return match(TOKENS.IDENTIFIER);
@@ -1460,8 +1460,8 @@ public class Parser {
         }
     }
 
-    private void booleanExpression(){
-        switch(__lookahead.Type){
+    private void booleanExpression() {
+        switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
             case TOKENS.TRUE:
@@ -1482,8 +1482,8 @@ public class Parser {
         }
     }
 
-    private void ordinalExpression(){
-        switch(__lookahead.Type){
+    private void ordinalExpression() {
+        switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
             case TOKENS.TRUE:
@@ -1505,14 +1505,14 @@ public class Parser {
         }
     }
 
-    private List<String> identifierList(){
-        switch(__lookahead.Type){
+    private List<String> identifierList() {
+        switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(113 + " ");
                 List<String> idList = new List<String>();
                 idList.Add(match(TOKENS.IDENTIFIER));
                 List<String> idTailList = identifierTail();
-                if(idTailList != null){
+                if(idTailList != null) {
                     idList.AddRange(idTailList);
                 }
                 return idList;
@@ -1522,8 +1522,8 @@ public class Parser {
         }
     }
 
-    private List<String> identifierTail(){
-        switch(__lookahead.Type){
+    private List<String> identifierTail() {
+        switch(__lookahead.Type) {
             case TOKENS.COLON:
                 Console.Write(115 + " ");
                 break;
@@ -1533,7 +1533,7 @@ public class Parser {
                 match(TOKENS.COMMA);
                 idList.Add(match(TOKENS.IDENTIFIER));
                 List<String> idTailList = identifierTail();
-                if(idTailList != null){
+                if(idTailList != null) {
                     idList.AddRange(idTailList);
                 }
                 return idList;
