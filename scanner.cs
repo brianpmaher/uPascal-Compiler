@@ -94,10 +94,13 @@ public partial class Scanner {
                     }
                 }
                 __tokens.Add(new Token("EOF", TOKENS.EOF, __column, __line));
+                reader.Close();
+                reader.Dispose();
             }
         } catch(Exception ex) {
             Console.WriteLine(ex);
         }
+
         return __tokens;
     }
 
@@ -239,7 +242,7 @@ public partial class Scanner {
                 return new Token(lexeme, token, column, __line);
             }
         S3: // Digits have followed a valid '.'
-            token = TOKENS.FIXED_LIT;
+            token = TOKENS.FLOAT_LIT;
             next = __bytes[__curByte];
             __column++;
             __curByte++;
@@ -414,6 +417,7 @@ public partial class Scanner {
                 // We don't include the closing apostrophe
                 __column--;
                 __curByte--;
+                lexeme = "\"" + lexeme + "\"";
                 return new Token(lexeme, TOKENS.STRING_LIT, column, __line);
             }
         S3:

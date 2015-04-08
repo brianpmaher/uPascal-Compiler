@@ -83,13 +83,16 @@ public enum TYPES {
     FIXED     =     TOKENS.FIXED,
     FLOAT     =     TOKENS.FLOAT,
     INTEGER   =     TOKENS.INTEGER,
-    STRING    =     TOKENS.STRING
+    STRING    =     TOKENS.STRING,
+    NONE
 };
 
 public enum KINDS {
     VAR       =     TOKENS.VAR,
     PROCEDURE =     TOKENS.PROCEDURE,
-    FUNCTION  =     TOKENS.FUNCTION
+    FUNCTION  =     TOKENS.FUNCTION,
+    PARAMETER,
+    NONE
 };
 
 // Contains all constants for our program. Put any large and/or repeated strings here.
