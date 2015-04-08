@@ -9,7 +9,7 @@ public class SemAnalyzer{
 
     public SemAnalyzer(Stack<SymbolTable> symbolTableStack, String progname) {
         this.SymbolTableStack = symbolTableStack;
-        this.File = progname + ".exe";
+        this.File = progname + ".asm";
         // If the file exists, remove all existing code
         using(StreamWriter writer = new StreamWriter(File)) {
         }
