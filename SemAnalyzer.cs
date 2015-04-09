@@ -92,6 +92,10 @@ public class SemAnalyzer{
         output("BRFS " + label);
     }
 
+    public void genBr(String label) {
+        output("BR " + label);
+    }
+
     /**
     Multiplying Operators
     */

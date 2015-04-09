@@ -816,6 +816,7 @@ public class Parser {
                 __analyzer.genBrfs(elseLabel);
                 match(TOKENS.DO);
                 statement();
+                __analyzer.genBr(conditionLabel);
                 __analyzer.genOut(elseLabel + ":");
                 break;
             default:
