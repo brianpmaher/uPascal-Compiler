@@ -829,9 +829,7 @@ public class Parser {
             case TOKENS.FOR:
                 Console.Write(61 + " ");
                 match(TOKENS.FOR);
-                controlVariable();
-                match(TOKENS.ASSIGN);
-                initialValue();
+                assignmentStatement();
                 stepValue();
                 finalValue();
                 match(TOKENS.DO);
