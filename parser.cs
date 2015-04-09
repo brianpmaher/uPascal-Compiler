@@ -758,10 +758,16 @@ public class Parser {
             case TOKENS.IF:
                 Console.Write(56 + " ");
                 match(TOKENS.IF);
+                string elseLabel = "L" + LabelMaker.genLabel();
+                string outLabel = "L" + LabelMaker.genLabel();
                 booleanExpression();
                 match(TOKENS.THEN);
+                __analyzer.genBrfs(elseLabel);
                 statement();
+                __analyzer.genBr(outLabel);
+                __analyzer.genOut(elseLabel + ":");
                 optionalElsePart();
+                __analyzer.genOut(outLabel + ":");
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IF});
