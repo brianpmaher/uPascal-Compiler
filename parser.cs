@@ -819,8 +819,10 @@ public class Parser {
                 match(TOKENS.WHILE);
                 __analyzer.genOut(conditionLabel);
                 booleanExpression();
+                __analyzer.genBrfs(elseLabel);
                 match(TOKENS.DO);
                 statement();
+                __analyzer.genBr(conditionLabel);
                 __analyzer.genOut(elseLabel);
                 break;
             default:
