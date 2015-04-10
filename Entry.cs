@@ -21,6 +21,7 @@ public class Entry {
     public int Size {get; private set;}
     public int Offset {get; set;}
     public List<string> Parameters {get; private set;}
+    public bool Modifiable {get; set;}
 
     public Entry(string lexeme, TYPES type, KINDS kind, int size, int offset, List<string> parameters) {
         Lexeme     = lexeme;
@@ -29,5 +30,6 @@ public class Entry {
         Size       = size;
         Offset     = offset;
         Parameters = parameters;
+        Modifiable = true;
     }
 }

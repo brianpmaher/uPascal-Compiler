@@ -86,7 +86,7 @@ public class SymbolTable {
                 result = entry;
             }
         }
-        if(result == null){
+        if(result == null && Next != null){
             result = Next.GetEntry(identifier);
         }
         return result;

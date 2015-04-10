@@ -371,16 +371,20 @@ public class SemAnalyzer{
     }
 
     public void genAssign(SemRecord assignee, SemRecord expression) {
-        if(assignee.Type == expression.Type) {} //Do nothing
-        else if(assignee.Type == TYPES.INTEGER && expression.Type == TYPES.FLOAT) {
-            output("CASTSI");
-        } else if(assignee.Type == TYPES.FLOAT && expression.Type == TYPES.INTEGER) {
-            output("CASTSF");
-        } else{
-            throw new Exception("Incompatible types found: " + assignee.Type + " and " + expression.Type);
+        if(SymbolTableStack.Peek().GetEntry(assignee.Lexeme).Modifiable) {
+            if(assignee.Type == expression.Type) {} //Do nothing
+            else if(assignee.Type == TYPES.INTEGER && expression.Type == TYPES.FLOAT) {
+                output("CASTSI");
+            } else if(assignee.Type == TYPES.FLOAT && expression.Type == TYPES.INTEGER) {
+                output("CASTSF");
+            } else{
+                throw new Exception("Incompatible types found: " + assignee.Type + " and " + expression.Type);
+            }
+            Entry assigneeSymRec = SymbolTableStack.Peek().GetEntry(assignee.Lexeme);
+            output("POP " + assigneeSymRec.Offset + "(D" + SymbolTableStack.Peek().NestingLevel + ")");
+        } else {
+            throw new Exception("Can't modify a control variable");
         }
-        Entry assigneeSymRec = SymbolTableStack.Peek().GetEntry(assignee.Lexeme);
-        output("POP " + assigneeSymRec.Offset + "(D" + SymbolTableStack.Peek().NestingLevel + ")");
     }
 
     private void output(params String[] outputStrings) {

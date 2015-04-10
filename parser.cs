@@ -849,6 +849,9 @@ public class Parser {
                 // Generate the assign for control and initial value.
                 __analyzer.genAssign(controlVar, initialVal);
 
+                Entry variable = __symbolTableStack.Peek().GetEntry(controlVar.Lexeme);
+                variable.Modifiable = false;
+
                 // Generate the starting label
                 __analyzer.genOut(start + ":");
 
@@ -860,6 +863,13 @@ public class Parser {
                 // Retrieve finalValue semrec and generate the push the initial
                 // (now controlVariable) and the finalValue on the stack for it.
                 SemRecord finalVal = finalValue();
+
+                Entry finalValEntry = __symbolTableStack.Peek().GetEntry(finalVal.Lexeme);
+
+                if(finalValEntry != null) {
+                    finalValEntry.Modifiable = false;
+                }
+
                 __analyzer.genPushVar(controlVar);
 
                 // Generate either CMPGES or CMPLES depending on what was chosen
@@ -884,10 +894,16 @@ public class Parser {
                 __analyzer.genPushLit(step);
                 __analyzer.genPushVar(controlVar);
                 SemRecord result = new SemRecord(__analyzer.genAdd(step, controlVar), "");
+                variable.Modifiable = true;
                 __analyzer.genAssign(controlVar, result);
+                variable.Modifiable = false;
 
                 // Generate branch to beginning of loop and end label
                 __analyzer.genBr(start);
+                variable.Modifiable = true;
+                if (finalValEntry != null) {
+                    finalValEntry.Modifiable = true;
+                }
                 __analyzer.genOut(end + ":");
                 break;
             default:

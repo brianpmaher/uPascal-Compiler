@@ -8,6 +8,6 @@ begin
         begin
           writeln(x);
         end;
-      x := x + 1
+      {x := x + 1}
     end
 end.
