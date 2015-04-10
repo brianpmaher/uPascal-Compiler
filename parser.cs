@@ -902,10 +902,8 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 Console.Write(62 + " ");
                 string id = variableIdentifier();
-
-                // Gonna have to change this. I'm assuming all control variables
-                // will be integers which is wrong.
-                controlRec = new SemRecord(TYPES.INTEGER, id);
+                Entry variable = __symbolTableStack.Peek().GetEntry(id);
+                controlRec = new SemRecord(variable.Type, variable.Lexeme);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
