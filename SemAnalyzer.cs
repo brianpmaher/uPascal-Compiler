@@ -377,7 +377,7 @@ public class SemAnalyzer{
         } else if(assignee.Type == TYPES.FLOAT && expression.Type == TYPES.INTEGER) {
             output("CASTSF");
         } else{
-            throw new Exception("Incompatible types found");
+            throw new Exception("Incompatible types found: " + assignee.Type + " and " + expression.Type);
         }
         Entry assigneeSymRec = SymbolTableStack.Peek().GetEntry(assignee.Lexeme);
         output("POP " + assigneeSymRec.Offset + "(D" + SymbolTableStack.Peek().NestingLevel + ")");

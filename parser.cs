@@ -814,8 +814,8 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.WHILE:
                 Console.Write(60 + " ");
-                String conditionLabel = "L" + LabelMaker.genLabel();
-                String elseLabel = "L" + LabelMaker.genLabel();
+                string conditionLabel = "L" + LabelMaker.genLabel();
+                string elseLabel = "L" + LabelMaker.genLabel();
                 match(TOKENS.WHILE);
                 __analyzer.genOut(conditionLabel);
                 booleanExpression();
@@ -836,13 +836,59 @@ public class Parser {
             case TOKENS.FOR:
                 Console.Write(61 + " ");
                 match(TOKENS.FOR);
-                controlVariable();
+
+                // Store the labels for start and end of loop.
+                string start = "L" + LabelMaker.genLabel();
+                string end = "L" + LabelMaker.genLabel();
+
+                // Get semrecord for control and initial
+                SemRecord controlVar = controlVariable();
                 match(TOKENS.ASSIGN);
-                initialValue();
-                stepValue();
-                finalValue();
+                SemRecord initialVal = initialValue();
+
+                // Generate the assign for control and initial value.
+                __analyzer.genAssign(controlVar, initialVal);
+
+                // Generate the starting label
+                __analyzer.genOut(start + ":");
+
+                // Retrieve the semrecord for what type of for loop
+                // (to or downto). Note: this will return either a 1 or -1
+                // for adding later.
+                SemRecord step = stepValue();
+
+                // Retrieve finalValue semrec and generate the push the initial
+                // (now controlVariable) and the finalValue on the stack for it.
+                SemRecord finalVal = finalValue();
+                __analyzer.genPushVar(controlVar);
+
+                // Generate either CMPGES or CMPLES depending on what was chosen
+                // (either to or downto).
+                if(step.Lexeme.Equals("1")) {
+                    // to was chosen
+                    __analyzer.genGte(controlVar, finalVal);
+                } else if(step.Lexeme.Equals("-1")){
+                    // downto was chosen
+                    __analyzer.genLte(controlVar, finalVal);
+                } else {
+                    throw new Exception("Something went wrong with to or downto");
+                }
+
+                // Generate the branch false on stack
+                __analyzer.genBrfs(end);
+
                 match(TOKENS.DO);
                 statement();
+
+                // Generate for increment or decrement of controlVariable
+                __analyzer.genPushLit(step);
+                __analyzer.genPushVar(controlVar);
+                SemRecord result = new SemRecord(__analyzer.genAdd(step, controlVar), "");
+                __analyzer.genAssign(controlVar, result);
+
+                // Generate branch to beginning of loop and end label
+                __analyzer.genBr(start);
+                __analyzer.genOut(end + ":");
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FOR});
@@ -850,19 +896,26 @@ public class Parser {
         }
     }
 
-    private void controlVariable() {
+    private SemRecord controlVariable() {
+        SemRecord controlRec = null;
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(62 + " ");
-                variableIdentifier();
+                string id = variableIdentifier();
+
+                // Gonna have to change this. I'm assuming all control variables
+                // will be integers which is wrong.
+                controlRec = new SemRecord(TYPES.INTEGER, id);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
                 break;
         }
+        return controlRec;
     }
 
-    private void initialValue() {
+    private SemRecord initialValue() {
+        SemRecord initialRec = null;
         switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
@@ -875,7 +928,7 @@ public class Parser {
             case TOKENS.MINUS:
             case TOKENS.PLUS:
                 Console.Write(63 + " ");
-                ordinalExpression();
+                initialRec = ordinalExpression();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
@@ -883,25 +936,31 @@ public class Parser {
                     TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
+        return initialRec;
     }
 
-    private void stepValue() {
+    private SemRecord stepValue() {
+        SemRecord stepValRec = null;
         switch(__lookahead.Type) {
             case TOKENS.DOWNTO:
                 Console.Write(65 + " ");
                 match(TOKENS.DOWNTO);
+                stepValRec = new SemRecord(TYPES.INTEGER, "-1");
                 break;
             case TOKENS.TO:
                 Console.Write(64 + " ");
                 match(TOKENS.TO);
+                stepValRec = new SemRecord(TYPES.INTEGER, "1");
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.DOWNTO, TOKENS.TO});
                 break;
         }
+        return stepValRec;
     }
 
-    private void finalValue() {
+    private SemRecord finalValue() {
+        SemRecord finalValRec = null;
         switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
@@ -914,7 +973,7 @@ public class Parser {
             case TOKENS.MINUS:
             case TOKENS.PLUS:
                 Console.Write(66 + " ");
-                ordinalExpression();
+                finalValRec = ordinalExpression();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
@@ -922,6 +981,7 @@ public class Parser {
                     TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
+        return finalValRec;
     }
 
     private void procedureStatement() {
@@ -1493,7 +1553,8 @@ public class Parser {
         }
     }
 
-    private void ordinalExpression() {
+    private SemRecord ordinalExpression() {
+        SemRecord ordExpRec = null;
         switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
@@ -1506,7 +1567,7 @@ public class Parser {
             case TOKENS.PLUS:
             case TOKENS.MINUS:
                 Console.Write(112 + " ");
-                expression();
+                ordExpRec = expression();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
@@ -1514,6 +1575,7 @@ public class Parser {
                     TOKENS.LPAREN});
                 break;
         }
+        return ordExpRec;
     }
 
     private List<String> identifierList() {
