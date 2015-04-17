@@ -61,6 +61,13 @@ public class SymbolTable {
         return totalSize;
     }
 
+    // This method should be called after adding all parameter entries to the symbol table
+    // This makes room for the PC in the symbol table, to avoid incorrect offsets in
+    // the vars
+    public void IncSize(){
+        Size++;
+    }
+
     public TYPES GetType(String identifier){
         Entry entry = GetEntry(identifier);
         if(entry != null){
