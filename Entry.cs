@@ -20,10 +20,10 @@ public class Entry {
     public KINDS Kind {get; private set;}
     public int Size {get; private set;}
     public int Offset {get; set;}
-    public List<string> Parameters {get; private set;}
+    public List<Parameter> Parameters {get; private set;}
     public bool Modifiable {get; set;}
 
-    public Entry(string lexeme, TYPES type, KINDS kind, int size, int offset, List<string> parameters) {
+    public Entry(string lexeme, TYPES type, KINDS kind, int size, int offset, List<Parameter> parameters) {
         Lexeme     = lexeme;
         Type       = type;
         Kind       = kind;
@@ -31,5 +31,24 @@ public class Entry {
         Offset     = offset;
         Parameters = parameters;
         Modifiable = true;
+    }
+
+    public ParamType(string lexeme){
+        foreach(Parameter para in Parameters){
+            if(lexeme == para.Lexeme){
+                return para.InOut;
+            }
+        }
+        return null; // Parameter not found
+    }
+}
+
+public class Parameter {
+    public string Lexeme {get; private set;}
+    public boolean InOut {get; private set;}
+
+    public Parameter(string lexeme, inOut=True){
+        Lexeme = lexeme;
+        InOut  = inOut;
     }
 }
