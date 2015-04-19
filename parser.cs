@@ -205,6 +205,7 @@ public class Parser {
                 TYPES typeRec = type();
                 SymbolTable top = __symbolTableStack.Peek();
                 if(typeRec != TYPES.NONE) {
+                    top.IncSize(); // Make room for PC
                     foreach(String identifier in identifiers) {
                         top.AddEntry(identifier, typeRec, KINDS.VAR, 1, null);
                     }
@@ -320,7 +321,7 @@ public class Parser {
                     new SymbolTable(
                         identifier,
                         __symbolTableStack.Peek().NestingLevel +1,
-                        0,
+                        1,
                         __symbolTableStack.Peek().NestingLevel +1,
                         new List<Entry>(),
                         __symbolTableStack.Peek()
@@ -365,7 +366,7 @@ public class Parser {
                     new SymbolTable(
                         identifier,
                         __symbolTableStack.Peek().NestingLevel + 1,
-                        0,
+                        1,
                         //TODO: Change this to labeling
                         __symbolTableStack.Peek().NestingLevel + 1,
                         new List<Entry>(),
