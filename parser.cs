@@ -267,7 +267,6 @@ public class Parser {
     private void procedureDeclaration() {
         switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
-                string label =
                 Console.Write(17 + " ");
                 procedureHeading();
                 match(TOKENS.SCOLON);
@@ -1013,13 +1012,7 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 Console.Write(67 + " ");
                 string procedure = procedureIdentifier();
-                // Look it up, push the nesting level of it + 1 onto the stack
-                List<Parameters> parameters = optionalActualParameterList();
-                // If parameters, push each parameter on to the stack and keep track of that number.
-                // Call the procedure (look up its label)
-                __analyzer.genCall(label);
-                // Remove the number of parameters
-                __analyzer.genCleanup(parameters.Count);
+                optionalActualParameterList();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
