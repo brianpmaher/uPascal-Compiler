@@ -1,0 +1,151 @@
+<!DOCTYPE html> 
+<html><!-- InstanceBegin template="/Templates/page.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="../../../Stylesheets/prettify.css" />
+<link rel="stylesheet" href="../../../Stylesheets/pageStylesheet.css" />
+<link rel="stylesheet" href="../../../Stylesheets/navigationStylesheet.css" />
+<link rel="stylesheet" href="../../../Stylesheets/allTextStyles.css" />
+<link rel="stylesheet" href="../../../Stylesheets/colors-blue.css" />
+
+<script type="text/javascript" src="../../../Scripts/google-code-prettify/run_prettify.js"></script>
+<script type="text/javascript" src="../../../Scripts/recomputeAttributes.js"></script>
+
+
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Scanner Specifications</title>
+<!-- InstanceEndEditable -->
+</head>
+
+<body id="body-style">
+
+<!-- 
+<div id="browser-window-veil">
+</div>
+-->
+
+<div id="page-container">
+
+<header id="header">
+<div id="track-icon1">
+  <img src="../../../Media/StyleImages/bobcat-small.png" alt="bobcat icon" width="75" height="48"></div>
+<div id="track-icon2">
+</div>
+<div id="track-icon3">
+</div>
+  <div id="headMatter">
+    <span id="headTitle1">
+      <!-- InstanceBeginEditable name="Header" -->Scanner Specs<!-- InstanceEndEditable --> 
+    </span>
+    <span id="headTitle2">
+    </span>
+  </div>
+</header>
+
+<nav id="navigate">
+</nav>
+
+
+<aside id="aside-left">
+<div id="asideLeftTitle">
+Compilers 2014
+</div>
+
+</aside>
+
+<aside id="aside-right">
+</aside>
+
+<footer id="footer">
+  <div id="footMatter">
+    <span id="previousPageLink">
+
+    </span>
+    <span id="currentPageNumber">
+    </span>
+    <span id="nextPageLink">
+
+    </span>
+  </div>
+</footer>
+
+<article id="mainContent">
+<!-- InstanceBeginEditable name="Main" -->
+<h1>Scanner Specifications (Abbreviated)</h1>
+<p>The specifications for writing the scanner are outlined below.</p>
+<h2>Background</h2>
+<p>The background of the specifications is the theory of formal&nbsp;languages and automata that form&nbsp;the foundation of scanning.</p>
+<h3>Regular Expressions</h3>
+<p>Teams are given a general description of μPascal and an understanding of what tokens are. They are then required to identify all tokens in μPascal. Next, they are to write a regular expression for each token. Finally, they are given formal specifications for the tokens of μPascal as regular expressions for comparison with the regular expressions they derived. Thus, after making their own attempts, all teams begin coding of the scanner with a standard set of regular expressions for the tokens of μPascal.</p>
+<h3>Finite State Automata</h3>
+<p>Teams then review the theory and practice of finite state automata so that they can implement the regular expressions that stand of the tokens of μPascal as finite state automata. </p>
+<h2>Implementing the Scanner</h2>
+<h3>The Dispatcher</h3>
+<p>A dispatcher (itself&nbsp;a finite state automaton) is to do the following:</p>
+<p><strong>precondition</strong>: the source file pointer is either pointing at the first character of the file (when the file is first&nbsp;opened) or is pointing to the first character in the file after the most recently scanned lexeme that matched a token.</p>
+<ul>
+  <li>skip white space (where white space is a regular expression defined in the μPascal&nbsp;specifications)</li>
+  <li>peek at the first non-white space character without consuming it</li>
+  <li>call the finite state automaton that is responsible for scanning for tokens that start with that character</li>
+</ul>
+<h3>The Finite State Automata for Each Token</h3>
+<p> The specifications for each implemented FSA are the same:</p>
+<ul>
+  <li><strong>precondition</strong>: 
+    <ul>
+      <li>the file pointer is pointing to the first character of the current token being scanned</li>
+      </ul>
+    </li>
+  <li><strong>postcondition:</strong>
+    <ul>
+      <li>If a token was successfully matched:
+        <ul>
+          <li>instance variable<strong> token</strong> has been set to the currently scanned token</li>
+          <li>instance variable<strong> lexeme</strong> contains the lexeme associated with the scanned token</li>
+          <li>instance variable <strong>lineNumber</strong> has been set to the source code line that contains the token scanned</li>
+          <li>instance variable <strong>columnNumber</strong> that is the column number of the start of the current token scanned</li>
+          <li>the <strong>file pointer</strong> is pointing to the first character that follows the lexeme associated with the currently scanned token</li>
+          </ul>
+      </li>
+      <li>If no token was matched:
+        <ul>
+          <li>instance variable <strong>token</strong> is set to a special error token</li>
+          <li>instance variable <strong>lexeme</strong> is undefined</li>
+          <li>instance variable <strong>lineNumber</strong> has been set to the source code line on which the error was encountered</li>
+          <li>instance variable columnNumber has been set to the column indicated by the file pointer when the FSA was called.</li>
+          <li>the file pointer is incremented by one from its initial position when this FSA was called.</li>
+          <li>some leeway was allowed in handling special errors, such as run-on-string&nbsp;and run-on-comment</li>
+        </ul>
+      </li>
+      </ul>
+  </li>
+</ul>
+<p><strong>In addition:</strong></p>
+<ul>
+  <li>each token FSA is to always return the token that is matched by the longest possible lexeme</li>
+  <li>a standard approach for implementing each FSA must be chosen:
+    <ul>
+      <li>EITHER: A loop that runs until a lexeme for the token is matched. On each pass through the loop
+        <ul>
+          <li>in an outer switch statement, select the current state of the FSA</li>
+          <li>the current state is represented by another switch statement that sets the next state based on the current input character.</li>
+          </ul>
+        </li>
+      <li>OR the FSA is implemented&nbsp;with goto statements such that 
+        <ul>
+          <li>each state is represented with a label</li>
+          <li>a goto statement is associated with every state that transfers execution to the label of the state indicated by the current state and the current input symbol.</li>
+          </ul>
+        </li>
+      </ul>
+  </li>
+  </ul>
+<p>&nbsp;</p>
+<h2>&nbsp;</h2>
+<!-- InstanceEndEditable -->
+
+</article>
+</div>
+</body>
+<!-- InstanceEnd --></html>

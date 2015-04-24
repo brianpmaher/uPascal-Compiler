@@ -1,0 +1,425 @@
+@charset "UTF-8";
+/* CSS Document */
+
+#cover-veil{
+	position: absolute;
+	top: 0;
+	right: 0;
+	left:0;
+	bottom:0;
+	background-color: #000000;
+	visibility: visible;
+	opacity:1.0;
+	z-index:25;
+}
+
+#browser-window-backdrop{
+	position: absolute;
+	top: 0;
+	right: 0;
+	left:0;
+	bottom:0;
+	background-color: #131a3c;
+	visibility: visible;
+	opacity: 1.0;
+	z-index:1;
+}
+
+#cover-container{
+    font-family: Verdana, Geneva, sans-serif;
+	background-color: #000000;
+	position:    absolute;
+	width:       942px;
+	top:         10px;
+	bottom:      5px;
+	padding:     5px;
+	margin-left: 50%;
+	left:        -471px;
+	z-index:     50;
+	border-radius: 22px;
+	border-style: solid;
+	border-color: black;
+	border-width: thick;
+}
+
+#cover-container{
+	animation-name: container;
+    animation-duration: 8s;
+    animation-timing-function: ease;
+	animation-delay: 0.5s;
+	animation-iteration-count: 2;
+	animation-play-state: running;
+	animation-direction: normal;
+	animation-fill-mode: forwards;
+	
+	/* Firefox: */
+	-moz-animation-name: container;
+	-moz-animation-duration: 8s;
+	-moz-animation-timing-function: ease;
+	-moz-animation-delay: 0.5s;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-direction: normal;
+	-moz-animation-play-state: running;
+	-moz-animation-fill-mode: forwards;
+
+	/* Safari and Chrome: */
+	-webkit-animation-name: container;
+	-webkit-animation-duration: 8s;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-delay: 0.5s;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-direction: normal;
+	-webkit-animation-play-state: running;
+	-webkit-animation-fill-mode: forwards;
+}
+
+@keyframes container {
+	0%  {border-color: #000000; background-color: black;}
+	99% {border-color: #000000; background-color: black;}
+	100%{border-color: #d0a560;  background-color: #315ca5;}
+}
+
+@-webkit-keyframes container { /* Safari and Chrome */
+	0%  {border-color: #000000; background-color: black;}
+	99% {border-color: #000000; background-color: black;}
+	100%{border-color: #d0a560;  background-color: #315ca5;}
+}
+
+@-moz-keyframes container { /* Firefox */
+	0%  {border-color: #000000; background-color: black;}
+	99% {border-color: #000000; background-color: black;}
+	100%{border-color: #d0a560;  background-color: #315ca5}
+}
+
+#navigate{
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 100px;
+	height: auto;
+	z-index:51;
+}
+
+#open-book{
+	float: left;
+	margin-left: 100px;
+	font-weight: 400;
+}
+
+a, a:link, a:visited {
+	text-decoration: none;
+	color: #000000;
+	animation-name: open-book;
+    animation-duration: 3s;
+    animation-timing-function: ease;
+	animation-delay: 9s;
+	animation-iteration-count: 1;
+	animation-play-state: running;
+	animation-direction: normal;
+	animation-fill-mode: forwards;
+	
+	/* Firefox: */
+	-moz-animation-name: open-book;
+	-moz-animation-duration: 3s;
+	-moz-animation-timing-function: ease;
+	-moz-animation-delay: 9s;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-direction: normal;
+	-moz-animation-play-state: running;
+	-moz-animation-fill-mode: forwards;
+
+	/* Safari and Chrome: */
+	-webkit-animation-name: open-book;
+	-webkit-animation-duration: 3s;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-delay: 9s;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-direction: normal;
+	-webkit-animation-play-state: running;
+	-webkit-animation-fill-mode: forwards;
+}
+
+@keyframes open-book {
+	0%   {color: #000000;}
+	80%  {color: #F2C782;}
+	100% {color: #d0a560;}
+}
+
+@-webkit-keyframes open-book { /* Safari and Chrome */
+	0%   {color: #000000;}
+	80%  {color: #F2C782;}
+	100% {color: #d0a560;}
+}
+
+@-moz-keyframes open-book { /* Firefox */
+	0%   {color: #000000;}
+	80%  {color: #F2C782;}
+	100% {color: #d0a560;}
+}
+
+#help{
+	float: right;
+	margin-right: 100px;
+	font-weight: 400;
+	text-decoration: none;
+	color: #000000;
+}
+
+#help{
+	animation-name: help;
+    animation-duration: 3s;
+    animation-timing-function: ease;
+	animation-delay: 10s;
+	animation-iteration-count: 1;
+	animation-play-state: running;
+	animation-direction: normal;
+	animation-fill-mode: forwards;
+	
+	/* Firefox: */
+	-moz-animation-name: help;
+	-moz-animation-duration: 3s;
+	-moz-animation-timing-function: ease;
+	-moz-animation-delay: 10s;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-direction: normal;
+	-moz-animation-play-state: running;
+	-moz-animation-fill-mode: forwards;
+
+	/* Safari and Chrome: */
+	-webkit-animation-name: help;
+	-webkit-animation-duration: 3s;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-delay: 10s;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-direction: normal;
+	-webkit-animation-play-state: running;
+	-webkit-animation-fill-mode: forwards;
+}
+
+@keyframes help {
+	0%   {color: #000000;}
+	80%  {color: #F2C782;}
+	100% {color: #d0a560;}
+}
+
+@-webkit-keyframes help { /* Safari and Chrome */
+	0%   {color: #000000;}
+	80%  {color: #F2C782;}
+	100% {color: #d0a560;}
+}
+
+@-moz-keyframes help { /* Firefox */
+	0%   {color: #000000;}
+	80%  {color: #F2C782;}
+	100% {color: #d0a560;}
+}
+
+#cover-header{
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 60%;
+	text-align: center;
+	color: #000000;
+	font-size: 0px;
+	font-weight: 800;
+	letter-spacing: 0.3em;
+	font-style: oblique;
+	z-index:51;
+}
+
+#cover-header{
+	animation-name: header;
+    animation-duration: 6s;
+    animation-timing-function: ease;
+	animation-delay: 2.5s;
+	animation-iteration-count: 1;
+	animation-play-state: running;
+	animation-direction: normal;
+	animation-fill-mode: forwards;
+	
+	/* Firefox: */
+	-moz-animation-name: header;
+	-moz-animation-duration: 6s;
+	-moz-animation-timing-function: ease;
+	-moz-animation-delay: 2.5s;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-direction: normal;
+	-moz-animation-play-state: running;
+	-moz-animation-fill-mode: forwards;
+
+	/* Safari and Chrome: */
+	-webkit-animation-name: header;
+	-webkit-animation-duration: 6s;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-delay: 2.5s;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-direction: normal;
+	-webkit-animation-play-state: running;
+	-webkit-animation-fill-mode: forwards;
+}
+	
+@keyframes header {
+	0%   {font-size:  2px; letter-spacing: 0em; color: #000000;}
+	25%  {font-size: 36px; letter-spacing: 0.5em;}
+	50%  {font-size: 36px; letter-spacing: 0.5em; color: #FFFFFF; -webkit-transform: rotate(0deg) translate(0px, 0px);}
+	75%  {font-size: 10px; letter-spacing: 0.5em; color: #CCCCCC -webkit-transform: rotate(0deg) translate(0px, 0px); top: 60%;}
+	100% {font-size: 48px; letter-spacing: 0.5em; color: #d0a560; -webkit-transform: rotate(0deg) translate(0px, 0px); top:  0%;}
+}
+
+@-webkit-keyframes header { /* Safari and Chrome */
+	0%   {font-size:  2px; letter-spacing: 0em; color: #000000;}
+	25%  {font-size: 36px; letter-spacing: 0.5em;}
+	50%  {font-size: 36px; letter-spacing: 0.5em; color: #FFFFFF; -webkit-transform: rotate(0deg) translate(0px, 0px);}
+	75%  {font-size: 10px; letter-spacing: 0.5em; color: #CCCCCC; -webkit-transform: rotate(0deg) translate(0px, 0px); top: 60%;}
+	100% {font-size: 48px; letter-spacing: 0.5em; color: #d0a560; -webkit-transform: rotate(0deg) translate(0px, 0px); top:  0%;}
+}
+
+@-moz-keyframes header { /* Firefox */
+	0%   {font-size:  2px; letter-spacing: 0em; color: #000000;}
+	25%  {font-size: 36px; letter-spacing: 0.5em;}
+	50%  {font-size: 36px; letter-spacing: 0.5em; color: #FFFFFF; -moz-transform: rotate(0deg) translate(0px, 0px);}
+	75%  {font-size: 10px; letter-spacing: 0.5em; color: #CCCCCC; -moz-transform: rotate(0deg) translate(0px, 0px); top: 60%;}
+	100% {font-size: 48px; letter-spacing: 0.5em; color: #d0a560; -moz-transform: rotate(0deg) translate(0px, 0px); top:  0%;}
+}
+
+#cover-left-bar{
+	position: absolute;
+	left:  0px;
+	right: 0px;
+	top:   50%;
+	text-align: center;
+	color: #000000;
+	font-size:0px;
+	font-weight: 700;
+	letter-spacing: 0.3em;
+	font-style: oblique;
+	background-color: none;
+	z-index:51;
+}
+	
+#cover-left-bar{
+	animation-name: leftbar1;
+    animation-duration: 8.5s;
+    animation-timing-function: ease;
+	animation-delay: 0s;
+	animation-iteration-count: 2;
+	animation-play-state: running;
+	animation-direction: normal;
+	animation-fill-mode: forwards;
+	
+	/* Firefox: */
+	-moz-animation-name: leftbar1;
+	-moz-animation-duration: 8.5s;
+	-moz-animation-timing-function: ease;
+	-moz-animation-delay: 0s;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-direction: normal;
+	-moz-animation-play-state: running;
+	-moz-animation-fill-mode: forwards;
+
+	/* Safari and Chrome: */
+	-webkit-animation-name: leftbar1;
+	-webkit-animation-duration: 8.5s;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-delay: 0s;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-direction: normal;
+	-webkit-animation-play-state: running;
+	-webkit-animation-fill-mode: forwards;
+	
+	/*transform:rotate(270deg) translate(100px,200px);
+	/*-ms-transform:rotate(270deg) translate(-200px,200px); /* IE 9 */
+	/*-moz-transform:rotate(200deg) translate(-200px,200px); /* Firefox */
+	/*-webkit-transform:rotate(90deg) translate(-200px,200px); /* Safari and Chrome */
+	/*-o-transform:rotate(270deg) translate(-200px,200px); /* Opera */
+	/*transform:rotate(270deg);
+	-ms-transform:rotate(270deg); /* IE 9 */
+	/*-moz-transform:rotate(200deg); /* Firefox */
+	/*-webkit-transform: translate(-450px, 0px) rotate(-90deg); /* Safari and Chrome */
+	/*-o-transform:rotate(270deg); /* Opera */
+
+}
+	
+@keyframes leftbar1 {
+	0%   {font-size:  2px; letter-spacing: 0em;   color: #000000;}
+	50%  {font-size: 48px; letter-spacing: 0.5em; color: #FFFFFF;}
+	70%  {font-size: 48px; letter-spacing: 0.5em; color: #CCCCCC; rotate(0deg) translate(0px, 0px);}
+	100% {font-size: 48px; letter-spacing: 0.5em; color: #d0a560; rotate(-90deg) translate(0px, -450px);}
+}
+
+@-webkit-keyframes leftbar1 { /* Safari and Chrome */
+	0%   {font-size:  2px; letter-spacing: 0em;   color: #000000;}
+	50%  {font-size: 48px; letter-spacing: 0.5em; color: #FFFFFF;}
+	70%  {font-size: 48px; letter-spacing: 0.5em; color: #CCCCCC; -webkit-transform: rotate(0deg) translate(0px, 0px);}
+	100% {font-size: 48px; letter-spacing: 0.5em; color: #d0a560; -webkit-transform: rotate(-90deg) translate(0px, -450px);}
+}
+
+@-moz-keyframes leftbar1 { /* Firefox */
+	0%   {font-size:  2px; letter-spacing: 0em;   color: #000000;}
+	50%  {font-size: 48px; letter-spacing: 0.5em; color: #FFFFFF;}
+	70%  {font-size: 48px; letter-spacing: 0.5em; color: #CCCCCC; -moz-transform: rotate(0deg) translate(0px, 0px);}
+	100% {font-size: 48px; letter-spacing: 0.5em; color: #d0a560; -moz-transform: rotate(-90deg) translate(0px, -450px);}
+}
+
+#cover-area{
+	position: absolute;
+	top:   40px;
+	bottom: 0px;
+	left:  40px;
+	right:  0px;	
+}
+
+.cover{
+	position: absolute;
+	margin-top: 35%;
+	margin-left: 30%;
+	opacity: 0.0;
+}
+
+.cover{
+	animation-name: cover-movie;
+    animation-duration: 5s;
+    animation-timing-function: ease;
+	animation-delay: 8s;
+	animation-iteration-count: 2;
+	animation-play-state: running;
+	animation-direction: normal;
+	animation-fill-mode: forwards;
+	
+	/* Firefox: */
+	-moz-animation-name: cover-movie;
+	-moz-animation-duration: 5s;
+	-moz-animation-timing-function: ease;
+	-moz-animation-delay: 8s;
+	-moz-animation-iteration-count: 1;
+	-moz-animation-direction: normal;
+	-moz-animation-play-state: running;
+	-moz-animation-fill-mode: forwards;
+
+	/* Safari and Chrome: */
+	-webkit-animation-name: cover-movie;
+	-webkit-animation-duration: 5s;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-delay: 8s;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-direction: normal;
+	-webkit-animation-play-state: running;
+	-webkit-animation-fill-mode: forwards;
+}
+
+@keyframes cover-movie {
+	0%   {opacity: 0.0;}
+	100% {opacity: 1.1;}
+}
+
+@-webkit-keyframes cover-movie { /* Safari and Chrome */
+	0%   {opacity: 0.0;}
+	100% {opacity: 1.1;}
+}
+
+@-moz-keyframes cover-movie { /* Firefox */
+	0%   {opacity: 0.0;}
+	100% {opacity: 1.1;}
+}
+

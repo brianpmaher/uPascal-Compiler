@@ -1,0 +1,108 @@
+/* This css file defines the text styles and fonts used for all pages. Other
+   css files are used to define the page layouts and colors */
+   
+/* For <a> tag links */
+.noDecorationLinkStyle{
+    text-decoration: none;
+}
+
+.textStyles {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 500;
+}
+
+.caption{
+    line-height:1;
+    margin-left:5px;
+	margin-right:5px;
+}
+
+/* This is the style class for the page navigation text and links for all standard
+   content pages */
+.navBarTextStyle {   
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 500;
+	color: #000000;
+	visibility: visible;
+	z-index: 35;
+	left: 0px;
+	top: 0px;
+	position: absolute;
+	text-decoration: none	
+}
+
+
+/* style sheets for tags are listed here */
+
+body{
+    line-height:1.5;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 500;
+}
+
+td {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+th {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 h2 h3 h4 h5 h6 {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {font-size:36px; 
+    font-weight: bold; 
+	text-align:center;
+}
+
+h2 {
+    font-size:24px; 
+    font-weight: bold;
+    text-align:left;
+}
+
+h3 {
+    font-size:16px; 
+	font-weight: bold; 
+	text-align:left; 
+	font-style:oblique;
+}
+
+h4 {
+    font-size:12px; 
+	font-weight: bold; 
+	text-align:left; 
+	text-decoration:underline;
+}
+
+#tokens table{
+	font:"Courier New", Courier, monospace;
+	background-color:red;
+}
+
+.bold{
+	font-weight:700;
+}
+
+.centered{
+	text-align:center;
+}
+
+/* li {
+    font-family: Arial, Helvetica, sans-serif; 
+    font-size: 12px; 
+	font-weight: 500;
+    line-height:1.5;
+} */
+
+/*p {
+    line-height:1.5; 
+}	*/

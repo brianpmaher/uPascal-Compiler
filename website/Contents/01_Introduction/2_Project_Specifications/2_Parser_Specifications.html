@@ -1,0 +1,98 @@
+<!DOCTYPE html> 
+<html><!-- InstanceBegin template="/Templates/page.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="../../../Stylesheets/prettify.css" />
+<link rel="stylesheet" href="../../../Stylesheets/pageStylesheet.css" />
+<link rel="stylesheet" href="../../../Stylesheets/navigationStylesheet.css" />
+<link rel="stylesheet" href="../../../Stylesheets/allTextStyles.css" />
+<link rel="stylesheet" href="../../../Stylesheets/colors-blue.css" />
+
+<script type="text/javascript" src="../../../Scripts/google-code-prettify/run_prettify.js"></script>
+<script type="text/javascript" src="../../../Scripts/recomputeAttributes.js"></script>
+
+
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Parser</title>
+<!-- InstanceEndEditable -->
+</head>
+
+<body id="body-style">
+
+<!-- 
+<div id="browser-window-veil">
+</div>
+-->
+
+<div id="page-container">
+
+<header id="header">
+<div id="track-icon1">
+  <img src="../../../Media/StyleImages/bobcat-small.png" alt="bobcat icon" width="75" height="48"></div>
+<div id="track-icon2">
+</div>
+<div id="track-icon3">
+</div>
+  <div id="headMatter">
+    <span id="headTitle1">
+      <!-- InstanceBeginEditable name="Header" -->Parser Specs<!-- InstanceEndEditable --> 
+    </span>
+    <span id="headTitle2">
+    </span>
+  </div>
+</header>
+
+<nav id="navigate">
+</nav>
+
+
+<aside id="aside-left">
+<div id="asideLeftTitle">
+Compilers 2014
+</div>
+
+</aside>
+
+<aside id="aside-right">
+</aside>
+
+<footer id="footer">
+  <div id="footMatter">
+    <span id="previousPageLink">
+
+    </span>
+    <span id="currentPageNumber">
+    </span>
+    <span id="nextPageLink">
+
+    </span>
+  </div>
+</footer>
+
+<article id="mainContent">
+<!-- InstanceBeginEditable name="Main" -->
+<h1>Parser Specifications (Abbreviated)</h1>
+<p>Students are to implement a recursive descent parser. They do this through the following.</p>
+<h2>EBNF, LL(1) Grammars, and LL(1) Table Construction</h2>
+<p>Students refresh their knowledge of EBNF and context-free grammars. They then learn about LL(1) grammars, the construction of LL(1) tables by way of First, Follow, and Predict set calculations, and how to resolve LL(1) table conflicts. They create their own LL(1) table for microPascal, but are then given a correct version for comparison and use in constructing the parser.</p>
+<h2>Parser Construction</h2>
+<p>From the LL(1) table teams are to construct a recursive descent parser for microPascal based on this table as follows.</p>
+<ul>
+  <li>The nonterminal symbols of the microPascal grammar are divided among the team members.</li>
+  <li>For each non terminal, the responsible student is to write a method in which that nonterminal symbol expands itself as follows: 
+    <ul>
+      <li>The lookahead token is obtained from the scanner</li>
+      <li>The entry in the LL(1) table for the non-terminal (row) of this method and the current lookahead token (column) is examined. If the entry is non-empty it contains the number of a rule in the grammar that has the nonterminal of this method on the left</li>
+      <li>A case statement that switches on the rule number found in the LL(1) table selects the correct case for expanding the nonterminal according to its rule number (if the LL(1) table has no entry in it for this nonterminal-lookahead pair, the default case is to register an error)</li>
+      <li>Each non-default case in the case statement represents the expansion of one of the rules in the grammar with the nonterminal of this method on the left. The case expands the nonterminal according to this rule by handling each symbol on the right hand side of this rule by (for each token on the right hand side) calling a method to match the token and calling the relevant method for each nonterminal.</li>
+      <li>If the case statement in the implementation language cannot switch one or the other type of value (the state or the lookahead token) an if-then-elseif-else construct can be used.</li>
+    </ul>
+  </li>
+</ul>
+<!-- InstanceEndEditable -->
+
+</article>
+</div>
+</body>
+<!-- InstanceEnd --></html>
