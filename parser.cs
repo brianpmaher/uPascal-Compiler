@@ -310,12 +310,15 @@ public class Parser {
                 match(TOKENS.PROCEDURE);
                 String identifier = procedureIdentifier();
                 List<Entry> entries = optionalFormalParameterList();
+
                 // Make procedure symbol table entry and table
                 List<String> paras = new List<String>();
                 foreach(Entry entry in entries) {
                     paras.Add(entry.Lexeme);
                 }
-                //Add the entry for the procedure
+
+                // Add the entry for the procedure in the current top of stack
+                // symbol table
                 __symbolTableStack.Peek().AddEntry(
                     identifier,
                     TYPES.NONE,
@@ -323,6 +326,8 @@ public class Parser {
                     0,
                     paras
                 );
+
+                // Push precedure symbol table to top of the symbol table stack
                 __symbolTableStack.Push(
                     new SymbolTable(
                         identifier,
@@ -333,6 +338,9 @@ public class Parser {
                         __symbolTableStack.Peek()
                     )
                 );
+
+                // Add entries for the parameters on the precedure symbol
+                // table (which should be at the top of the stack now)
                 foreach(Entry entry in entries) {
                     __symbolTableStack.Peek().AddEntry(entry);
                 }
