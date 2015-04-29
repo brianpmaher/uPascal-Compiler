@@ -67,6 +67,20 @@ public class SemAnalyzer{
         );
     }
 
+    public void genEnd(int size){
+        SymbolTable top = SymbolTableStack.Peek();
+        string endInst;
+        if(top.NestingLevel == 0){
+            endInst = "HLT";
+        } else {
+            endInst = "RET";
+        }
+        output(
+            "SUB SP #" + size + " SP",
+            endInst
+        );
+    }
+
     public void genCleanup(int size){
         int depth = SymbolTableStack.Peek().NestingLevel;
         output(
@@ -77,7 +91,8 @@ public class SemAnalyzer{
     public void genPushVar(SemRecord toPush) {
         SymbolTable top = SymbolTableStack.Peek();
         Entry idEntry = top.GetEntry(toPush.Lexeme);
-        output("PUSH " + idEntry.Offset + "(D" + top.NestingLevel + ")");
+        int offset = idEntry.Offset;
+        output("PUSH " + offset + "(D" + top.NestingLevel + ")");
         topStackType = toPush.Type;
     }
 

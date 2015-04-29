@@ -187,7 +187,7 @@ public class Parser {
                 }
 
                 statementPart();
-                __analyzer.genEnd();
+                __analyzer.genEnd(temp);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.BEGIN, TOKENS.FUNCTION, TOKENS.PROCEDURE,
@@ -1085,6 +1085,7 @@ public class Parser {
                 __analyzer.genPointer(list.Count, "D" + applyNextLevel);
 
                 // call the procedure (have to find label still)
+                SymbolTable top = __symbolTableStack.Peek();
                 __analyzer.genCall(procedure);
 
                 // Remove the number of parameters
