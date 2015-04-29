@@ -109,9 +109,9 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.PROGRAM:
                 Console.Write(2 + " ");
-                programHeading();
+                string progLabel = programHeading();
                 match(TOKENS.SCOLON);
-                block();
+                block(progLabel, true);
                 match(TOKENS.PERIOD);
                 break;
             default:
@@ -120,7 +120,8 @@ public class Parser {
         }
     }
 
-    private void programHeading() {
+    private string programHeading() {
+        string progLabel = "";
         switch(__lookahead.Type) {
             case TOKENS.PROGRAM:
                 Console.Write(3 + " ");
@@ -130,15 +131,17 @@ public class Parser {
                 __symbolTableStack.Push(new SymbolTable(
                     programName, 0, 0, 0, new List<Entry>(),
                     null));
-                __analyzer.genInit();
+                progLabel = "L" + LabelMaker.genLabel();
+                __analyzer.genBr(progLabel);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROGRAM});
                 break;
         }
+        return progLabel;
     }
 
-    private void block() {
+    private void block(string startLabel, bool progBlock = false) {
         switch(__lookahead.Type) {
             case TOKENS.BEGIN:
             case TOKENS.FUNCTION:
@@ -147,9 +150,10 @@ public class Parser {
                 Console.Write(4 + " ");
                 variableDeclarationPart();
                 procedureAndFunctionDeclarationPart();
+                __analyzer.genOut(startLabel + ":");
                 __analyzer.genSymSize();
                 statementPart();
-                __analyzer.genEnd();
+                __analyzer.genEnd(progBlock);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.BEGIN, TOKENS.FUNCTION, TOKENS.PROCEDURE,
@@ -269,9 +273,9 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
                 Console.Write(17 + " ");
-                procedureHeading();
+                string procedureLabel = procedureHeading();
                 match(TOKENS.SCOLON);
-                block();
+                block(procedureLabel);
                 match(TOKENS.SCOLON);
                 break;
             default:
@@ -284,9 +288,9 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.FUNCTION:
                 Console.Write(18 + " ");
-                functionHeading();
+                string functionLabel = functionHeading();
                 match(TOKENS.SCOLON);
-                block();
+                block(functionLabel);
                 match(TOKENS.SCOLON);
                 break;
             default:
@@ -295,7 +299,8 @@ public class Parser {
         }
     }
 
-    private void procedureHeading() {
+    private string procedureHeading() {
+        string procedureLabel = "";
         switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
                 Console.Write(19 + " ");
@@ -307,6 +312,8 @@ public class Parser {
                 foreach(Entry entry in entries) {
                     paras.Add(entry.Lexeme);
                 }
+                procedureLabel = "L" + LabelMaker.genLabel();
+                __analyzer.genBr(procedureLabel);
                 //Add the entry for the procedure
                 __symbolTableStack.Peek().AddEntry(
                     identifier,
@@ -333,9 +340,11 @@ public class Parser {
                 error(new List<TOKENS>{TOKENS.PROCEDURE});
                 break;
         }
+        return procedureLabel;
     }
 
-    private void functionHeading() {
+    private string functionHeading() {
+        string functionLabel = "";
         switch(__lookahead.Type) {
             case TOKENS.FUNCTION:
                 Console.Write(20 + " ");
@@ -351,6 +360,8 @@ public class Parser {
                         paras.Add(entry.Lexeme);
                     }
                 }
+                functionLabel = "L" + LabelMaker.genLabel();
+                __analyzer.genBr(functionLabel);
                 // Add the entry for the function
                 __symbolTableStack.Peek().AddEntry(
                     identifier,
@@ -379,6 +390,7 @@ public class Parser {
                 error(new List<TOKENS>{TOKENS.FUNCTION});
                 break;
         }
+        return functionLabel;
     }
 
     private List<Entry> optionalFormalParameterList() {
