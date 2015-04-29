@@ -15,6 +15,10 @@ public class SemAnalyzer{
         }
     }
 
+    public void genPointer(int size, string register){
+        output("SUB SP #" + size + " " + register);
+    }
+
     public void genPointer(string register){
         SymbolTable top = SymbolTableStack.Peek();
         output("SUB SP #" + top.Size + " " + register);

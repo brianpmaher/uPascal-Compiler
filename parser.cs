@@ -284,7 +284,7 @@ public class Parser {
                 match(TOKENS.SCOLON);
 
                 // popping the table off the stack after procedure
-                // declaration is done so that 
+                // declaration is done so that
                 // nesting level decrements and main can print HLT instead
                 // of RET
                 __symbolTableStack.Pop();
@@ -1040,11 +1040,11 @@ public class Parser {
                 Console.Write(67 + " ");
                 string procedure = procedureIdentifier();
                 List<SemRecord> list = optionalActualParameterList();
-                
-                // generate the register so we can point it to 
+
+                // generate the register so we can point it to
                 int applyNextLevel = __symbolTableStack.Peek().NestingLevel;
                 applyNextLevel++;
-                __analyzer.genPointer("D" + applyNextLevel);
+                __analyzer.genPointer(list.Count, "D" + applyNextLevel);
 
                 // call the procedure (have to find label still)
                 __analyzer.genCall(procedure);

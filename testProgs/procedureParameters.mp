@@ -1,11 +1,13 @@
 program procedureParameters;
-	var someInt : integer;
-	procedure printHello(x : integer);
+	var someInt, someInt2 : integer;
+	someFloat, someFloat2 : float;
+	procedure printHello(x, y : integer);
 	begin 
-		writeln('hello');
+		writeln(y);
 		writeln(x);
 	end;
 begin
 	someInt := 1;
-	printHello(3);
+	someInt2 := 2;
+	printHello(someInt, someInt2);
 end.
