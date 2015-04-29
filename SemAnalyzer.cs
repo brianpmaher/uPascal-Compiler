@@ -47,6 +47,10 @@ public class SemAnalyzer{
         output("ADD SP #" + top.Size + " SP");
     }
 
+    public void genSymSize(int size) {
+        output("ADD SP #" + size + " SP");
+    }
+
     //Pops the table off the stack
     public void genEnd() {
         SymbolTable top = SymbolTableStack.Peek();

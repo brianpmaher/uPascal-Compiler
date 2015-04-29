@@ -141,7 +141,45 @@ public class Parser {
                 variableDeclarationPart();
                 procedureAndFunctionDeclarationPart();
                 __analyzer.genOut("L" + label + ":");
+
+                // This needs to be changed. Right now it is assuming we need
+                // to allocate space for the parameters which is out of date now
+                // However, we still need to generate for local variables.
                 __analyzer.genSymSize();
+
+                // If this is nesting level 0 meaning 'main'
+                if( __symbolTableStack.Peek().NestingLevel == 0){
+                    __analyzer.genPointer("D" + __symbolTableStack.Peek().NestingLevel);
+                }
+
+                statementPart();
+                __analyzer.genEnd();
+                break;
+            default:
+                error(new List<TOKENS>{TOKENS.BEGIN, TOKENS.FUNCTION, TOKENS.PROCEDURE,
+                    TOKENS.VAR});
+                break;
+        }
+    }
+
+    private void block(string label, int size) {
+        switch(__lookahead.Type) {
+            case TOKENS.BEGIN:
+            case TOKENS.FUNCTION:
+            case TOKENS.PROCEDURE:
+            case TOKENS.VAR:
+                Console.Write(4 + " ");
+                variableDeclarationPart();
+                procedureAndFunctionDeclarationPart();
+                __analyzer.genOut("L" + label + ":");
+
+                // This needs to be changed. Right now it is assuming we need
+                // to allocate space for the parameters which is out of date now
+                // However, we still need to generate for local variables.
+                //__analyzer.genSymSize();
+                SymbolTable top = __symbolTableStack.Peek();
+                int temp = top.GetSize() - size;
+                __analyzer.genSymSize(temp);
 
                 // If this is nesting level 0 meaning 'main'
                 if( __symbolTableStack.Peek().NestingLevel == 0){
@@ -280,7 +318,7 @@ public class Parser {
 
                 match(TOKENS.SCOLON);
                 string label = LabelMaker.genLabel();
-                block(label);
+                block(label, parameters.Count);
                 match(TOKENS.SCOLON);
 
                 // popping the table off the stack after procedure
