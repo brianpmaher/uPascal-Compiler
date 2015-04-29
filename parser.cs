@@ -111,7 +111,12 @@ public class Parser {
                 Console.Write(2 + " ");
                 programHeading();
                 match(TOKENS.SCOLON);
-                block();
+
+                // generate label and branch to it
+                string label = LabelMaker.genLabel();
+                __analyzer.genBr(label);
+
+                block(label);
                 match(TOKENS.PERIOD);
                 break;
             default:
@@ -138,7 +143,7 @@ public class Parser {
         }
     }
 
-    private void block() {
+    private void block(string label) {
         switch(__lookahead.Type) {
             case TOKENS.BEGIN:
             case TOKENS.FUNCTION:
@@ -147,6 +152,7 @@ public class Parser {
                 Console.Write(4 + " ");
                 variableDeclarationPart();
                 procedureAndFunctionDeclarationPart();
+                __analyzer.genOut(label + ":");
                 __analyzer.genSymSize();
                 statementPart();
                 __analyzer.genEnd();
@@ -271,7 +277,8 @@ public class Parser {
                 Console.Write(17 + " ");
                 procedureHeading();
                 match(TOKENS.SCOLON);
-                block();
+                string label = LabelMaker.genLabel();
+                block(label);
                 match(TOKENS.SCOLON);
                 break;
             default:
@@ -286,7 +293,8 @@ public class Parser {
                 Console.Write(18 + " ");
                 functionHeading();
                 match(TOKENS.SCOLON);
-                block();
+                string label = LabelMaker.genLabel();
+                block(label);
                 match(TOKENS.SCOLON);
                 break;
             default:
