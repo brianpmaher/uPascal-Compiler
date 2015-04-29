@@ -111,7 +111,9 @@ public class Parser {
                 Console.Write(2 + " ");
                 programHeading();
                 match(TOKENS.SCOLON);
-                block();
+                string label = LabelMaker.genLabel();
+                __analyzer.genBr(label);
+                block(label);
                 match(TOKENS.PERIOD);
                 break;
             default:
@@ -130,7 +132,6 @@ public class Parser {
                 __symbolTableStack.Push(new SymbolTable(
                     programName, 0, 0, 0, new List<Entry>(),
                     null));
-                __analyzer.genInit();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROGRAM});
@@ -138,7 +139,7 @@ public class Parser {
         }
     }
 
-    private void block() {
+    private void block(string label) {
         switch(__lookahead.Type) {
             case TOKENS.BEGIN:
             case TOKENS.FUNCTION:
@@ -147,6 +148,7 @@ public class Parser {
                 Console.Write(4 + " ");
                 variableDeclarationPart();
                 procedureAndFunctionDeclarationPart();
+                __analyzer.genOut(label + ":");
                 __analyzer.genSymSize();
                 statementPart();
                 __analyzer.genEnd();
@@ -161,6 +163,10 @@ public class Parser {
     private void variableDeclarationPart() {
         switch(__lookahead.Type) {
             case TOKENS.VAR:
+                // Ensure there is room for the PC
+                if(__symbolTableStack.Peek().NestingLevel > 0){
+                    __symbolTableStack.Peek().IncSize();
+                }
                 Console.Write(5 + " ");
                 match(TOKENS.VAR);
                 variableDeclaration();
@@ -269,9 +275,14 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
                 Console.Write(17 + " ");
-                procedureHeading();
+
+                // get parameters
+                List<Entry> parameters = new List<Entry>();
+                parameters = procedureHeading();
+
                 match(TOKENS.SCOLON);
-                block();
+                string label = LabelMaker.genLabel();
+                block(label);
                 match(TOKENS.SCOLON);
                 break;
             default:
@@ -286,7 +297,8 @@ public class Parser {
                 Console.Write(18 + " ");
                 functionHeading();
                 match(TOKENS.SCOLON);
-                block();
+                string label = LabelMaker.genLabel();
+                block(label);
                 match(TOKENS.SCOLON);
                 break;
             default:
@@ -295,19 +307,23 @@ public class Parser {
         }
     }
 
-    private void procedureHeading() {
+    private List<Entry> procedureHeading() {
+        List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
                 Console.Write(19 + " ");
                 match(TOKENS.PROCEDURE);
                 String identifier = procedureIdentifier();
-                List<Entry> entries = optionalFormalParameterList();
+                entries = optionalFormalParameterList();
+
                 // Make procedure symbol table entry and table
                 List<String> paras = new List<String>();
                 foreach(Entry entry in entries) {
                     paras.Add(entry.Lexeme);
                 }
-                //Add the entry for the procedure
+
+                // Add the entry for the procedure in the current top of stack
+                // symbol table
                 __symbolTableStack.Peek().AddEntry(
                     identifier,
                     TYPES.NONE,
@@ -315,6 +331,8 @@ public class Parser {
                     0,
                     paras
                 );
+
+                // Push procedure symbol table to top of the symboltablestack
                 __symbolTableStack.Push(
                     new SymbolTable(
                         identifier,
@@ -325,6 +343,9 @@ public class Parser {
                         __symbolTableStack.Peek()
                     )
                 );
+
+                // Add entries for the parameters on the procedure symbol
+                // table (which should be at the top of the stack now)
                 foreach(Entry entry in entries) {
                     __symbolTableStack.Peek().AddEntry(entry);
                 }
@@ -333,6 +354,7 @@ public class Parser {
                 error(new List<TOKENS>{TOKENS.PROCEDURE});
                 break;
         }
+        return entries;
     }
 
     private void functionHeading() {
@@ -1010,8 +1032,14 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(67 + " ");
-                procedureIdentifier();
-                optionalActualParameterList();
+                string procedure = procedureIdentifier();
+                // Look it up, push the nesting level of it + 1 onto the stack
+                List<Parameters> parameters = optionalActualParameterList();
+                // If parameters, push each parameter on to the stack and keep track of that number.
+                // Call the procedure (look up its label)
+                __analyzer.genCall(label);
+                // Remove the number of parameters
+                __analyzer.genCleanup(parameters.Count);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});

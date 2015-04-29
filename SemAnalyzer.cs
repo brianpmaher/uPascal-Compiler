@@ -45,10 +45,24 @@ public class SemAnalyzer{
     //Pops the table off the stack
     public void genEnd() {
         SymbolTable top = SymbolTableStack.Peek();
+        string endInst;
+        if(top.NestingLevel == 0){
+            endInst = "POP D0\nHLT";
+        } else {
+            endInst = "RET";
+        }
         output(
+            // top.Size is incorrect, find the number of vars
             "SUB SP #" + top.Size + " SP",
-            "POP D" + top.NestingLevel,
-            "HLT"
+            endInst
+        );
+    }
+
+    public void genCleanup(int length){
+        int depth = SymbolTableStack.Peek().NestingLevel;
+        output(
+            "SUB SP #" + length + " SP",
+            "POP D" + depth
         );
     }
 
