@@ -30,7 +30,6 @@ public class SemAnalyzer{
     // Initializes the register on the stack
     public void genInit() {
         SymbolTable top = SymbolTableStack.Peek();
-        genLabel();
         output(
             "PUSH D" + top.NestingLevel,
             "MOV SP D" + top.NestingLevel
@@ -47,9 +46,13 @@ public class SemAnalyzer{
         SymbolTable top = SymbolTableStack.Peek();
         output(
             "SUB SP #" + top.Size + " SP",
-            "POP D" + top.NestingLevel,
-            "HLT"
+            "POP D" + top.NestingLevel
         );
+        if(top.NestingLevel == 0) {
+            output("HLT");
+        } else {
+            output("RET");
+        }
     }
 
     public void genPushVar(SemRecord toPush) {
