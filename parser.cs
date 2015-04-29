@@ -111,7 +111,7 @@ public class Parser {
                 Console.Write(2 + " ");
                 string progLabel = programHeading();
                 match(TOKENS.SCOLON);
-                block(progLabel, true);
+                block(progLabel);
                 match(TOKENS.PERIOD);
                 break;
             default:
@@ -141,7 +141,7 @@ public class Parser {
         return progLabel;
     }
 
-    private void block(string startLabel, bool progBlock = false) {
+    private void block(string startLabel) {
         switch(__lookahead.Type) {
             case TOKENS.BEGIN:
             case TOKENS.FUNCTION:
@@ -153,7 +153,7 @@ public class Parser {
                 __analyzer.genOut(startLabel + ":");
                 __analyzer.genSymSize();
                 statementPart();
-                __analyzer.genEnd(progBlock);
+                __analyzer.genEnd();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.BEGIN, TOKENS.FUNCTION, TOKENS.PROCEDURE,

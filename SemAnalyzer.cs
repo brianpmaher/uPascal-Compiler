@@ -42,13 +42,13 @@ public class SemAnalyzer{
     }
 
     //Pops the table off the stack
-    public void genEnd(bool endOfProg = false) {
+    public void genEnd() {
         SymbolTable top = SymbolTableStack.Peek();
         output(
             "SUB SP #" + top.Size + " SP",
             "POP D" + top.NestingLevel
         );
-        if(endOfProg) {
+        if(top.NestingLevel == 0) {
             output("HLT");
         } else {
             output("RET");
