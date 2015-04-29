@@ -154,6 +154,7 @@ public class Parser {
                 __analyzer.genSymSize();
                 statementPart();
                 __analyzer.genEnd();
+                __symbolTableStack.Pop();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.BEGIN, TOKENS.FUNCTION, TOKENS.PROCEDURE,
