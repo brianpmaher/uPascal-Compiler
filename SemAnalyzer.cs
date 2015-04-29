@@ -58,6 +58,12 @@ public class SemAnalyzer{
         );
     }
 
+    public void genAddSP(int count){
+        output(
+            "ADD SP #" + count + " SP"
+        );
+    }
+
     public void genPushVar(SemRecord toPush) {
         SymbolTable top = SymbolTableStack.Peek();
         Entry idEntry = top.GetEntry(toPush.Lexeme);

@@ -8,6 +8,7 @@ public class Parser {
     private List<Token>.Enumerator __e;
     private Stack<SymbolTable> __symbolTableStack;
     private SemAnalyzer __analyzer;
+    private string __funcProcHolder;
 
     public Parser(List<Token> tokens, String progname) {
         this.__tokens = tokens;
@@ -205,6 +206,7 @@ public class Parser {
                 TYPES typeRec = type();
                 SymbolTable top = __symbolTableStack.Peek();
                 if(typeRec != TYPES.NONE) {
+                    top.IncSize(); // Make room for PC
                     foreach(String identifier in identifiers) {
                         top.AddEntry(identifier, typeRec, KINDS.VAR, 1, null);
                     }
@@ -329,7 +331,7 @@ public class Parser {
                     new SymbolTable(
                         identifier,
                         __symbolTableStack.Peek().NestingLevel +1,
-                        0,
+                        1,
                         __symbolTableStack.Peek().NestingLevel +1,
                         new List<Entry>(),
                         __symbolTableStack.Peek()
@@ -378,7 +380,7 @@ public class Parser {
                     new SymbolTable(
                         identifier,
                         __symbolTableStack.Peek().NestingLevel + 1,
-                        0,
+                        1,
                         //TODO: Change this to labeling
                         __symbolTableStack.Peek().NestingLevel + 1,
                         new List<Entry>(),
@@ -1024,14 +1026,9 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(67 + " ");
+                __analyzer.genAddSP(1);
                 string procedure = procedureIdentifier();
-                // Look it up, push the nesting level of it + 1 onto the stack
-                List<Parameters> parameters = optionalActualParameterList();
-                // If parameters, push each parameter on to the stack and keep track of that number.
-                // Call the procedure (look up its label)
-                __analyzer.genCall(label);
-                // Remove the number of parameters
-                __analyzer.genCleanup(parameters.Count);
+                optionalActualParameterList();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
@@ -1114,7 +1111,8 @@ public class Parser {
             case TOKENS.MINUS:
             case TOKENS.PLUS:
                 Console.Write(72 + " ");
-                ordinalExpression();
+                // Here we may need to do type checking on the mode of the parameter
+                SemRecord expRec = ordinalExpression();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
@@ -1482,13 +1480,22 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 String identifier = __lookahead.Lexeme;
                 KINDS identifierKind = __symbolTableStack.Peek().GetKind(identifier);
-                if(identifierKind == KINDS.VAR || identifierKind == KINDS.PARAMETER) {
+                if(identifierKind == KINDS.VAR) {
                     Console.Write(116 + " ");
                     String factorId = variableIdentifier();
                     TYPES factorType = __symbolTableStack.Peek().GetType(factorId);
                     factorRec = new SemRecord(factorType, factorId);
                     __analyzer.genPushVar(factorRec);
                     return factorRec;
+                } else if (identifierKind == KINDS.PARAMETER) {
+                    Console.Write(116 + " ");
+                    String factorId = variableIdentifier();
+                    try{
+                        Entry funcProcEntry = __symbolTableStack.Peek().GetEntry(__funcProcHolder);
+                        boolean mode = funcProcEntry.ParamType(factorId);
+                    } catch (Exception e){
+                        throw new Exception("Function or Procedure placeholder not set while calling.");
+                    }
                 } else if(identifierKind == KINDS.FUNCTION) {
                     Console.Write(106 + " ");
                     String funcId = functionIdentifier();
