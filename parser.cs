@@ -325,7 +325,7 @@ public class Parser {
                 // declaration is done so that
                 // nesting level decrements and main can print HLT instead
                 // of RET
-                __symbolTableStack.Pop();
+                //__symbolTableStack.Pop();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROCEDURE});
@@ -1086,7 +1086,15 @@ public class Parser {
 
                 // call the procedure (have to find label still)
                 SymbolTable top = __symbolTableStack.Peek();
-                __analyzer.genCall(procedure);
+
+                // find label from symbol table stack
+                SymbolTable procedureSymbolTable = null;
+                foreach(SymbolTable table in __symbolTableStack){
+                    if(table.Name.Equals(procedure)){
+                        procedureSymbolTable = table;
+                    }
+                }
+                __analyzer.genCall("L" + procedureSymbolTable.Label);
 
                 // Remove the number of parameters
                 __analyzer.genCleanup(list.Count);
