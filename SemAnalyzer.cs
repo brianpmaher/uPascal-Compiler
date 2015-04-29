@@ -15,6 +15,10 @@ public class SemAnalyzer{
         }
     }
 
+    public void genCall(string label) {
+        output("CALL " + label);
+    }
+
     public void genOut(string outputStr) {
         output(outputStr);
     }

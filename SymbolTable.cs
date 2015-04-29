@@ -68,6 +68,10 @@ public class SymbolTable {
         Size++;
     }
 
+    public void DecSize(){
+        Size--;
+    }
+
     public TYPES GetType(String identifier){
         Entry entry = GetEntry(identifier);
         if(entry != null){

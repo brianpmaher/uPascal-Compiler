@@ -104,7 +104,7 @@ public class Parser {
                 programHeading();
                 match(TOKENS.SCOLON);
                 string label = LabelMaker.genLabel();
-                __analyzer.genBr(label);
+                __analyzer.genBr("L" + label);
                 block(label);
                 match(TOKENS.PERIOD);
                 break;
@@ -140,7 +140,7 @@ public class Parser {
                 Console.Write(4 + " ");
                 variableDeclarationPart();
                 procedureAndFunctionDeclarationPart();
-                __analyzer.genOut(label + ":");
+                __analyzer.genOut("L" + label + ":");
                 __analyzer.genSymSize();
                 statementPart();
                 __analyzer.genEnd();
@@ -276,6 +276,7 @@ public class Parser {
                 string label = LabelMaker.genLabel();
                 block(label);
                 match(TOKENS.SCOLON);
+                __symbolTableStack.Pop();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROCEDURE});
@@ -1026,12 +1027,12 @@ public class Parser {
                 Console.Write(67 + " ");
                 string procedure = procedureIdentifier();
                 // Look it up, push the nesting level of it + 1 onto the stack
-                List<Parameters> parameters = optionalActualParameterList();
+                optionalActualParameterList();
                 // If parameters, push each parameter on to the stack and keep track of that number.
                 // Call the procedure (look up its label)
-                __analyzer.genCall(label);
+                __analyzer.genCall(procedure);
                 // Remove the number of parameters
-                __analyzer.genCleanup(parameters.Count);
+                //__analyzer.genCleanup(parameters.Count);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
