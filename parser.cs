@@ -266,9 +266,12 @@ public class Parser {
     private void procedureDeclaration() {
         switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
-                string label =
                 Console.Write(17 + " ");
-                procedureHeading();
+
+                // get parameters
+                List<Entry> parameters = new List<Entry>();
+                parameters = procedureHeading();
+
                 match(TOKENS.SCOLON);
                 string label = LabelMaker.genLabel();
                 block(label);
@@ -296,19 +299,23 @@ public class Parser {
         }
     }
 
-    private void procedureHeading() {
+    private List<Entry> procedureHeading() {
+        List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
                 Console.Write(19 + " ");
                 match(TOKENS.PROCEDURE);
                 String identifier = procedureIdentifier();
-                List<Entry> entries = optionalFormalParameterList();
+                entries = optionalFormalParameterList();
+
                 // Make procedure symbol table entry and table
                 List<String> paras = new List<String>();
                 foreach(Entry entry in entries) {
                     paras.Add(entry.Lexeme);
                 }
-                //Add the entry for the procedure
+
+                // Add the entry for the procedure in the current top of stack
+                // symbol table
                 __symbolTableStack.Peek().AddEntry(
                     identifier,
                     TYPES.NONE,
@@ -316,6 +323,8 @@ public class Parser {
                     0,
                     paras
                 );
+
+                // Push procedure symbol table to top of the symboltablestack
                 __symbolTableStack.Push(
                     new SymbolTable(
                         identifier,
@@ -326,6 +335,9 @@ public class Parser {
                         __symbolTableStack.Peek()
                     )
                 );
+
+                // Add entries for the parameters on the procedure symbol
+                // table (which should be at the top of the stack now)
                 foreach(Entry entry in entries) {
                     __symbolTableStack.Peek().AddEntry(entry);
                 }
@@ -334,6 +346,7 @@ public class Parser {
                 error(new List<TOKENS>{TOKENS.PROCEDURE});
                 break;
         }
+        return entries;
     }
 
     private void functionHeading() {
