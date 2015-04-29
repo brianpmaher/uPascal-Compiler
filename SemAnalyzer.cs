@@ -15,6 +15,11 @@ public class SemAnalyzer{
         }
     }
 
+    public void genPointer(string register){
+        SymbolTable top = SymbolTableStack.Peek();
+        output("SUB SP #" + top.Size + " " + register);
+    }
+
     public void genCall(string label) {
         output("CALL " + label);
     }
@@ -43,7 +48,7 @@ public class SemAnalyzer{
         SymbolTable top = SymbolTableStack.Peek();
         string endInst;
         if(top.NestingLevel == 0){
-            endInst = "POP D0\nHLT";
+            endInst = "HLT";
         } else {
             endInst = "RET";
         }
@@ -54,11 +59,10 @@ public class SemAnalyzer{
         );
     }
 
-    public void genCleanup(int length){
+    public void genCleanup(int size){
         int depth = SymbolTableStack.Peek().NestingLevel;
         output(
-            "SUB SP #" + length + " SP",
-            "POP D" + depth
+            "SUB SP #" + size + " SP"
         );
     }
 

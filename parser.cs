@@ -142,6 +142,12 @@ public class Parser {
                 procedureAndFunctionDeclarationPart();
                 __analyzer.genOut("L" + label + ":");
                 __analyzer.genSymSize();
+
+                // If this is nesting level 0 meaning 'main'
+                if( __symbolTableStack.Peek().NestingLevel == 0){
+                    __analyzer.genPointer("D" + __symbolTableStack.Peek().NestingLevel);
+                }
+
                 statementPart();
                 __analyzer.genEnd();
                 break;
@@ -276,6 +282,11 @@ public class Parser {
                 string label = LabelMaker.genLabel();
                 block(label);
                 match(TOKENS.SCOLON);
+
+                // popping the table off the stack after procedure
+                // declaration is done so that 
+                // nesting level decrements and main can print HLT instead
+                // of RET
                 __symbolTableStack.Pop();
                 break;
             default:
@@ -307,6 +318,8 @@ public class Parser {
                 Console.Write(19 + " ");
                 match(TOKENS.PROCEDURE);
                 String identifier = procedureIdentifier();
+
+                // get parameters
                 entries = optionalFormalParameterList();
 
                 // Make procedure symbol table entry and table
@@ -1026,13 +1039,18 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 Console.Write(67 + " ");
                 string procedure = procedureIdentifier();
-                // Look it up, push the nesting level of it + 1 onto the stack
-                optionalActualParameterList();
-                // If parameters, push each parameter on to the stack and keep track of that number.
-                // Call the procedure (look up its label)
+                List<SemRecord> list = optionalActualParameterList();
+                
+                // generate the register so we can point it to 
+                int applyNextLevel = __symbolTableStack.Peek().NestingLevel;
+                applyNextLevel++;
+                __analyzer.genPointer("D" + applyNextLevel);
+
+                // call the procedure (have to find label still)
                 __analyzer.genCall(procedure);
+
                 // Remove the number of parameters
-                //__analyzer.genCleanup(parameters.Count);
+                __analyzer.genCleanup(list.Count);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
@@ -1040,7 +1058,8 @@ public class Parser {
         }
     }
 
-    private void optionalActualParameterList() {
+    private List<SemRecord> optionalActualParameterList() {
+        List<SemRecord> list = new List<SemRecord>();
         switch(__lookahead.Type) {
             case TOKENS.AND:
             case TOKENS.DIV:
@@ -1071,8 +1090,8 @@ public class Parser {
             case TOKENS.LPAREN:
                 Console.Write(68 + " ");
                 match(TOKENS.LPAREN);
-                actualParameter();
-                actualParameterTail();
+                list.Add(actualParameter());
+                list.AddRange(actualParameterTail());
                 match(TOKENS.RPAREN);
                 break;
             default:
@@ -1083,15 +1102,17 @@ public class Parser {
                     TOKENS.RPAREN, TOKENS.SCOLON, TOKENS.TIMES});
                 break;
         }
+        return list;
     }
 
-    private void actualParameterTail() {
+    private List<SemRecord> actualParameterTail() {
+        List<SemRecord> list = new List<SemRecord>();
         switch(__lookahead.Type) {
             case TOKENS.COMMA:
                 Console.Write(70 + " ");
                 match(TOKENS.COMMA);
-                actualParameter();
-                actualParameterTail();
+                list.Add(actualParameter());
+                list.AddRange(actualParameterTail());
                 break;
             case TOKENS.RPAREN:
                 Console.Write(71 + " ");
@@ -1100,9 +1121,11 @@ public class Parser {
                 error(new List<TOKENS>{TOKENS.COMMA, TOKENS.RPAREN});
                 break;
         }
+        return list;
     }
 
-    private void actualParameter() {
+    private SemRecord actualParameter() {
+        SemRecord actSem = null;
         switch(__lookahead.Type) {
             case TOKENS.FALSE:
             case TOKENS.NOT:
@@ -1115,7 +1138,7 @@ public class Parser {
             case TOKENS.MINUS:
             case TOKENS.PLUS:
                 Console.Write(72 + " ");
-                ordinalExpression();
+                actSem = ordinalExpression();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
@@ -1123,6 +1146,7 @@ public class Parser {
                     TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
+        return actSem;
     }
 
     private SemRecord expression() {
