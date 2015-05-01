@@ -1088,6 +1088,8 @@ public class Parser {
                 Console.Write(67 + " ");
                 string procedure = procedureIdentifier();
 
+                // Push new symbol table?
+
                 // find symbol where the procedure is. Then that symbol tables
                 // nesting level + 1.
 
@@ -1119,6 +1121,9 @@ public class Parser {
 
                 // Pop the current nesting level
                 __analyzer.genPopCurrentNestingLevel();
+
+                // Pop symbol table off stack?
+
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
