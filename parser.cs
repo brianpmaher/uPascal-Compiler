@@ -319,13 +319,13 @@ public class Parser {
                 match(TOKENS.SCOLON);
                 string label = LabelMaker.genLabel();
                 block(label, parameters.Count);
-                match(TOKENS.SCOLON);
 
                 // popping the table off the stack after procedure
                 // declaration is done so that
                 // nesting level decrements and main can print HLT instead
                 // of RET
-                //__symbolTableStack.Pop();
+                __symbolTableStack.Pop();
+                match(TOKENS.SCOLON);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROCEDURE});
@@ -341,6 +341,7 @@ public class Parser {
                 match(TOKENS.SCOLON);
                 string label = LabelMaker.genLabel();
                 block(label);
+                //__symbolTableStack.Pop()
                 match(TOKENS.SCOLON);
                 break;
             default:
@@ -1077,6 +1078,10 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 Console.Write(67 + " ");
                 string procedure = procedureIdentifier();
+
+                // Push current nesting level
+                __analyzer.genPushCurrentNestingLevel();
+
                 List<SemRecord> list = optionalActualParameterList();
 
                 // generate the register so we can point it to
@@ -1088,16 +1093,19 @@ public class Parser {
                 SymbolTable top = __symbolTableStack.Peek();
 
                 // find label from symbol table stack
-                SymbolTable procedureSymbolTable = null;
-                foreach(SymbolTable table in __symbolTableStack){
-                    if(table.Name.Equals(procedure)){
-                        procedureSymbolTable = table;
+                Entry current = null;
+                foreach(Entry entry in top.Entries){
+                    if(entry.Lexeme.Equals(procedure)){
+                        current = entry;
                     }
                 }
-                __analyzer.genCall("L" + procedureSymbolTable.Label);
+                __analyzer.genCall("L" + current.Lexeme);
 
                 // Remove the number of parameters
                 __analyzer.genCleanup(list.Count);
+
+                // Pop the current nesting level
+                __analyzer.genPopCurrentNestingLevel();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});

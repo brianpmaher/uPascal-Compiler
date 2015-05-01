@@ -15,6 +15,16 @@ public class SemAnalyzer{
         }
     }
 
+    public void genPopCurrentNestingLevel(){
+        SymbolTable top = SymbolTableStack.Peek();
+        output("POP D" + top.NestingLevel);
+    }
+
+    public void genPushCurrentNestingLevel(){
+        SymbolTable top = SymbolTableStack.Peek();
+        output("PUSH D" + top.NestingLevel);
+    }
+
     public void genPointer(int size, string register){
         output("SUB SP #" + size + " " + register);
     }
