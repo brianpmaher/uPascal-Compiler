@@ -1,3 +1,11 @@
+/*
+ *  CSCI 468
+ *  Group 2
+ *  Jesse Brown
+ *  Brian Maher
+ *  Sean Rogers
+ */
+
 using System;
 using System.Collections.Generic;
 using System.IO;

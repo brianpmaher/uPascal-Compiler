@@ -1,0 +1,106 @@
+<!DOCTYPE html> 
+<html><!-- InstanceBegin template="/Templates/page.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="../../../../Stylesheets/prettify.css" />
+<link rel="stylesheet" href="../../../../Stylesheets/pageStylesheet.css" />
+<link rel="stylesheet" href="../../../../Stylesheets/navigationStylesheet.css" />
+<link rel="stylesheet" href="../../../../Stylesheets/allTextStyles.css" />
+<link rel="stylesheet" href="../../../../Stylesheets/colors-blue.css" />
+
+<script type="text/javascript" src="../../../../Scripts/google-code-prettify/run_prettify.js"></script>
+<script type="text/javascript" src="../../../../Scripts/recomputeAttributes.js"></script>
+
+
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Design Tradeoffs</title>
+<!-- InstanceEndEditable -->
+</head>
+
+<body id="body-style">
+
+<!-- 
+<div id="browser-window-veil">
+</div>
+-->
+
+<div id="page-container">
+
+<header id="header">
+<div id="track-icon1">
+  <img src="../../../../Media/StyleImages/bobcat-small.png" alt="bobcat icon" width="75" height="48"></div>
+<div id="track-icon2">
+</div>
+<div id="track-icon3">
+</div>
+  <div id="headMatter">
+    <span id="headTitle1">
+      <!-- InstanceBeginEditable name="Header" -->
+        Header
+	  <!-- InstanceEndEditable --> 
+    </span>
+    <span id="headTitle2">
+    </span>
+  </div>
+</header>
+
+<nav id="navigate">
+</nav>
+
+
+<aside id="aside-left">
+<div id="asideLeftTitle">
+Compilers 2014
+</div>
+
+</aside>
+
+<aside id="aside-right">
+</aside>
+
+<footer id="footer">
+  <div id="footMatter">
+    <span id="previousPageLink">
+
+    </span>
+    <span id="currentPageNumber">
+    </span>
+    <span id="nextPageLink">
+
+    </span>
+  </div>
+</footer>
+
+<article id="mainContent">
+<!-- InstanceBeginEditable name="Main" -->
+<h1>Design Tradeoffs</h1>
+THIS IS AN EXAMPLE. LIST YOUR OWN DESIGN TRADEOFF. THE RESERVED WORD LOOKUP TABLE IS A GOOD ONE, BUT SO IS THE SYMBOL TABLE. REMOVE THIS LINE.
+
+<h2>Data Structure Tradeoffs</h2>
+
+<h3>Resolution of Keywords</h3>
+<p>
+The &micro;-pascal language has 36 reserved words. 
+We chose to use an array to store these words and simply do a linear search of each token scanned to determine whether or not it is a reserved word. 
+While this is not the most efficient method of searching, it is easy to program, and with only 36 elements in the list, is certainly fast enough. 
+A hash function makes little sense on a data set as small as this because calculating the hash would be expensive as performing a linear search. 
+Another alternative would be to implement a binary tree to reduce the search time to O(log(n)). 
+Again, because the data structure is more complicated than a simple array, the actual time savings would be insignificant to the overall runtime of the program.
+</p>
+
+<h3>Symbol Table Design</h3>
+<p>
+Our implementation of the symbol table as a singularly linked list forced our lookup of elements in the table to be O(n). 
+Of course faster search algorithms exist. 
+The symbol table would have to have an additional field representing the nesting level and be a simple list to use a hash table or other data structure that allows faster lookup time. 
+However, this adds some complexity to the search to ensure the variable currently in scope is the variable being referenced. 
+The linked list symbol table with a recursive linear search solves this problem. 
+The actual time difference of faster search algorithms was not sufficient to justify the ease of not only writing the code, but also elegantly solve the problem of variable scope.
+</p>
+<!-- InstanceEndEditable -->
+
+</article>
+</div>
+</body>
+<!-- InstanceEnd --></html>
