@@ -1092,9 +1092,17 @@ public class Parser {
 
                 // find symbol where the procedure is. Then that symbol tables
                 // nesting level + 1.
+                SymbolTable top = __symbolTableStack.Peek();
+                int appropriateNestingLevel = 0;
+                foreach(Entry entry in top.Entries){
+                    if(entry.Lexeme.Equals(procedure)){
+                        appropriateNestingLevel = top.NestingLevel;
+                    }
+                }
+                appropriateNestingLevel++;
 
                 // Push nesting level (Needs to be fixed)
-                __analyzer.genPushCurrentNestingLevel();
+                __analyzer.genPushNestingLevel(appropriateNestingLevel);
 
                 List<SemRecord> listOfParams = optionalActualParameterList();
 
@@ -1105,7 +1113,7 @@ public class Parser {
                 __analyzer.genPointer(sizeOfParamsPlusOne, "D" + applyNextLevel);
 
                 // call the procedure (have to find label still)
-                SymbolTable top = __symbolTableStack.Peek();
+                top = __symbolTableStack.Peek();
 
                 // find label from symbol table stack
                 Entry current = null;
@@ -1120,7 +1128,7 @@ public class Parser {
                 __analyzer.genCleanup(listOfParams.Count);
 
                 // Pop the current nesting level (Needs to be fixed)
-                __analyzer.genPopCurrentNestingLevel();
+                __analyzer.genPopNestingLevel(appropriateNestingLevel);
 
                 // Pop symbol table off stack?
 
