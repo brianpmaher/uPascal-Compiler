@@ -1096,8 +1096,6 @@ public class Parser {
                 Console.Write(67 + " ");
                 string procedure = procedureIdentifier();
 
-                // Push new symbol table?
-
                 // find symbol where the procedure is. Then that symbol tables
                 // nesting level + 1.
                 SymbolTable top = __symbolTableStack.Peek();
@@ -1115,21 +1113,14 @@ public class Parser {
                 List<SemRecord> listOfParams = optionalActualParameterList();
 
                 // generate the register so we can point it to
-                int applyNextLevel = __symbolTableStack.Peek().NestingLevel;
-                applyNextLevel++;
+                int NestingPlusOne = top.GetNestingLevel(procedure) + 1;
                 int sizeOfParamsPlusOne = listOfParams.Count + 1;
-                __analyzer.genPointer(sizeOfParamsPlusOne, "D" + applyNextLevel);
-
-                // call the procedure (have to find label still)
-                top = __symbolTableStack.Peek();
+                __analyzer.genPointer(sizeOfParamsPlusOne, "D" + NestingPlusOne);
 
                 // find label from symbol table stack
-                Entry current = null;
-                foreach(Entry entry in top.Entries){
-                    if(entry.Lexeme.Equals(procedure)){
-                        current = entry;
-                    }
-                }
+                Entry current = top.GetEntry(procedure);
+
+                current.Offset++;
                 __analyzer.genCall("L" + current.Label);
 
                 // Remove the number of parameters
@@ -1137,8 +1128,6 @@ public class Parser {
 
                 // Pop the current nesting level (Needs to be fixed)
                 __analyzer.genPopNestingLevel(appropriateNestingLevel);
-
-                // Pop symbol table off stack?
 
                 break;
             default:
@@ -1227,6 +1216,11 @@ public class Parser {
             case TOKENS.MINUS:
             case TOKENS.PLUS:
                 Console.Write(72 + " ");
+                // if value
+
+
+                // if variable
+
                 actSem = ordinalExpression();
                 break;
             default:

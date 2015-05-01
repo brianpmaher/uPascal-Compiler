@@ -111,4 +111,17 @@ public class SymbolTable {
         }
         return result;
     }
+
+    public int GetNestingLevel(string identifier){
+        int nestingLevel = -1;
+        foreach(Entry entry in Entries){
+            if(entry.Lexeme == identifier){
+                nestingLevel = NestingLevel;
+            }
+        }
+        if(nestingLevel == -1 && Next != null){
+            nestingLevel = Next.GetNestingLevel(identifier);
+        }
+        return nestingLevel;
+    }
 }
