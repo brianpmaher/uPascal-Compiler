@@ -1088,7 +1088,10 @@ public class Parser {
                 Console.Write(67 + " ");
                 string procedure = procedureIdentifier();
 
-                // Push current nesting level
+                // find symbol where the procedure is. Then that symbol tables
+                // nesting level + 1.
+
+                // Push nesting level
                 __analyzer.genPushCurrentNestingLevel();
 
                 List<SemRecord> listOfParams = optionalActualParameterList();
