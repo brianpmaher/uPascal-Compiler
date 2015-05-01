@@ -31,7 +31,8 @@ public class SemAnalyzer{
 
     public void genPointer(string register){
         SymbolTable top = SymbolTableStack.Peek();
-        output("SUB SP #" + top.Size + " " + register);
+        int size = top.Size + 1;
+        output("SUB SP #" + size + " " + register);
     }
 
     public void genCall(string label) {
@@ -71,8 +72,8 @@ public class SemAnalyzer{
             endInst = "RET";
         }
         output(
-            // top.Size is incorrect, find the number of vars
             "SUB SP #" + top.Size + " SP",
+            "POP D" + top.NestingLevel,
             endInst
         );
     }

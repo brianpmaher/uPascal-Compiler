@@ -142,6 +142,12 @@ public class Parser {
                 procedureAndFunctionDeclarationPart();
                 __analyzer.genOut("L" + label + ":");
 
+                // generate push of nesting level if main (to fix for the new
+                // offsetting of variables, etc)
+                if( __symbolTableStack.Peek().NestingLevel == 0){
+                    __analyzer.genPushCurrentNestingLevel();
+                }
+
                 // This needs to be changed. Right now it is assuming we need
                 // to allocate space for the parameters which is out of date now
                 // However, we still need to generate for local variables.
@@ -314,10 +320,12 @@ public class Parser {
 
                 // get parameters
                 List<Entry> parameters = new List<Entry>();
-                parameters = procedureHeading();
+                string label = LabelMaker.genLabel();
+
+                parameters = procedureHeading(label);
 
                 match(TOKENS.SCOLON);
-                string label = LabelMaker.genLabel();
+
                 block(label, parameters.Count);
 
                 // popping the table off the stack after procedure
@@ -350,7 +358,7 @@ public class Parser {
         }
     }
 
-    private List<Entry> procedureHeading() {
+    private List<Entry> procedureHeading(string label) {
         List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
@@ -371,6 +379,7 @@ public class Parser {
                 // symbol table
                 __symbolTableStack.Peek().AddEntry(
                     identifier,
+                    label,
                     TYPES.NONE,
                     KINDS.PROCEDURE,
                     0,
@@ -1082,12 +1091,13 @@ public class Parser {
                 // Push current nesting level
                 __analyzer.genPushCurrentNestingLevel();
 
-                List<SemRecord> list = optionalActualParameterList();
+                List<SemRecord> listOfParams = optionalActualParameterList();
 
                 // generate the register so we can point it to
                 int applyNextLevel = __symbolTableStack.Peek().NestingLevel;
                 applyNextLevel++;
-                __analyzer.genPointer(list.Count, "D" + applyNextLevel);
+                int sizeOfParamsPlusOne = listOfParams.Count + 1;
+                __analyzer.genPointer(sizeOfParamsPlusOne, "D" + applyNextLevel);
 
                 // call the procedure (have to find label still)
                 SymbolTable top = __symbolTableStack.Peek();
@@ -1099,10 +1109,10 @@ public class Parser {
                         current = entry;
                     }
                 }
-                __analyzer.genCall("L" + current.Lexeme);
+                __analyzer.genCall("L" + current.Label);
 
                 // Remove the number of parameters
-                __analyzer.genCleanup(list.Count);
+                __analyzer.genCleanup(listOfParams.Count);
 
                 // Pop the current nesting level
                 __analyzer.genPopCurrentNestingLevel();

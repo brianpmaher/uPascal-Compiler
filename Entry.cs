@@ -16,6 +16,7 @@ using System.Collections.Generic;
  */
 public class Entry {
     public string Lexeme {get; private set;}
+    public string Label {get; private set;}
     public TYPES Type {get; private set;}
     public KINDS Kind {get; private set;}
     public int Size {get; private set;}
@@ -25,6 +26,17 @@ public class Entry {
 
     public Entry(string lexeme, TYPES type, KINDS kind, int size, int offset, List<string> parameters) {
         Lexeme     = lexeme;
+        Type       = type;
+        Kind       = kind;
+        Size       = size;
+        Offset     = offset;
+        Parameters = parameters;
+        Modifiable = true;
+    }
+
+    public Entry(string lexeme, string label, TYPES type, KINDS kind, int size, int offset, List<string> parameters) {
+        Lexeme     = lexeme;
+        Label      = label;
         Type       = type;
         Kind       = kind;
         Size       = size;

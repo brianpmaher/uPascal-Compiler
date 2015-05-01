@@ -17,4 +17,5 @@ begin
 	someInt := 1;
 	someInt2 := 2;
 	printHello(someInt, someInt2);
+	print;
 end.

@@ -35,7 +35,7 @@ public class SymbolTable {
     public void AddEntry(Entry entry){
         if(entry != null){
             if(entry.Kind == KINDS.VAR || entry.Kind == KINDS.PARAMETER){
-                entry.Offset = this.Size;
+                entry.Offset = this.Size + 1;
                 Entries.Add(entry);
                 this.Size += entry.Size;
             } else {
@@ -46,10 +46,19 @@ public class SymbolTable {
 
     public void AddEntry(String lexeme, TYPES type, KINDS kind, int size, List<String> paras) {
         if(kind == KINDS.VAR || kind == KINDS.PARAMETER){
-            Entries.Add(new Entry(lexeme, type, kind, size, this.Size, paras));
+            Entries.Add(new Entry(lexeme, type, kind, size, this.Size + 1, paras));
             this.Size += size;
         } else { //nonvars don't have size
             Entries.Add(new Entry(lexeme, type, kind, size, 0, paras));
+        }
+    }
+
+    public void AddEntry(String lexeme, string label, TYPES type, KINDS kind, int size, List<String> paras) {
+        if(kind == KINDS.VAR || kind == KINDS.PARAMETER){
+            Entries.Add(new Entry(lexeme, label, type, kind, size, this.Size + 1, paras));
+            this.Size += size;
+        } else { //nonvars don't have size
+            Entries.Add(new Entry(lexeme, label, type, kind, size, 0, paras));
         }
     }
 
