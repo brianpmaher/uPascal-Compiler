@@ -1093,7 +1093,7 @@ public class Parser {
                 // find symbol where the procedure is. Then that symbol tables
                 // nesting level + 1.
 
-                // Push nesting level
+                // Push nesting level (Needs to be fixed)
                 __analyzer.genPushCurrentNestingLevel();
 
                 List<SemRecord> listOfParams = optionalActualParameterList();
@@ -1119,7 +1119,7 @@ public class Parser {
                 // Remove the number of parameters
                 __analyzer.genCleanup(listOfParams.Count);
 
-                // Pop the current nesting level
+                // Pop the current nesting level (Needs to be fixed)
                 __analyzer.genPopCurrentNestingLevel();
 
                 // Pop symbol table off stack?
