@@ -1,0 +1,75 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../Stylesheets/pageStylesheet.css" />
+<link rel="stylesheet" href="../Stylesheets/coverStylesheet.css" />
+<link rel="stylesheet" href="../Stylesheets/coverNavigationStylesheet.css" />
+<link rel="stylesheet" href="../Stylesheets/coverColors.css" />
+<link rel="stylesheet" href="../Stylesheets/coverTextStyles.css" />
+
+<script type="text/javascript" src="../Scripts/recomputeAttributes.js"></script>
+
+
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Project</title>
+<!-- TemplateEndEditable -->
+</head>
+
+<body id="body-style">
+
+<div id="browser-window-backdrop">
+</div>
+
+<div id="cover-veil">
+</div>
+
+<div id="cover-container">
+
+  <header id="cover-header">
+  <!-- TemplateBeginEditable name="cover-header" -->
+
+  <!-- TemplateEndEditable -->
+  </header>
+
+  <nav id="navigate">
+  <span id="open-book"><a href="../Contents/01_Introduction/1_Project_Overview/Overview_1.html">Open Book</a></span>
+  <span id="help"><a href="../Help/Help.html">Help</a></span>
+  </nav>
+
+  <aside id="cover-left-bar">
+  <!-- TemplateBeginEditable name="left-bar" -->
+
+  <!-- TemplateEndEditable -->
+  </aside>
+
+  <aside id="cover-right-bar">
+  <!-- TemplateBeginEditable name="right-bar" -->
+     right-bar
+  <!-- TemplateEndEditable -->
+  </aside>
+
+  <footer id="cover-footer">
+  <!-- TemplateBeginEditable name="footer" -->
+     footer
+  <!-- TemplateEndEditable -->
+  </footer>
+
+  <article id="cover-area">
+  <!-- TemplateBeginEditable name="cover-area" -->
+    Main
+  <!-- TemplateEndEditable -->
+  </article>
+  
+</div> <!-- end cover-container -->
+
+<!--
+<script type="text/javascript" src="Scripts/coverEffects/resizePage.js"> </script>
+-->
+<!--<script type="text/javascript" src="Scripts/coverEffects/colorFadeInOut.js"> </script> -->
+<!-- <script type="text/javascript" src="Scripts/coverEffects/opacityFadeInOut.js"> </script> -->
+<!-- <script type="text/javascript" src="Scripts/coverEffects/fadeInCover.js"> </script> -->
+
+
+</body>
+</html>

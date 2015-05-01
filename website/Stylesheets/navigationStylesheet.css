@@ -1,0 +1,147 @@
+@charset "UTF-8";
+/* CSS Document */
+
+#navigate{ 
+    /* box that holds the top level navigaton bar */
+	position: absolute;
+	left: 100px;
+	top: 75px;
+	height: 30px;
+    right: 10px;
+	overflow: visible;
+    border-top-left-radius: 22px;
+	border-top-right-radius: 22px;
+	z-index:100;
+	}
+
+#navigate ul#nav { 
+    /* top level navigation bar */
+	overflow: visible;
+	margin: 0;
+	padding: 7px 6px 0;
+	line-height: 100%;
+	height: auto;
+	width: auto;
+	z-index: auto;
+	position:relative;
+}
+
+#navigate li {
+	/* no bullets, etc. on list (menu) items */
+	list-style: none;
+}
+
+#navigate a{
+	/* no underlining of menu items (links) */
+	text-decoration: none;
+}
+
+#navigate ul#nav > li { 
+    /* top level list items configured to show up 
+	   horizontally in navigation bar */
+	margin: 0;
+	padding: 0px;
+	float: left; /* list items display horizontally */
+	display: block;
+	width: auto;
+	height:auto;
+	z-index: auto;
+}
+
+#navigate ul#nav > li:last-child { 
+    /* float the last menu item (help menu) of the top 
+	   level menu bar to the far right*/
+	float: right;
+}
+
+#navigate ul#nav > li > a { 
+    /* text and anchor (link) for each top level list item */
+	font-weight: 100;
+	display: block;
+	padding-top: 4px; 
+	padding-bottom: 6px;
+	padding-right: 20px;
+	padding-left: 20px;
+	margin: 0px;
+	height:auto;
+}
+
+#navigate ul#nav > li > ul{
+	/* second level (dropdown) menus */
+	width: 200px;
+	overflow: auto;
+	display: none;
+	position: absolute;
+	z-index:auto;
+	height: auto;
+}
+
+#navigate ul#nav > li > ul > li > a { 
+    /* text and anchor (link) for second level list items */
+	font-weight: 100;
+	display: block;
+	padding-top: 4px; 
+	padding-bottom: 6px;
+	padding-right: 10px;
+	padding-left: 10px;
+	margin: 0px;
+	height:auto;
+	border: thin solid black;
+	z-index: auto;
+}
+
+#navigate ul#nav > li > ul > li > ul {
+	width: auto;
+	display: none;
+	position: relative;
+	z-index:auto;
+	height: auto;
+	overflow:auto;
+}
+
+#navigate ul#nav > li > ul > li > ul > li > a { 
+    /* text and anchor (link) for each third level list item */
+	font-weight: 100;
+	display: block;
+	padding-top: 4px; 
+	padding-bottom: 6px;
+	padding-right: 10px;
+	padding-left: 10px;
+	margin: 0px;
+	height:auto;
+	border: thin solid black;
+    z-index: auto;
+}
+
+#navigate ul#nav li li:last-child > a, #navigate ul#nav li li:last-child:hover > a { 
+    /* all child anchor tags of last li grand- (and great-grandchildren) of the main 
+	ul#nav; this puts rounded corners at the bottom of each dropdown menu, and the 
+	nested popopout menus */
+	border-bottom-left-radius: 1.6em;
+    border-bottom-right-radius: 1.6em;
+}
+
+#navigate ul#nav li li li:last-child > a, #navigate ul#nav li li li:last-child:hover > a {
+    /* all child anchor tags of last li great-grandchildren of the main 
+	ul#nav; this puts rounded corners at the left bottom of each popout menu item;
+	the right border bottom is not rounded in order to match the straight right
+	side of the enclosing ul*/
+	border-bottom-left-radius: 1.6em;
+    border-bottom-right-radius: 0em;
+}
+
+#navigate ul#nav ul li:last-child ul li:lastchild{
+	/* (Nothing to test this with yet)
+	The last list item in the popout menu of the last list item
+	in any dropdown menu (if there is one) should have a rounded right
+	bottom corner to match the rounded right bottom corner of its containing ul */
+	border-bottom-right-radius: 1.6em;
+}
+
+#navigate ul#nav li:hover > ul {
+	/* hovering over any li (menu item) at levels 1 and 2 will reveal the ul
+	contained within that li (if any), since those ul's are initialized with
+	"display: none" */
+	display: block;
+	z-index:5;
+}

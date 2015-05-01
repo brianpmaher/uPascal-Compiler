@@ -1,0 +1,49 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/* The colors used in the website can be changed in this stylesheet as noted */
+
+/*  background color for the browser window */
+#body-style{
+	background-color:#FFFFFF;
+}
+
+/* background color for the page container div (needed to fill in behind some rounded corners) */
+#page-container{
+	background-image:url(../Media/StyleImages/Cover-Backdrop-Green.jpg);
+}
+
+/* background color for top bar of page, where the project name appears */
+#header{
+	background-color:none;
+}
+
+/* color of Project title lettering in header */
+#name-header{
+    color: #FF0000;
+    text-shadow: 4px 4px 2px #aaaafe;
+}
+
+#aside-left{
+	background-color:none;
+	color: #aaaafe;
+}
+
+/* background color for the thin right bar of the page */
+#aside-right{
+	background-color:none;
+}
+
+/* background color for the thin bottom, or footer, bar of the page */
+#footer{
+	background-color:none;
+}
+
+/* background color for the main content area of the page */
+#mainContent{
+	background-color:#FFFFFF;
+}
+
+#red{
+	color:#FF0000;
+}

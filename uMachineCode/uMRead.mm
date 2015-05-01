@@ -1,0 +1,4 @@
+PRTS
+RD 0(SP)
+PRTS
+HLT

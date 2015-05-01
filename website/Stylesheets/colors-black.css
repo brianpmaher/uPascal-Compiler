@@ -1,0 +1,141 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/* colord for the advanced (black diamond) track */
+
+/*  background color for the browser window */
+#body-style{
+	background-color:#010101;
+}
+
+/* background color for the page container div (needed to fill in behind some rounded corners) */
+#page-container{
+	background-image:url(../Media/StyleImages/Cover-Backdrop-Black.jpg);
+}
+
+/* background color for top bar of page, where the project name appears */
+#header{
+	background-color:none;
+}
+
+#headTitle1{
+	color:#444444; 
+}
+
+#headTitle2{
+	color:#444444; 
+}
+
+#track-icon1{
+	position: absolute;
+	left: 30px;
+	top: 20px;
+	width: 40px;
+	height: 40px;
+	z-index: 20;
+	background-color: #000000;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+}
+
+#track-icon2{
+	position: absolute;
+	left: 50px;
+	top: 25px;
+	width: 35px;
+	height: 35px;
+	z-index: 19;
+	background-color: #333333;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+}
+
+#track-icon3{
+	position: absolute;
+	left: 67px;
+	top: 28px;
+	width: 30px;
+	height: 30px;
+	z-index: 18;
+	background-color: #666666;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+}
+
+
+/* color of Project title lettering in header */
+#name-header{
+    color: #0000FF;
+    text-shadow: 4px 4px 2px #aaaafe;
+}
+
+#aside-left{
+	background-color:none;
+	color: #aaaafe;
+}
+
+/* background color for the thin right bar of the page */
+#aside-right{
+	background-color:none;
+}
+
+/* background color for the thin bottom, or footer, bar of the page */
+#footer{
+	background-color:none;
+}
+
+/* background color for the main content area of the page */
+#mainContent{
+	background-color:#FFFFFF;
+}
+
+#navigate {
+	background-color: #444444;
+}
+
+#navigate ul#nav {
+	background-color: none;
+}
+
+/* main level link */
+#navigate ul#nav a {
+	color: #cccccc;
+}
+
+#navigate ul#nav li:hover > a {
+	color: #ff0000;
+}
+
+/*sub levels link hover */
+/*#navigate ul#nav ul li:hover a{
+	backgound-color: green;
+	color: #000;
+}*/
+
+#navigate ul#nav ul a:hover {
+	background-color: none;
+	color: #fff;
+	}
+
+/* level 2 list */
+#navigate ul#nav ul {
+}
+
+#navigate ul#nav ul li{
+	background-color: none;
+}
+
+#navigate ul#nav ul li a{
+	background-color: #444444;
+}
+
+#navigate ul#nav ul ul {
+	background-color: #444444;
+}
+
+h1, h2, h3, h4, h5{
+	color: #010101;	
+}
