@@ -1626,7 +1626,6 @@ public class Parser {
                 } else if(identifierKind == KINDS.FUNCTION) {
                     Console.Write(106 + " ");
                     string funcId = functionIdentifier();
-                    optionalActualParameterList(__symbolTableStack.Peek().GetEntry(funcId).Parameters);
 
                     /////////////
                     SymbolTable top = __symbolTableStack.Peek();
@@ -1645,6 +1644,9 @@ public class Parser {
                     __analyzer.genPushNestingLevel(appropriateNestingLevel);
 
                     List<SemRecord> listOfParams = optionalActualParameterList(current.Parameters);
+                    foreach (Parameter param in __symbolTableStack.Peek().GetEntry(funcId).Parameters){
+                        Console.WriteLine("Param--> " + param.VarType);
+                    }
 
                     // generate the register so we can point it to
                     int NestingPlusOne = top.GetNestingLevel(funcId) + 1;

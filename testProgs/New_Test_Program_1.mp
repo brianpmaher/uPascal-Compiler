@@ -83,6 +83,7 @@ program lab1;
 		end;
 		
 	begin
+		writeln('GLOB IN THE SKY TELL ME WHY');
 		x := x + y;
 		writeln('X in refcheck2 is ', x);
 		refCheck3(y);
