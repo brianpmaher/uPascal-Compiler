@@ -353,11 +353,17 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.FUNCTION:
                 Console.Write(18 + " ");
-                functionHeading();
-                match(TOKENS.SCOLON);
+
+                // get parameters
+                List<Entry> parameters = new List<Entry>();
                 string label = LabelMaker.genLabel();
-                block(label);
-                //__symbolTableStack.Pop()
+
+                parameters = functionHeading(label);
+                match(TOKENS.SCOLON);
+
+                block(label, parameters.Count);
+
+                __symbolTableStack.Pop();
                 match(TOKENS.SCOLON);
                 break;
             default:
@@ -411,6 +417,9 @@ public class Parser {
                 foreach(Entry entry in entries) {
                     __symbolTableStack.Peek().AddEntry(entry);
                 }
+
+                // This for the program counter.
+                __symbolTableStack.Peek().IncSize();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROCEDURE});
@@ -419,13 +428,14 @@ public class Parser {
         return entries;
     }
 
-    private void functionHeading() {
+    private List<Entry> functionHeading(string label) {
+        List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type) {
             case TOKENS.FUNCTION:
                 Console.Write(20 + " ");
                 match(TOKENS.FUNCTION);
                 String identifier = functionIdentifier();
-                List<Entry> entries = optionalFormalParameterList();
+                entries = optionalFormalParameterList();
                 match(TOKENS.COLON);
                 TYPES funcRetType = type();
                 // Make function symbol table entry and table
@@ -458,11 +468,15 @@ public class Parser {
                 foreach(Entry entry in entries) {
                     __symbolTableStack.Peek().AddEntry(entry);
                 }
+
+                //This is for the program counter.
+                __symbolTableStack.Peek().IncSize();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FUNCTION});
                 break;
         }
+        return entries;
     }
 
     private List<Entry> optionalFormalParameterList() {
@@ -1120,7 +1134,7 @@ public class Parser {
                 int sizeOfParamsPlusOne = listOfParams.Count + 1;
                 __analyzer.genPointer(sizeOfParamsPlusOne, "D" + NestingPlusOne);
 
-                current.Offset++;
+                // print label for calling
                 __analyzer.genCall("L" + current.Label);
 
                 // Remove the number of parameters
@@ -1209,22 +1223,18 @@ public class Parser {
             case TOKENS.IDENTIFIER:
                 string id = __lookahead.Lexeme;
                 Entry idEntry = __symbolTableStack.Peek().GetEntry(id);
-
-                if(idEntry.Kind == KINDS.FUNCTION){
-                    actSem = ordinalExpression();
-                    return actSem;
-                }
-                id = variableIdentifier();
-                int nestingLevel = __symbolTableStack.Peek().GetNestingLevel(id);
                 Parameter wecare = parametercopy[0];
                 parametercopy.RemoveAt(0);
-                actSem = new SemRecord(idEntry.Type, idEntry.Lexeme);
-                if(wecare.VarType){
-                    __analyzer.genVarParameter(idEntry.Offset, nestingLevel);
+                if(!wecare.VarType){
+                    actSem = ordinalExpression();
+                    return actSem;
                 } else {
-                    __analyzer.genPushVar(actSem);
+                    int nestingLevel = __symbolTableStack.Peek().GetNestingLevel(id);
+                    actSem = new SemRecord(idEntry.Type, idEntry.Lexeme);
+                    __analyzer.genVarParameter(idEntry.Offset, nestingLevel);
+                    variableIdentifier();
+                    return actSem;
                 }
-                break;
             case TOKENS.FALSE:
             case TOKENS.NOT:
             case TOKENS.TRUE:
@@ -1235,10 +1245,6 @@ public class Parser {
             case TOKENS.MINUS:
             case TOKENS.PLUS:
                 Console.Write(72 + " ");
-                // if value
-
-                // if variable
-
                 actSem = ordinalExpression();
                 break;
             default:

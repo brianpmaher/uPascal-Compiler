@@ -5,10 +5,12 @@ program procedureParameters;
 	procedure printHello(x : integer);
 	var hi, hey : integer;
 	begin 
+		hi := 4;
 		if x > 3 then
     		write('DONE')
   		else
   			printHello(x + 1);
+  		write(hi);
 	end;
 
 	procedure print;
