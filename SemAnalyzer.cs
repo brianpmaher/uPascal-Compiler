@@ -23,6 +23,13 @@ public class SemAnalyzer{
         }
     }
 
+    public void genVarParameter(int offset, int nestingLevel){
+        output(
+            "PUSH D" + nestingLevel,
+            "PUSH #" + offset,
+            "ADDS");
+    }
+
     public void genPopCurrentNestingLevel(){
         SymbolTable top = SymbolTableStack.Peek();
         output("POP D" + top.NestingLevel);
@@ -119,7 +126,11 @@ public class SemAnalyzer{
         SymbolTable top = SymbolTableStack.Peek();
         Entry idEntry = top.GetEntry(toPush.Lexeme);
         int offset = idEntry.Offset;
-        output("PUSH " + offset + "(D" + top.NestingLevel + ")");
+        if(idEntry.VarParameter){
+            output("PUSH @" + offset + "(D" + top.NestingLevel + ")");
+        } else {
+            output("PUSH " + offset + "(D" + top.NestingLevel + ")");
+        }
         topStackType = toPush.Type;
     }
 
@@ -443,6 +454,7 @@ public class SemAnalyzer{
     }
 
     public void genAssign(SemRecord assignee, SemRecord expression) {
+        SymbolTable top = SymbolTableStack.Peek();
         if(SymbolTableStack.Peek().GetEntry(assignee.Lexeme).Modifiable) {
             if(assignee.Type == expression.Type) {} //Do nothing
             else if(assignee.Type == TYPES.INTEGER && expression.Type == TYPES.FLOAT) {
@@ -453,7 +465,12 @@ public class SemAnalyzer{
                 throw new Exception("Incompatible types found: " + assignee.Type + " and " + expression.Type);
             }
             Entry assigneeSymRec = SymbolTableStack.Peek().GetEntry(assignee.Lexeme);
-            output("POP " + assigneeSymRec.Offset + "(D" + SymbolTableStack.Peek().NestingLevel + ")");
+            if(assigneeSymRec.VarParameter){
+                output("POP @" + assigneeSymRec.Offset + "(" + "D" + top.NestingLevel + ")");
+            } else {
+                output("POP " + assigneeSymRec.Offset + "(D" + top.NestingLevel + ")");
+            }
+
         } else {
             throw new Exception("Can't modify a control variable");
         }

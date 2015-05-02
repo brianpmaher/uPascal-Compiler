@@ -44,7 +44,7 @@ public class SymbolTable {
         }
     }
 
-    public void AddEntry(String lexeme, TYPES type, KINDS kind, int size, List<String> paras) {
+    public void AddEntry(String lexeme, TYPES type, KINDS kind, int size, List<Parameter> paras) {
         if(kind == KINDS.VAR || kind == KINDS.PARAMETER){
             Entries.Add(new Entry(lexeme, type, kind, size, this.Size + 1, paras));
             this.Size += size;
@@ -53,7 +53,7 @@ public class SymbolTable {
         }
     }
 
-    public void AddEntry(String lexeme, string label, TYPES type, KINDS kind, int size, List<String> paras) {
+    public void AddEntry(String lexeme, string label, TYPES type, KINDS kind, int size, List<Parameter> paras) {
         if(kind == KINDS.VAR || kind == KINDS.PARAMETER){
             Entries.Add(new Entry(lexeme, label, type, kind, size, this.Size + 1, paras));
             this.Size += size;
@@ -123,5 +123,15 @@ public class SymbolTable {
             nestingLevel = Next.GetNestingLevel(identifier);
         }
         return nestingLevel;
+    }
+}
+
+public class Parameter {
+    public bool VarType {get; set;}
+    public TYPES Type {get; set;}
+
+    public Parameter(bool vartype, TYPES type) {
+        VarType = vartype;
+        Type = type;
     }
 }
