@@ -448,6 +448,7 @@ public class Parser {
                 // Add the entry for the function
                 __symbolTableStack.Peek().AddEntry(
                     identifier,
+                    label,
                     funcRetType,
                     KINDS.FUNCTION,
                     0,
@@ -1142,7 +1143,6 @@ public class Parser {
 
                 // Pop the current nesting level (Needs to be fixed)
                 __analyzer.genPopNestingLevel(appropriateNestingLevel);
-
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
@@ -1625,6 +1625,40 @@ public class Parser {
                     Console.Write(106 + " ");
                     string funcId = functionIdentifier();
                     optionalActualParameterList(__symbolTableStack.Peek().GetEntry(funcId).Parameters);
+
+                    /////////////
+                    SymbolTable top = __symbolTableStack.Peek();
+
+                    // find label from symbol table stack
+                    Entry current = top.GetEntry(funcId);
+
+                    // find symbol where the function is. Then that symbol tables
+                    // nesting level + 1.
+                    int appropriateNestingLevel = top.GetNestingLevel(funcId) + 1;
+
+                    // add space for function return
+                    __analyzer.genSymSize(1);
+
+                    // Push nesting level (Needs to be fixed)
+                    __analyzer.genPushNestingLevel(appropriateNestingLevel);
+
+                    List<SemRecord> listOfParams = optionalActualParameterList(current.Parameters);
+
+                    // generate the register so we can point it to
+                    int NestingPlusOne = top.GetNestingLevel(funcId) + 1;
+                    int sizeOfParamsPlusOne = listOfParams.Count + 1;
+                    __analyzer.genPointer(sizeOfParamsPlusOne, "D" + NestingPlusOne);
+
+                    // print label for calling
+                    __analyzer.genCall("L" + current.Label);
+
+                    // Remove the number of parameters
+                    __analyzer.genCleanup(listOfParams.Count);
+
+                    // Pop the current nesting level (Needs to be fixed)
+                    __analyzer.genPopNestingLevel(appropriateNestingLevel);
+                    /////////////
+
                     TYPES funcType = __symbolTableStack.Peek().GetType(funcId);
                     return new SemRecord(funcType, funcId); // Just a placeholder until we implement functions
                 } else {

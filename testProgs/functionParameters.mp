@@ -7,10 +7,12 @@ program procedureParameters;
 	begin
 		if x = 0 then
     		write('DONE')
+
   		else
-  			printHello := printHello(x - 1);
+  			printHello := 7;
 	end;
 begin
 	someInt := 3;
-	someInt2 := printHello(someInt);
+	someInt2 := printHello(someInt) + 5;
+	write(someInt2);
 end.

@@ -467,7 +467,10 @@ public class SemAnalyzer{
             Entry assigneeSymRec = SymbolTableStack.Peek().GetEntry(assignee.Lexeme);
             if(assigneeSymRec.VarParameter){
                 output("POP @" + assigneeSymRec.Offset + "(" + "D" + top.NestingLevel + ")");
-            } else {
+            } else if(top.Name == assignee.Lexeme) {
+                output("POP -1(D" + top.NestingLevel + ")");
+            }
+            else {
                 output("POP " + assigneeSymRec.Offset + "(D" + top.NestingLevel + ")");
             }
 
