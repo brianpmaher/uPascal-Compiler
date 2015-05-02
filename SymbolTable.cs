@@ -124,6 +124,14 @@ public class SymbolTable {
         }
         return nestingLevel;
     }
+
+    public void printSymbolTable(){
+        Console.WriteLine("--------------PRINTING SYMBOLTABLE-------------------");
+        foreach(Entry entry in Entries){
+            Console.WriteLine("Entry ---> Lexeme: " + entry.Lexeme + ", Type: " + entry.Type);
+        }
+        Console.WriteLine("-----------------------END---------------------------");
+    }
 }
 
 public class Parameter {

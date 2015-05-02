@@ -264,7 +264,9 @@ public class Parser {
                 SymbolTable top = __symbolTableStack.Peek();
                 if(typeRec != TYPES.NONE) {
                     foreach(String identifier in identifiers) {
+                        Console.WriteLine("Processing var: " + identifier);
                         top.AddEntry(identifier, typeRec, KINDS.VAR, 1, null);
+                        __symbolTableStack.Peek().printSymbolTable();
                     }
                 }
                 break;

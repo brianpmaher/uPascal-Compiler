@@ -32,6 +32,7 @@ program lab1;
 	
 	{Testing scope, as otherthing was already declared at the top
 	This should only use the internal variable}
+	
 	procedure scopeTest;
 	var otherthing: float;
 	begin
