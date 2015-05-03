@@ -29,7 +29,7 @@ public partial class Scanner {
     // Initializes the scanner and checks for file format
     public List<Token> initializeScanner(string fileName) {
         try {
-            if(!fileName.EndsWith(".mp")) {
+            if(!fileName.EndsWith(".mp") && !fileName.EndsWith(".up")) {
                 // File format exception
                 throw new Exception(Constants.ERROR_FILE_FORMAT);
             } else {
