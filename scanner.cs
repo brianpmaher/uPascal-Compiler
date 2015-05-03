@@ -36,13 +36,11 @@ public partial class Scanner {
                 // Grab all bytes from the file and store them in the __bytes character array
                 StreamReader reader = new StreamReader(Path.GetFullPath(fileName));
                 string temp = reader.ReadToEnd();
+                temp += '\n';
                 __bytes = temp.ToCharArray();
 
                 // Caching length to save memory
                 int length = __bytes.Length;
-                if(__bytes[length - 1] != '\n'){
-                    throw new Exception(Constants.ERROR_NO_NEWLINE);
-                }
 
                 // String of whitespace characters
                 string ws = Constants.WHITESPACE;
