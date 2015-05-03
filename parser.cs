@@ -214,9 +214,6 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.VAR:
                 // Ensure there is room for the PC
-                if(__symbolTableStack.Peek().NestingLevel > 0){
-                    __symbolTableStack.Peek().IncSize();
-                }
                 Console.Write(5 + " ");
                 match(TOKENS.VAR);
                 variableDeclaration();
