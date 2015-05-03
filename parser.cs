@@ -1226,13 +1226,13 @@ public class Parser {
                 Entry idEntry = __symbolTableStack.Peek().GetEntry(id);
                 Parameter wecare = parametercopy[0];
                 parametercopy.RemoveAt(0);
-                if(!wecare.VarType){
+                if(!wecare.VarType) {
                     actSem = ordinalExpression();
                     return actSem;
                 } else {
                     int nestingLevel = __symbolTableStack.Peek().GetNestingLevel(id);
                     actSem = new SemRecord(idEntry.Type, idEntry.Lexeme);
-                    __analyzer.genVarParameter(idEntry.Offset, nestingLevel);
+                    __analyzer.genVarParameter(idEntry.Offset, nestingLevel, idEntry.VarParameter);
                     variableIdentifier();
                     return actSem;
                 }

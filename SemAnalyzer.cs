@@ -23,11 +23,17 @@ public class SemAnalyzer{
         }
     }
 
-    public void genVarParameter(int offset, int nestingLevel){
-        output(
-            "PUSH D" + nestingLevel,
-            "PUSH #" + offset,
-            "ADDS");
+    public void genVarParameter(int offset, int nestingLevel, bool treatAsValue){
+        if(treatAsValue){
+            output(
+                "PUSH " + offset + "(D" + nestingLevel +")"
+            );
+        } else {
+            output(
+                "PUSH D" + nestingLevel,
+                "PUSH #" + offset,
+                "ADDS");
+        }
     }
 
     public void genPopCurrentNestingLevel(){

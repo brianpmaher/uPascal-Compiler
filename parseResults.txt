@@ -576,46 +576,25 @@ LTHAN            148      19	<
 INTEGER_LIT      148      21	0
 RPAREN           148      22	)
 SCOLON           148      23	;
-FOR              150       1	for
-IDENTIFIER       150       5	otherthing
-ASSIGN           150      16	:=
-LPAREN           150      19	(
-MINUS            150      20	-
-INTEGER_LIT      150      21	5
-RPAREN           150      22	)
-TO               150      24	to
-LPAREN           150      27	(
-IDENTIFIER       150      28	otherthing
-PLUS             150      39	+
-INTEGER_LIT      150      41	20
-RPAREN           150      43	)
-DO               150      45	do
-WRITELN          152       1	writeln
-LPAREN           152       8	(
-STRING_LIT       152       9	"otherthing is "
-COMMA            152      25	,
-IDENTIFIER       152      27	otherthing
-RPAREN           152      37	)
-SCOLON           152      38	;
-IDENTIFIER       154       1	booleanvalue
-ASSIGN           154      14	:=
-TRUE             154      17	true
-SCOLON           154      21	;
+IDENTIFIER       152       1	booleanvalue
+ASSIGN           152      14	:=
+TRUE             152      17	true
+SCOLON           152      21	;
+WRITELN          154       1	writeln
+LPAREN           154       8	(
+INTEGER_LIT      154       9	5
+PLUS             154      11	+
+FLOAT_LIT        154      16	6.5
+RPAREN           154      16	)
+SCOLON           154      17	;
 WRITELN          156       1	writeln
 LPAREN           156       8	(
-INTEGER_LIT      156       9	5
-PLUS             156      11	+
-FLOAT_LIT        156      16	6.5
-RPAREN           156      16	)
-SCOLON           156      17	;
-WRITELN          158       1	writeln
-LPAREN           158       8	(
-STRING_LIT       158       9	"Thank you for using this!"
-RPAREN           158      36	)
-SCOLON           158      37	;
-END              159       3	end
-PERIOD           159       6	.
-EOF              160       1	EOF
+STRING_LIT       156       9	"Thank you for using this!"
+RPAREN           156      36	)
+SCOLON           156      37	;
+END              157       3	end
+PERIOD           157       6	.
+EOF              158       1	EOF
 1 2 3 
 Matching program
 107 
@@ -1829,48 +1808,6 @@ Matching 0
 93 84 
 Matching )
 93 84 75 32 
-Matching ;
-42 61 
-Matching for
-62 108 
-Matching otherthing
-
-Matching :=
-63 112 73 82 87 91 105 
-Matching (
-73 82 86 
-Matching -
-91 99 
-Matching 5
-93 84 75 
-Matching )
-93 84 75 64 
-Matching to
-66 112 73 82 87 91 105 
-Matching (
-73 82 87 91 116 108 
-Matching otherthing
-93 83 88 
-Matching +
-91 99 
-Matching 20
-93 84 75 
-Matching )
-93 84 75 
-Matching do
-37 50 
-Matching writeln
-
-Matching (
-53 112 73 82 87 91 101 
-Matching "otherthing is "
-93 84 75 51 
-Matching ,
-53 112 73 82 87 91 116 108 
-Matching otherthing
-93 84 75 52 
-Matching )
-32 
 Matching ;
 38 54 108 
 Matching booleanvalue
