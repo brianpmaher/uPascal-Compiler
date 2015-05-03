@@ -264,7 +264,6 @@ public class Parser {
                 SymbolTable top = __symbolTableStack.Peek();
                 if(typeRec != TYPES.NONE) {
                     foreach(String identifier in identifiers) {
-                        Console.WriteLine("Processing var: " + identifier);
                         top.AddEntry(identifier, typeRec, KINDS.VAR, 1, null);
                         __symbolTableStack.Peek().printSymbolTable();
                     }
@@ -1247,6 +1246,7 @@ public class Parser {
             case TOKENS.MINUS:
             case TOKENS.PLUS:
                 Console.Write(72 + " ");
+                parametercopy.RemoveAt(0);
                 actSem = ordinalExpression();
                 break;
             default:
@@ -1518,7 +1518,6 @@ public class Parser {
                 Console.Write(92 + " ");
                 Func<SemRecord, SemRecord, TYPES> mulOp = multiplyingOperator();
                 SemRecord right = factor();
-                Console.WriteLine(right.Lexeme + " of Type " + right.Type);
                 SemRecord mulRec = new SemRecord(mulOp(left, right), "");
                 SemRecord tailRec = factorTail(mulRec);
                 return tailRec;
@@ -1644,9 +1643,6 @@ public class Parser {
                     __analyzer.genPushNestingLevel(appropriateNestingLevel);
 
                     List<SemRecord> listOfParams = optionalActualParameterList(current.Parameters);
-                    foreach (Parameter param in __symbolTableStack.Peek().GetEntry(funcId).Parameters){
-                        Console.WriteLine("Param--> " + param.VarType);
-                    }
 
                     // generate the register so we can point it to
                     int NestingPlusOne = top.GetNestingLevel(funcId) + 1;
@@ -1688,7 +1684,6 @@ public class Parser {
                 match(TOKENS.LPAREN);
                 factorRec = expression();
                 match(TOKENS.RPAREN);
-                Console.WriteLine("factorRec is of type " + factorRec.Type);
                 return factorRec;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,

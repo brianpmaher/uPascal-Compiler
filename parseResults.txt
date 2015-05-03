@@ -301,326 +301,321 @@ SCOLON            82      12	;
 END               83       1	end
 SCOLON            83       4	;
 BEGIN             85       1	begin
-WRITELN           86       1	writeln
-LPAREN            86       8	(
-STRING_LIT        86       9	"GLOB IN THE SKY TELL ME WHY"
-RPAREN            86      38	)
-SCOLON            86      39	;
-IDENTIFIER        87       1	x
-ASSIGN            87       3	:=
-IDENTIFIER        87       6	x
-PLUS              87       8	+
-IDENTIFIER        87      10	y
-SCOLON            87      11	;
-WRITELN           88       1	writeln
-LPAREN            88       8	(
-STRING_LIT        88       9	"X in refcheck2 is "
-COMMA             88      29	,
-IDENTIFIER        88      31	x
-RPAREN            88      32	)
-SCOLON            88      33	;
-IDENTIFIER        89       1	refcheck3
-LPAREN            89      10	(
-IDENTIFIER        89      11	y
-RPAREN            89      12	)
-SCOLON            89      13	;
-END               90       1	end
-SCOLON            90       4	;
-BEGIN             92       3	begin
+IDENTIFIER        86       1	x
+ASSIGN            86       3	:=
+IDENTIFIER        86       6	x
+PLUS              86       8	+
+IDENTIFIER        86      10	y
+SCOLON            86      11	;
+WRITELN           87       1	writeln
+LPAREN            87       8	(
+STRING_LIT        87       9	"X in refcheck2 is "
+COMMA             87      29	,
+IDENTIFIER        87      31	x
+RPAREN            87      32	)
+SCOLON            87      33	;
+IDENTIFIER        88       1	refcheck3
+LPAREN            88      10	(
+IDENTIFIER        88      11	y
+RPAREN            88      12	)
+SCOLON            88      13	;
+END               89       1	end
+SCOLON            89       4	;
+BEGIN             91       3	begin
+WRITELN           92       1	writeln
+LPAREN            92       8	(
+STRING_LIT        92       9	"Welcome to my program (^_^ )"
+RPAREN            92      39	)
+SCOLON            92      40	;
 WRITELN           93       1	writeln
 LPAREN            93       8	(
-STRING_LIT        93       9	"Welcome to my program (^_^ )"
-RPAREN            93      39	)
-SCOLON            93      40	;
-WRITELN           94       1	writeln
-LPAREN            94       8	(
-STRING_LIT        94       9	"Please enter an integer to find the factorial of:"
-RPAREN            94      60	)
-SCOLON            94      61	;
-READ              95       1	read
-LPAREN            95       5	(
-IDENTIFIER        95       6	choice
-RPAREN            95      12	)
-SCOLON            95      13	;
-IF                96       1	if
-NOT               96       4	not
-LPAREN            96       7	(
-FALSE             96       8	false
-RPAREN            96      13	)
-THEN              96      15	then
-WRITELN           97       1	writeln
-LPAREN            97       8	(
-IDENTIFIER        97       9	factorial
-LPAREN            97      18	(
-IDENTIFIER        97      19	choice
-RPAREN            97      25	)
-RPAREN            97      26	)
-ELSE              98       1	else
-WRITELN           99       1	writeln
-LPAREN            99       8	(
-STRING_LIT        99       9	"-1"
-RPAREN            99      13	)
-SCOLON            99      14	;
+STRING_LIT        93       9	"Please enter an integer to find the factorial of:"
+RPAREN            93      60	)
+SCOLON            93      61	;
+READ              94       1	read
+LPAREN            94       5	(
+IDENTIFIER        94       6	choice
+RPAREN            94      12	)
+SCOLON            94      13	;
+IF                95       1	if
+NOT               95       4	not
+LPAREN            95       7	(
+FALSE             95       8	false
+RPAREN            95      13	)
+THEN              95      15	then
+WRITELN           96       1	writeln
+LPAREN            96       8	(
+IDENTIFIER        96       9	factorial
+LPAREN            96      18	(
+IDENTIFIER        96      19	choice
+RPAREN            96      25	)
+RPAREN            96      26	)
+ELSE              97       1	else
+WRITELN           98       1	writeln
+LPAREN            98       8	(
+STRING_LIT        98       9	"-1"
+RPAREN            98      13	)
+SCOLON            98      14	;
+IDENTIFIER       100       1	listnum
+LPAREN           100       8	(
+INTEGER_LIT      100       9	100
+DIV              100      13	div
+INTEGER_LIT      100      17	2
+RPAREN           100      18	)
+SCOLON           100      19	;
 IDENTIFIER       101       1	listnum
 LPAREN           101       8	(
-INTEGER_LIT      101       9	100
-DIV              101      13	div
-INTEGER_LIT      101      17	2
-RPAREN           101      18	)
-SCOLON           101      19	;
-IDENTIFIER       102       1	listnum
-LPAREN           102       8	(
-IDENTIFIER       102       9	factorial
-LPAREN           102      18	(
-INTEGER_LIT      102      19	9
-DIV              102      21	div
-INTEGER_LIT      102      25	3
-RPAREN           102      26	)
-RPAREN           102      27	)
-SCOLON           102      28	;
-IDENTIFIER       104       1	otherthing
-ASSIGN           104      12	:=
-INTEGER_LIT      104      15	5
-MOD              104      17	mod
-INTEGER_LIT      104      21	2
-SCOLON           104      22	;
-WRITELN          105       1	writeln
-LPAREN           105       8	(
-MINUS            105       9	-
-IDENTIFIER       105      10	otherthing
-RPAREN           105      20	)
-SCOLON           105      21	;
-IDENTIFIER       108       1	bob
-ASSIGN           108       5	:=
-TRUE             108       8	true
-SCOLON           108      12	;
-IDENTIFIER       109       1	fred
-ASSIGN           109       6	:=
-FALSE            109       9	false
-SCOLON           109      14	;
-WRITELN          112       1	writeln
-LPAREN           112       8	(
-IDENTIFIER       112       9	bob
-COMMA            112      12	,
-IDENTIFIER       112      13	fred
-RPAREN           112      17	)
-SCOLON           112      18	;
-IDENTIFIER       114       1	fred
-ASSIGN           114       6	:=
+IDENTIFIER       101       9	factorial
+LPAREN           101      18	(
+INTEGER_LIT      101      19	9
+DIV              101      21	div
+INTEGER_LIT      101      25	3
+RPAREN           101      26	)
+RPAREN           101      27	)
+SCOLON           101      28	;
+IDENTIFIER       103       1	otherthing
+ASSIGN           103      12	:=
+INTEGER_LIT      103      15	5
+MOD              103      17	mod
+INTEGER_LIT      103      21	2
+SCOLON           103      22	;
+WRITELN          104       1	writeln
+LPAREN           104       8	(
+MINUS            104       9	-
+IDENTIFIER       104      10	otherthing
+RPAREN           104      20	)
+SCOLON           104      21	;
+IDENTIFIER       107       1	bob
+ASSIGN           107       5	:=
+TRUE             107       8	true
+SCOLON           107      12	;
+IDENTIFIER       108       1	fred
+ASSIGN           108       6	:=
+FALSE            108       9	false
+SCOLON           108      14	;
+WRITELN          111       1	writeln
+LPAREN           111       8	(
+IDENTIFIER       111       9	bob
+COMMA            111      12	,
+IDENTIFIER       111      13	fred
+RPAREN           111      17	)
+SCOLON           111      18	;
+IDENTIFIER       113       1	fred
+ASSIGN           113       6	:=
+IDENTIFIER       113       9	fred
+AND              113      14	and
+IDENTIFIER       113      18	bob
+SCOLON           113      21	;
+WRITELN          114       1	writeln
+LPAREN           114       8	(
 IDENTIFIER       114       9	fred
-AND              114      14	and
-IDENTIFIER       114      18	bob
-SCOLON           114      21	;
-WRITELN          115       1	writeln
-LPAREN           115       8	(
+RPAREN           114      13	)
+SCOLON           114      14	;
+IDENTIFIER       115       1	fred
+ASSIGN           115       6	:=
 IDENTIFIER       115       9	fred
-RPAREN           115      13	)
-SCOLON           115      14	;
-IDENTIFIER       116       1	fred
-ASSIGN           116       6	:=
+OR               115      14	or
+IDENTIFIER       115      17	bob
+SCOLON           115      20	;
+WRITELN          116       1	writeln
+LPAREN           116       8	(
 IDENTIFIER       116       9	fred
-OR               116      14	or
-IDENTIFIER       116      17	bob
-SCOLON           116      20	;
-WRITELN          117       1	writeln
-LPAREN           117       8	(
-IDENTIFIER       117       9	fred
-RPAREN           117      13	)
-SCOLON           117      14	;
-WRITELN          119       1	writeln
-LPAREN           119       8	(
-MINUS            119       9	-
-LPAREN           119      10	(
-INTEGER_LIT      119      11	1
-PLUS             119      13	+
-INTEGER_LIT      119      15	2
-RPAREN           119      16	)
-RPAREN           119      17	)
-SCOLON           119      18	;
-IDENTIFIER       121       1	otherthing
-ASSIGN           121      12	:=
-INTEGER_LIT      121      15	15
-TIMES            121      18	*
-INTEGER_LIT      121      20	15
-DIV              121      23	div
-INTEGER_LIT      121      27	5
-PLUS             121      29	+
-INTEGER_LIT      121      31	1
-MINUS            121      33	-
-INTEGER_LIT      121      35	2
-TIMES            121      37	*
-INTEGER_LIT      121      39	2
-SCOLON           121      40	;
-WRITELN          122       1	writeln
-LPAREN           122       8	(
-STRING_LIT       122       9	"From *main* otherthing is: "
-COMMA            122      38	,
-IDENTIFIER       122      40	otherthing
-RPAREN           122      50	)
-SCOLON           122      51	;
-IDENTIFIER       123       1	scopetest
-SCOLON           123      10	;
-WRITELN          124       1	writeln
-LPAREN           124       8	(
-STRING_LIT       124       9	"From *main* otherthing still is: "
-COMMA            124      44	,
-IDENTIFIER       124      46	otherthing
-RPAREN           124      56	)
-SCOLON           124      57	;
-IDENTIFIER       125       1	floatmathtest
-ASSIGN           125      15	:=
-LPAREN           125      18	(
-FLOAT_LIT        125      22	7.0
-TIMES            125      23	*
-FLOAT_LIT        125      27	2.1
-MINUS            125      28	-
-FLOAT_LIT        125      33	0.6
-FLOAT_DIVIDE     125      34	/
-INTEGER_LIT      125      36	13
-RPAREN           125      38	)
-TIMES            125      40	*
-LPAREN           125      42	(
-IDENTIFIER       125      43	factorial
-LPAREN           125      52	(
-INTEGER_LIT      125      53	13
-MINUS            125      56	-
-INTEGER_LIT      125      58	11
-RPAREN           125      60	)
-RPAREN           125      61	)
-SCOLON           125      62	;
-WRITELN          126       1	writeln
-LPAREN           126       8	(
-IDENTIFIER       126       9	floatmathtest
-RPAREN           126      22	)
-SCOLON           126      23	;
-WRITELN          131       1	writeln
-LPAREN           131       8	(
-IDENTIFIER       131       9	retstring
-LPAREN           131      18	(
-FLOAT_LIT        131      24	0.001
-COMMA            131      24	,
-FLOAT_LIT        131      30	1.23
-COMMA            131      30	,
-STRING_LIT       131      32	"String as input argument"
-RPAREN           131      58	)
-RPAREN           131      59	)
-SCOLON           131      60	;
-WRITELN          133       1	writeln
-LPAREN           133       8	(
-STRING_LIT       133       9	"X starts at "
-COMMA            133      23	,
-IDENTIFIER       133      25	otherthing
-RPAREN           133      35	)
-SCOLON           133      36	;
-IDENTIFIER       134       1	refcheck
-LPAREN           134       9	(
-IDENTIFIER       134      10	otherthing
-RPAREN           134      20	)
-SCOLON           134      21	;
-WRITELN          135       1	writeln
-LPAREN           135       8	(
-STRING_LIT       135       9	"X is now "
-COMMA            135      20	,
-IDENTIFIER       135      22	otherthing
-COMMA            135      32	,
-STRING_LIT       135      34	" in main"
-RPAREN           135      44	)
-SCOLON           135      45	;
-WRITELN          137       1	writeln
-LPAREN           137       8	(
-STRING_LIT       137       9	"floatMathTest start: "
-COMMA            137      32	,
-IDENTIFIER       137      34	floatmathtest
-RPAREN           137      47	)
-SCOLON           137      48	;
-IDENTIFIER       139       1	refcheck2
-LPAREN           139      10	(
-INTEGER_LIT      139      11	10
-DIV              139      14	div
-INTEGER_LIT      139      18	3
-COMMA            139      19	,
-IDENTIFIER       139      21	floatmathtest
-COMMA            139      34	,
-IDENTIFIER       139      36	floatmathtest
-RPAREN           139      49	)
-SCOLON           139      50	;
-WRITELN          141       1	writeln
-LPAREN           141       8	(
-STRING_LIT       141       9	"floatMathTest is now "
-COMMA            141      32	,
-IDENTIFIER       141      34	floatmathtest
-COMMA            141      47	,
-STRING_LIT       141      49	" in main"
-RPAREN           141      59	)
-SCOLON           141      60	;
-IDENTIFIER       143       1	otherthing
-ASSIGN           143      12	:=
-INTEGER_LIT      143      15	5
-SCOLON           143      16	;
-REPEAT           144       1	repeat
-BEGIN            145       1	begin
-WRITE            146       1	write
-LPAREN           146       6	(
-IDENTIFIER       146       7	otherthing
-COMMA            146      17	,
-STRING_LIT       146      19	" "
-RPAREN           146      22	)
-SCOLON           146      23	;
-IDENTIFIER       147       1	otherthing
-ASSIGN           147      12	:=
-IDENTIFIER       147      15	otherthing
-MINUS            147      26	-
-INTEGER_LIT      147      28	3
-SCOLON           147      29	;
-END              148       1	end
-SCOLON           148       4	;
-UNTIL            149       1	until
-LPAREN           149       7	(
-IDENTIFIER       149       8	otherthing
-LTHAN            149      19	<
-INTEGER_LIT      149      21	0
-RPAREN           149      22	)
-SCOLON           149      23	;
-FOR              151       1	for
-IDENTIFIER       151       5	otherthing
-ASSIGN           151      16	:=
-LPAREN           151      19	(
-MINUS            151      20	-
-INTEGER_LIT      151      21	5
-RPAREN           151      22	)
-TO               151      24	to
-LPAREN           151      27	(
-IDENTIFIER       151      28	otherthing
-PLUS             151      39	+
-INTEGER_LIT      151      41	20
-RPAREN           151      43	)
-DO               151      45	do
-WRITELN          153       1	writeln
-LPAREN           153       8	(
-STRING_LIT       153       9	"otherthing is "
-COMMA            153      25	,
-IDENTIFIER       153      27	otherthing
-RPAREN           153      37	)
-SCOLON           153      38	;
-IDENTIFIER       155       1	booleanvalue
-ASSIGN           155      14	:=
-TRUE             155      17	true
-SCOLON           155      21	;
-WRITELN          157       1	writeln
-LPAREN           157       8	(
-INTEGER_LIT      157       9	5
-PLUS             157      11	+
-FLOAT_LIT        157      16	6.5
-RPAREN           157      16	)
-SCOLON           157      17	;
-WRITELN          159       1	writeln
-LPAREN           159       8	(
-STRING_LIT       159       9	"Thank you for using this!"
-RPAREN           159      36	)
-SCOLON           159      37	;
-END              160       3	end
-PERIOD           160       6	.
-EOF              161       1	EOF
+RPAREN           116      13	)
+SCOLON           116      14	;
+WRITELN          118       1	writeln
+LPAREN           118       8	(
+MINUS            118       9	-
+LPAREN           118      10	(
+INTEGER_LIT      118      11	1
+PLUS             118      13	+
+INTEGER_LIT      118      15	2
+RPAREN           118      16	)
+RPAREN           118      17	)
+SCOLON           118      18	;
+IDENTIFIER       120       1	otherthing
+ASSIGN           120      12	:=
+INTEGER_LIT      120      15	15
+TIMES            120      18	*
+INTEGER_LIT      120      20	15
+DIV              120      23	div
+INTEGER_LIT      120      27	5
+PLUS             120      29	+
+INTEGER_LIT      120      31	1
+MINUS            120      33	-
+INTEGER_LIT      120      35	2
+TIMES            120      37	*
+INTEGER_LIT      120      39	2
+SCOLON           120      40	;
+WRITELN          121       1	writeln
+LPAREN           121       8	(
+STRING_LIT       121       9	"From *main* otherthing is: "
+COMMA            121      38	,
+IDENTIFIER       121      40	otherthing
+RPAREN           121      50	)
+SCOLON           121      51	;
+IDENTIFIER       122       1	scopetest
+SCOLON           122      10	;
+WRITELN          123       1	writeln
+LPAREN           123       8	(
+STRING_LIT       123       9	"From *main* otherthing still is: "
+COMMA            123      44	,
+IDENTIFIER       123      46	otherthing
+RPAREN           123      56	)
+SCOLON           123      57	;
+IDENTIFIER       124       1	floatmathtest
+ASSIGN           124      15	:=
+LPAREN           124      18	(
+FLOAT_LIT        124      22	7.0
+TIMES            124      23	*
+FLOAT_LIT        124      27	2.1
+MINUS            124      28	-
+FLOAT_LIT        124      33	0.6
+FLOAT_DIVIDE     124      34	/
+INTEGER_LIT      124      36	13
+RPAREN           124      38	)
+TIMES            124      40	*
+LPAREN           124      42	(
+IDENTIFIER       124      43	factorial
+LPAREN           124      52	(
+INTEGER_LIT      124      53	13
+MINUS            124      56	-
+INTEGER_LIT      124      58	11
+RPAREN           124      60	)
+RPAREN           124      61	)
+SCOLON           124      62	;
+WRITELN          125       1	writeln
+LPAREN           125       8	(
+IDENTIFIER       125       9	floatmathtest
+RPAREN           125      22	)
+SCOLON           125      23	;
+WRITELN          130       1	writeln
+LPAREN           130       8	(
+IDENTIFIER       130       9	retstring
+LPAREN           130      18	(
+FLOAT_LIT        130      24	0.001
+COMMA            130      24	,
+FLOAT_LIT        130      30	1.23
+COMMA            130      30	,
+STRING_LIT       130      32	"String as input argument"
+RPAREN           130      58	)
+RPAREN           130      59	)
+SCOLON           130      60	;
+WRITELN          132       1	writeln
+LPAREN           132       8	(
+STRING_LIT       132       9	"X starts at "
+COMMA            132      23	,
+IDENTIFIER       132      25	otherthing
+RPAREN           132      35	)
+SCOLON           132      36	;
+IDENTIFIER       133       1	refcheck
+LPAREN           133       9	(
+IDENTIFIER       133      10	otherthing
+RPAREN           133      20	)
+SCOLON           133      21	;
+WRITELN          134       1	writeln
+LPAREN           134       8	(
+STRING_LIT       134       9	"X is now "
+COMMA            134      20	,
+IDENTIFIER       134      22	otherthing
+COMMA            134      32	,
+STRING_LIT       134      34	" in main"
+RPAREN           134      44	)
+SCOLON           134      45	;
+WRITELN          136       1	writeln
+LPAREN           136       8	(
+STRING_LIT       136       9	"floatMathTest start: "
+COMMA            136      32	,
+IDENTIFIER       136      34	floatmathtest
+RPAREN           136      47	)
+SCOLON           136      48	;
+IDENTIFIER       138       1	refcheck2
+LPAREN           138      10	(
+INTEGER_LIT      138      11	10
+DIV              138      14	div
+INTEGER_LIT      138      18	3
+COMMA            138      19	,
+IDENTIFIER       138      21	floatmathtest
+COMMA            138      34	,
+IDENTIFIER       138      36	floatmathtest
+RPAREN           138      49	)
+SCOLON           138      50	;
+WRITELN          140       1	writeln
+LPAREN           140       8	(
+STRING_LIT       140       9	"floatMathTest is now "
+COMMA            140      32	,
+IDENTIFIER       140      34	floatmathtest
+COMMA            140      47	,
+STRING_LIT       140      49	" in main"
+RPAREN           140      59	)
+SCOLON           140      60	;
+IDENTIFIER       142       1	otherthing
+ASSIGN           142      12	:=
+INTEGER_LIT      142      15	5
+SCOLON           142      16	;
+REPEAT           143       1	repeat
+BEGIN            144       1	begin
+WRITE            145       1	write
+LPAREN           145       6	(
+IDENTIFIER       145       7	otherthing
+COMMA            145      17	,
+STRING_LIT       145      19	" "
+RPAREN           145      22	)
+SCOLON           145      23	;
+IDENTIFIER       146       1	otherthing
+ASSIGN           146      12	:=
+IDENTIFIER       146      15	otherthing
+MINUS            146      26	-
+INTEGER_LIT      146      28	3
+SCOLON           146      29	;
+END              147       1	end
+SCOLON           147       4	;
+UNTIL            148       1	until
+LPAREN           148       7	(
+IDENTIFIER       148       8	otherthing
+LTHAN            148      19	<
+INTEGER_LIT      148      21	0
+RPAREN           148      22	)
+SCOLON           148      23	;
+FOR              150       1	for
+IDENTIFIER       150       5	otherthing
+ASSIGN           150      16	:=
+LPAREN           150      19	(
+MINUS            150      20	-
+INTEGER_LIT      150      21	5
+RPAREN           150      22	)
+TO               150      24	to
+LPAREN           150      27	(
+IDENTIFIER       150      28	otherthing
+PLUS             150      39	+
+INTEGER_LIT      150      41	20
+RPAREN           150      43	)
+DO               150      45	do
+WRITELN          152       1	writeln
+LPAREN           152       8	(
+STRING_LIT       152       9	"otherthing is "
+COMMA            152      25	,
+IDENTIFIER       152      27	otherthing
+RPAREN           152      37	)
+SCOLON           152      38	;
+IDENTIFIER       154       1	booleanvalue
+ASSIGN           154      14	:=
+TRUE             154      17	true
+SCOLON           154      21	;
+WRITELN          156       1	writeln
+LPAREN           156       8	(
+INTEGER_LIT      156       9	5
+PLUS             156      11	+
+FLOAT_LIT        156      16	6.5
+RPAREN           156      16	)
+SCOLON           156      17	;
+WRITELN          158       1	writeln
+LPAREN           158       8	(
+STRING_LIT       158       9	"Thank you for using this!"
+RPAREN           158      36	)
+SCOLON           158      37	;
+END              159       3	end
+PERIOD           159       6	.
+EOF              160       1	EOF
 1 2 3 
 Matching program
 107 
@@ -640,11 +635,9 @@ Matching choice
 Matching :
 10 
 Matching integer
-Processing var: otherthing
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: otherthing, Type: INTEGER
 -----------------------END---------------------------
-Processing var: choice
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: otherthing, Type: INTEGER
 Entry ---> Lexeme: choice, Type: INTEGER
@@ -657,7 +650,6 @@ Matching floatmathtest
 Matching :
 11 
 Matching float
-Processing var: floatmathtest
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: otherthing, Type: INTEGER
 Entry ---> Lexeme: choice, Type: INTEGER
@@ -671,7 +663,6 @@ Matching booleanvalue
 Matching :
 13 
 Matching boolean
-Processing var: booleanvalue
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: otherthing, Type: INTEGER
 Entry ---> Lexeme: choice, Type: INTEGER
@@ -686,7 +677,6 @@ Matching float_mathtest
 Matching :
 12 
 Matching string
-Processing var: float_mathtest
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: otherthing, Type: INTEGER
 Entry ---> Lexeme: choice, Type: INTEGER
@@ -706,7 +696,6 @@ Matching fred
 Matching :
 13 
 Matching boolean
-Processing var: bob
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: otherthing, Type: INTEGER
 Entry ---> Lexeme: choice, Type: INTEGER
@@ -715,7 +704,6 @@ Entry ---> Lexeme: booleanvalue, Type: BOOLEAN
 Entry ---> Lexeme: float_mathtest, Type: STRING
 Entry ---> Lexeme: bob, Type: BOOLEAN
 -----------------------END---------------------------
-Processing var: fred
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: otherthing, Type: INTEGER
 Entry ---> Lexeme: choice, Type: INTEGER
@@ -755,7 +743,6 @@ Matching x
 Matching :
 10 
 Matching integer
-Processing var: x
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: b, Type: INTEGER
 Entry ---> Lexeme: x, Type: INTEGER
@@ -802,8 +789,6 @@ Matching -
 Matching 1
 93 84 75 71 
 Matching )
-Param--> False
-factorial of Type INTEGER
 93 84 75 32 
 Matching ;
 34 44 33 
@@ -834,7 +819,6 @@ Matching finish
 Matching :
 10 
 Matching integer
-Processing var: finish
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: start, Type: INTEGER
 Entry ---> Lexeme: finish, Type: INTEGER
@@ -923,7 +907,6 @@ Matching otherthing
 Matching :
 11 
 Matching float
-Processing var: otherthing
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: otherthing, Type: FLOAT
 -----------------------END---------------------------
@@ -941,12 +924,10 @@ Matching 1
 Matching *
 100 
 Matching 2.0
-2.0 of Type FLOAT
 92 95 
 Matching /
 99 
 Matching 4
-4 of Type INTEGER
 93 83 88 
 Matching +
 91 99 
@@ -1011,7 +992,6 @@ Matching intconverter
 Matching :
 10 
 Matching integer
-Processing var: intconverter
 --------------PRINTING SYMBOLTABLE-------------------
 Entry ---> Lexeme: x, Type: FLOAT
 Entry ---> Lexeme: y, Type: FLOAT
@@ -1098,7 +1078,6 @@ Matching (
 Matching b
 93 84 75 71 
 Matching )
-Param--> False
 32 
 Matching ;
 34 44 33 
@@ -1115,7 +1094,6 @@ Matching (
 Matching b
 93 84 75 71 
 Matching )
-Param--> False
 32 
 Matching ;
 34 44 33 
@@ -1158,7 +1136,6 @@ Matching (
 Matching intconverter
 93 84 75 71 
 Matching )
-Param--> False
 32 
 Matching ;
 38 55 110 
@@ -1303,17 +1280,7 @@ Matching end
 Matching ;
 16 29 30 
 Matching begin
-31 37 50 
-Matching writeln
-
-Matching (
-53 112 73 82 87 91 101 
-Matching "GLOB IN THE SKY TELL ME WHY"
-93 84 75 52 
-Matching )
-32 
-Matching ;
-38 54 108 
+31 38 54 108 
 Matching x
 
 Matching :=
@@ -1347,7 +1314,6 @@ Matching (
 Matching y
 71 
 Matching )
-Param--> True
 32 
 Matching ;
 34 44 33 
@@ -1396,7 +1362,6 @@ Matching (
 Matching false
 93 84 75 
 Matching )
-factorRec is of type BOOLEAN
 93 84 75 
 Matching then
 37 50 
@@ -1411,7 +1376,6 @@ Matching (
 Matching choice
 93 84 75 71 
 Matching )
-Param--> False
 93 84 75 52 
 Matching )
 57 
@@ -1436,10 +1400,8 @@ Matching 100
 Matching div
 99 
 Matching 2
-2 of Type INTEGER
 93 84 75 71 
 Matching )
-Param--> False
 32 
 Matching ;
 43 67 109 
@@ -1456,13 +1418,10 @@ Matching 9
 Matching div
 99 
 Matching 3
-3 of Type INTEGER
 93 84 75 71 
 Matching )
-Param--> False
 93 84 75 71 
 Matching )
-Param--> False
 32 
 Matching ;
 38 54 108 
@@ -1475,7 +1434,6 @@ Matching 5
 Matching mod
 99 
 Matching 2
-2 of Type INTEGER
 93 84 75 32 
 Matching ;
 37 50 
@@ -1530,7 +1488,6 @@ Matching fred
 Matching and
 116 108 
 Matching bob
-bob of Type BOOLEAN
 93 84 75 32 
 Matching ;
 37 50 
@@ -1581,7 +1538,6 @@ Matching +
 Matching 2
 93 84 75 
 Matching )
-factorRec is of type INTEGER
 93 84 75 52 
 Matching )
 32 
@@ -1596,12 +1552,10 @@ Matching 15
 Matching *
 99 
 Matching 15
-15 of Type INTEGER
 92 96 
 Matching div
 99 
 Matching 5
-5 of Type INTEGER
 93 83 88 
 Matching +
 91 99 
@@ -1614,7 +1568,6 @@ Matching 2
 Matching *
 99 
 Matching 2
-2 of Type INTEGER
 93 84 75 32 
 Matching ;
 37 50 
@@ -1661,7 +1614,6 @@ Matching 7.0
 Matching *
 100 
 Matching 2.1
-2.1 of Type FLOAT
 93 83 89 
 Matching -
 91 100 
@@ -1670,10 +1622,8 @@ Matching 0.6
 Matching /
 99 
 Matching 13
-13 of Type INTEGER
 93 84 75 
 Matching )
-factorRec is of type FLOAT
 92 94 
 Matching *
 105 
@@ -1690,11 +1640,8 @@ Matching -
 Matching 11
 93 84 75 71 
 Matching )
-Param--> False
 93 84 75 
 Matching )
-factorRec is of type INTEGER
-factorial of Type INTEGER
 93 84 75 32 
 Matching ;
 37 50 
@@ -1727,9 +1674,6 @@ Matching ,
 Matching "String as input argument"
 93 84 75 71 
 Matching )
-Param--> False
-Param--> False
-Param--> False
 93 84 75 52 
 Matching )
 32 
@@ -1756,7 +1700,6 @@ Matching (
 Matching otherthing
 71 
 Matching )
-Param--> True
 32 
 Matching ;
 37 50 
@@ -1801,20 +1744,16 @@ Matching 10
 Matching div
 99 
 Matching 3
-3 of Type INTEGER
 93 84 75 70 
 Matching ,
-112 73 82 87 91 116 108 
+108 
 Matching floatmathtest
-93 84 75 70 
+70 
 Matching ,
 108 
 Matching floatmathtest
 71 
 Matching )
-Param--> False
-Param--> True
-Param--> True
 32 
 Matching ;
 37 50 
@@ -1889,7 +1828,6 @@ Matching <
 Matching 0
 93 84 
 Matching )
-factorRec is of type BOOLEAN
 93 84 75 32 
 Matching ;
 42 61 
@@ -1906,7 +1844,6 @@ Matching -
 Matching 5
 93 84 75 
 Matching )
-factorRec is of type INTEGER
 93 84 75 64 
 Matching to
 66 112 73 82 87 91 105 
@@ -1919,7 +1856,6 @@ Matching +
 Matching 20
 93 84 75 
 Matching )
-factorRec is of type INTEGER
 93 84 75 
 Matching do
 37 50 
