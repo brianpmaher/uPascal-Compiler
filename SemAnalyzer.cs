@@ -45,6 +45,11 @@ public class SemAnalyzer{
         output("POP D" + size);
     }
 
+    public void genPopFinalValue(){
+        SymbolTable top = SymbolTableStack.Peek();
+        output("POP " + top.Size + "(D" + top.NestingLevel + ")");
+    }
+
     public void genPushCurrentNestingLevel(){
         SymbolTable top = SymbolTableStack.Peek();
         output("PUSH D" + top.NestingLevel);
