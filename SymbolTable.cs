@@ -66,6 +66,7 @@ public class SymbolTable {
         if(!Entries.Remove(entryRemoving)){
             throw new Exception("Tried to remove an entry for the symbol table that was not in the symbol table");
         }
+        DecSize();
     }
 
     public int GetSize(){

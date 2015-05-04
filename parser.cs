@@ -981,8 +981,9 @@ public class Parser {
                 // Generate the starting label
                 __analyzer.genOut(start + ":");
 
+                __analyzer.genPushVar(finalVar);
                 __analyzer.genPushVar(controlVar);
-                __analyzer.genPushVar(finalVal);
+
 
                 // Generate either CMPGES or CMPLES depending on what was chosen
                 // (either to or downto).
