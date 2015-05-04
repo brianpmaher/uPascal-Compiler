@@ -957,25 +957,32 @@ public class Parser {
                 Entry variable = __symbolTableStack.Peek().GetEntry(controlVar.Lexeme);
                 variable.Modifiable = false;
 
-                // Generate the starting label
-                __analyzer.genOut(start + ":");
-
                 // Retrieve the semrecord for what type of for loop
                 // (to or downto). Note: this will return either a 1 or -1
                 // for adding later.
                 SemRecord step = stepValue();
 
+
+                __analyzer.genSymSize(1);
                 // Retrieve finalValue semrec and generate the push the initial
                 // (now controlVariable) and the finalValue on the stack for it.
                 SemRecord finalVal = finalValue();
+                SemRecord finalVar = new SemRecord(finalVal.Type, "finalVal" + start);
 
-                Entry finalValEntry = __symbolTableStack.Peek().GetEntry(finalVal.Lexeme);
+                __symbolTableStack.Peek().AddEntry(finalVar.Lexeme, finalVar.Type, KINDS.VAR, 1, null);
+                Entry finalValEntry = __symbolTableStack.Peek().GetEntry(finalVar.Lexeme);
+
+                __analyzer.genAssign(finalVar, finalVal);
 
                 if(finalValEntry != null) {
                     finalValEntry.Modifiable = false;
                 }
 
+                // Generate the starting label
+                __analyzer.genOut(start + ":");
+
                 __analyzer.genPushVar(controlVar);
+                __analyzer.genPushVar(finalVal);
 
                 // Generate either CMPGES or CMPLES depending on what was chosen
                 // (either to or downto).
@@ -1010,6 +1017,8 @@ public class Parser {
                     finalValEntry.Modifiable = true;
                 }
                 __analyzer.genOut(end + ":");
+                __symbolTableStack.Peek().RemoveEntry(finalValEntry);
+                __analyzer.genSymSize(-1);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FOR});
