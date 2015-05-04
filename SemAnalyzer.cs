@@ -431,9 +431,9 @@ public class SemAnalyzer{
     public void genRead(String identifier) {
         SymbolTable top = SymbolTableStack.Peek();
         Entry idEntry = top.GetEntry(identifier);
-        if(idEntry.Kind != KINDS.VAR) {
+        if(idEntry.Kind != KINDS.VAR && idEntry.Kind != KINDS.PARAMETER) {
             throw new Exception("Tried to write to a non-variable");
-        } else{
+        } else {
             String outputString = "RD";
             switch(idEntry.Type) {
                 case TYPES.INTEGER:
@@ -447,6 +447,9 @@ public class SemAnalyzer{
                     break;
                 default:
                     throw new Exception("Tried to write to an invalid type");
+            }
+            if(idEntry.VarParameter){
+                outputString += " @";
             }
             output(outputString + idEntry.Offset + "(D" + top.NestingLevel + ")");
         }
