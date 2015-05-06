@@ -75,28 +75,31 @@ Compilers 2015
 <article id="mainContent">
 <!-- InstanceBeginEditable name="Main" -->
 <h1>Design Tradeoffs</h1>
-THIS IS AN EXAMPLE. LIST YOUR OWN DESIGN TRADEOFF. THE RESERVED WORD LOOKUP TABLE IS A GOOD ONE, BUT SO IS THE SYMBOL TABLE. REMOVE THIS LINE.
 
-<h2>Data Structure Tradeoffs</h2>
-
-<h3>Resolution of Keywords</h3>
+<h3>Error Handling</h3>
 <p>
-The &micro;-pascal language has 36 reserved words. 
-We chose to use an array to store these words and simply do a linear search of each token scanned to determine whether or not it is a reserved word. 
-While this is not the most efficient method of searching, it is easy to program, and with only 36 elements in the list, is certainly fast enough. 
-A hash function makes little sense on a data set as small as this because calculating the hash would be expensive as performing a linear search. 
-Another alternative would be to implement a binary tree to reduce the search time to O(log(n)). 
-Again, because the data structure is more complicated than a simple array, the actual time savings would be insignificant to the overall runtime of the program.
+  Initially, we were planning on implementing error recovery such that if there were scan errors
+  we would skip the lexeme and attempt to continue to scan for tokens and list out all scan errors
+  found. The issue arose that it became difficult to know when to stop scanning and attempt scan
+  recovery which would actually lead errors to be more difficult to read or lead to more errors than
+  there actually were without implementing a comlex error handling strategy. Since the purpose of
+  the error handling system was to handle errors effectively and with precision, the decision was
+  made by the team to stop compiling and output errors the first time we see one. While this didn't
+  allow for the programmer to get a full list of errors, it did allow for each error to be much
+  more specific and made the process of debugging simpler for the programmer utilizing our compiler.
 </p>
 
-<h3>Symbol Table Design</h3>
+<h3>Test Suite</h3>
 <p>
-Our implementation of the symbol table as a singularly linked list forced our lookup of elements in the table to be O(n). 
-Of course faster search algorithms exist. 
-The symbol table would have to have an additional field representing the nesting level and be a simple list to use a hash table or other data structure that allows faster lookup time. 
-However, this adds some complexity to the search to ensure the variable currently in scope is the variable being referenced. 
-The linked list symbol table with a recursive linear search solves this problem. 
-The actual time difference of faster search algorithms was not sufficient to justify the ease of not only writing the code, but also elegantly solve the problem of variable scope.
+  Another design tradeoff that was made was our test suite. This was meant to be able to be run by
+  us via a "--test" flag in our compiler in order to run unit tests instead of compiling. The main
+  tradeoff here was time. In the beginning we implemented a set of thorough unit tests for the
+  scanner that tested every FSA in various combinations that we believed led to a very full coverage
+  of the correctness of our scanner. The same idea was to be implemented for the parser, but due to
+  the time constraints of this project, it became necessary to halt further work on the unit test
+  suite in favor of actually completing the compiler. We did end up having to fix several parser
+  bugs that arose later which may have been found sooner had we incorporated the parser test suite
+  as planned.
 </p>
 <!-- InstanceEndEditable -->
 
