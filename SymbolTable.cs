@@ -34,6 +34,11 @@ public class SymbolTable {
 
     public void AddEntry(Entry entry){
         if(entry != null){
+            foreach(Entry entries in Entries){
+                if(entries.Lexeme == entry.Lexeme){
+                    throw new Exception("Can't have two entries of the same name");
+                }
+            }
             if(entry.Kind == KINDS.VAR || entry.Kind == KINDS.PARAMETER){
                 entry.Offset = this.Size + 1;
                 Entries.Add(entry);
@@ -45,6 +50,11 @@ public class SymbolTable {
     }
 
     public void AddEntry(String lexeme, TYPES type, KINDS kind, int size, List<Parameter> paras) {
+        foreach(Entry entries in Entries){
+                if(entries.Lexeme == lexeme){
+                    throw new Exception("Can't have two entries of the same name");
+                }
+            }
         if(kind == KINDS.VAR || kind == KINDS.PARAMETER){
             Entries.Add(new Entry(lexeme, type, kind, size, this.Size + 1, paras));
             this.Size += size;
@@ -54,6 +64,11 @@ public class SymbolTable {
     }
 
     public void AddEntry(String lexeme, string label, TYPES type, KINDS kind, int size, List<Parameter> paras) {
+        foreach(Entry entries in Entries){
+            if(entries.Lexeme == lexeme){
+                throw new Exception("Can't have two entries of the same name");
+            }
+        }
         if(kind == KINDS.VAR || kind == KINDS.PARAMETER){
             Entries.Add(new Entry(lexeme, label, type, kind, size, this.Size + 1, paras));
             this.Size += size;
