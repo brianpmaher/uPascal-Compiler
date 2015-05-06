@@ -29,20 +29,18 @@ public partial class Scanner {
     // Initializes the scanner and checks for file format
     public List<Token> initializeScanner(string fileName) {
         try {
-            if(!fileName.EndsWith(".mp")) {
+            if(!fileName.EndsWith(".mp") && !fileName.EndsWith(".up")) {
                 // File format exception
                 throw new Exception(Constants.ERROR_FILE_FORMAT);
             } else {
                 // Grab all bytes from the file and store them in the __bytes character array
                 StreamReader reader = new StreamReader(Path.GetFullPath(fileName));
                 string temp = reader.ReadToEnd();
+                temp += '\n';
                 __bytes = temp.ToCharArray();
 
                 // Caching length to save memory
                 int length = __bytes.Length;
-                if(__bytes[length - 1] != '\n'){
-                    throw new Exception(Constants.ERROR_NO_NEWLINE);
-                }
 
                 // String of whitespace characters
                 string ws = Constants.WHITESPACE;
@@ -178,9 +176,9 @@ public partial class Scanner {
                 __curByte--;
                 String lexeme_lower = lexeme.ToLower(); // Cached for ease of use
                 if (Constants.RESERVE_WORDS.ContainsKey(lexeme_lower)) {
-                    return new Token (lexeme, Constants.RESERVE_WORDS[lexeme_lower], column, __line);
+                    return new Token (lexeme_lower, Constants.RESERVE_WORDS[lexeme_lower], column, __line);
                 } else {
-                    return new Token (lexeme, TOKENS.IDENTIFIER, column, __line);
+                    return new Token (lexeme_lower, TOKENS.IDENTIFIER, column, __line);
                 }
             }
     }

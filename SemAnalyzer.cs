@@ -23,6 +23,56 @@ public class SemAnalyzer{
         }
     }
 
+    public void genVarParameter(int offset, int nestingLevel, bool treatAsValue){
+        if(treatAsValue){
+            output(
+                "PUSH " + offset + "(D" + nestingLevel +")"
+            );
+        } else {
+            output(
+                "PUSH D" + nestingLevel,
+                "PUSH #" + offset,
+                "ADDS");
+        }
+    }
+
+    public void genPopCurrentNestingLevel(){
+        SymbolTable top = SymbolTableStack.Peek();
+        output("POP D" + top.NestingLevel);
+    }
+
+    public void genPopNestingLevel(int size){
+        output("POP D" + size);
+    }
+
+    public void genPopFinalValue(){
+        SymbolTable top = SymbolTableStack.Peek();
+        output("POP " + top.Size + "(D" + top.NestingLevel + ")");
+    }
+
+    public void genPushCurrentNestingLevel(){
+        SymbolTable top = SymbolTableStack.Peek();
+        output("PUSH D" + top.NestingLevel);
+    }
+
+    public void genPushNestingLevel(int size){
+        output("PUSH D" + size);
+    }
+
+    public void genPointer(int size, string register){
+        output("SUB SP #" + size + " " + register);
+    }
+
+    public void genPointer(string register){
+        SymbolTable top = SymbolTableStack.Peek();
+        int size = top.Size + 1;
+        output("SUB SP #" + size + " " + register);
+    }
+
+    public void genCall(string label) {
+        output("CALL " + label);
+    }
+
     public void genOut(string outputStr) {
         output(outputStr);
     }
@@ -42,20 +92,56 @@ public class SemAnalyzer{
         output("ADD SP #" + top.Size + " SP");
     }
 
+    public void genSymSize(int size) {
+        output("ADD SP #" + size + " SP");
+    }
+
     //Pops the table off the stack
     public void genEnd() {
         SymbolTable top = SymbolTableStack.Peek();
+        string endInst;
+        if(top.NestingLevel == 0){
+            endInst = "HLT";
+        } else {
+            endInst = "RET";
+        }
         output(
             "SUB SP #" + top.Size + " SP",
             "POP D" + top.NestingLevel,
-            "HLT"
+            endInst
+        );
+    }
+
+    public void genEnd(int size){
+        SymbolTable top = SymbolTableStack.Peek();
+        string endInst;
+        if(top.NestingLevel == 0){
+            endInst = "HLT";
+        } else {
+            endInst = "RET";
+        }
+        output(
+            "SUB SP #" + size + " SP",
+            endInst
+        );
+    }
+
+    public void genCleanup(int size){
+        int depth = SymbolTableStack.Peek().NestingLevel;
+        output(
+            "SUB SP #" + size + " SP"
         );
     }
 
     public void genPushVar(SemRecord toPush) {
         SymbolTable top = SymbolTableStack.Peek();
         Entry idEntry = top.GetEntry(toPush.Lexeme);
-        output("PUSH " + idEntry.Offset + "(D" + top.NestingLevel + ")");
+        int offset = idEntry.Offset;
+        if(idEntry.VarParameter){
+            output("PUSH @" + offset + "(D" + top.NestingLevel + ")");
+        } else {
+            output("PUSH " + offset + "(D" + top.NestingLevel + ")");
+        }
         topStackType = toPush.Type;
     }
 
@@ -350,9 +436,9 @@ public class SemAnalyzer{
     public void genRead(String identifier) {
         SymbolTable top = SymbolTableStack.Peek();
         Entry idEntry = top.GetEntry(identifier);
-        if(idEntry.Kind != KINDS.VAR) {
+        if(idEntry.Kind != KINDS.VAR && idEntry.Kind != KINDS.PARAMETER) {
             throw new Exception("Tried to write to a non-variable");
-        } else{
+        } else {
             String outputString = "RD";
             switch(idEntry.Type) {
                 case TYPES.INTEGER:
@@ -367,6 +453,9 @@ public class SemAnalyzer{
                 default:
                     throw new Exception("Tried to write to an invalid type");
             }
+            if(idEntry.VarParameter){
+                outputString += " @";
+            }
             output(outputString + idEntry.Offset + "(D" + top.NestingLevel + ")");
         }
     }
@@ -379,6 +468,7 @@ public class SemAnalyzer{
     }
 
     public void genAssign(SemRecord assignee, SemRecord expression) {
+        SymbolTable top = SymbolTableStack.Peek();
         if(SymbolTableStack.Peek().GetEntry(assignee.Lexeme).Modifiable) {
             if(assignee.Type == expression.Type) {} //Do nothing
             else if(assignee.Type == TYPES.INTEGER && expression.Type == TYPES.FLOAT) {
@@ -389,7 +479,15 @@ public class SemAnalyzer{
                 throw new Exception("Incompatible types found: " + assignee.Type + " and " + expression.Type);
             }
             Entry assigneeSymRec = SymbolTableStack.Peek().GetEntry(assignee.Lexeme);
-            output("POP " + assigneeSymRec.Offset + "(D" + SymbolTableStack.Peek().NestingLevel + ")");
+            if(assigneeSymRec.VarParameter){
+                output("POP @" + assigneeSymRec.Offset + "(" + "D" + top.NestingLevel + ")");
+            } else if(top.Name == assignee.Lexeme) {
+                output("POP -1(D" + top.NestingLevel + ")");
+            }
+            else {
+                output("POP " + assigneeSymRec.Offset + "(D" + top.GetNestingLevel(assignee.Lexeme) + ")");
+            }
+
         } else {
             throw new Exception("Can't modify a control variable");
         }

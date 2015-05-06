@@ -1,0 +1,1851 @@
+TOKEN           LINE  COLUMN	LEXEME
+PROGRAM            5       1	program
+IDENTIFIER         5       9	lab1
+SCOLON             5      13	;
+VAR                6       5	var
+IDENTIFIER         6      10	otherthing
+COMMA              6      20	,
+IDENTIFIER         6      22	choice
+COLON              6      28	:
+INTEGER            6      30	integer
+SCOLON             6      37	;
+IDENTIFIER         7       1	floatmathtest
+COLON              7      14	:
+FLOAT              7      16	float
+SCOLON             7      21	;
+IDENTIFIER         8       1	booleanvalue
+COLON              8      13	:
+BOOLEAN            8      15	boolean
+SCOLON             8      22	;
+IDENTIFIER         9       1	float_mathtest
+COLON              9      15	:
+STRING             9      17	string
+SCOLON             9      23	;
+IDENTIFIER        10       1	bob
+COMMA             10       4	,
+IDENTIFIER        10       6	fred
+COLON             10      10	:
+BOOLEAN           10      12	boolean
+SCOLON            10      19	;
+FUNCTION          12       1	function
+IDENTIFIER        12      10	factorial
+LPAREN            12      19	(
+IDENTIFIER        12      21	b
+COLON             12      22	:
+INTEGER           12      24	integer
+RPAREN            12      31	)
+COLON             12      32	:
+INTEGER           12      33	integer
+SCOLON            12      40	;
+VAR               13       1	var
+IDENTIFIER        13       5	x
+COLON             13       6	:
+INTEGER           13       8	integer
+SCOLON            13      15	;
+BEGIN             14       1	begin
+IF                15       1	if
+IDENTIFIER        15       4	b
+EQUAL             15       6	=
+INTEGER_LIT       15       8	0
+THEN              15      10	then
+IDENTIFIER        16       1	factorial
+ASSIGN            16      11	:=
+INTEGER_LIT       16      14	1
+ELSE              17       1	else
+IDENTIFIER        18       1	factorial
+ASSIGN            18      11	:=
+IDENTIFIER        18      14	b
+TIMES             18      16	*
+IDENTIFIER        18      18	factorial
+LPAREN            18      27	(
+IDENTIFIER        18      28	b
+MINUS             18      29	-
+INTEGER_LIT       18      30	1
+RPAREN            18      31	)
+SCOLON            18      32	;
+END               19       1	end
+SCOLON            19       4	;
+PROCEDURE         21       1	procedure
+IDENTIFIER        21      11	listnum
+LPAREN            21      18	(
+IDENTIFIER        21      20	start
+COLON             21      25	:
+INTEGER           21      27	integer
+RPAREN            21      34	)
+SCOLON            21      35	;
+VAR               22       1	var
+IDENTIFIER        22       5	finish
+COLON             22      11	:
+INTEGER           22      13	integer
+SCOLON            22      20	;
+BEGIN             23       1	begin
+IDENTIFIER        24       1	finish
+ASSIGN            24       8	:=
+MINUS             24      11	-
+INTEGER_LIT       24      12	50
+SCOLON            24      14	;
+WHILE             25       1	while
+IDENTIFIER        25       7	start
+GTHAN             25      13	>
+IDENTIFIER        25      15	finish
+DO                25      22	do
+BEGIN             26       1	begin
+WRITE             27       1	write
+LPAREN            27       6	(
+IDENTIFIER        27       7	start
+COMMA             27      12	,
+STRING_LIT        27      14	" "
+RPAREN            27      17	)
+SCOLON            27      18	;
+IDENTIFIER        28       1	start
+ASSIGN            28       7	:=
+IDENTIFIER        28      10	start
+MINUS             28      16	-
+INTEGER_LIT       28      18	1
+SCOLON            28      19	;
+END               29       1	end
+SCOLON            29       4	;
+WRITELN           30       1	writeln
+LPAREN            30       8	(
+STRING_LIT        30       9	""
+RPAREN            30      11	)
+SCOLON            30      12	;
+END               31       1	end
+SCOLON            31       4	;
+PROCEDURE         36       1	procedure
+IDENTIFIER        36      11	scopetest
+SCOLON            36      20	;
+VAR               37       1	var
+IDENTIFIER        37       5	otherthing
+COLON             37      15	:
+FLOAT             37      17	float
+SCOLON            37      22	;
+BEGIN             38       1	begin
+IDENTIFIER        39       1	otherthing
+ASSIGN            39      12	:=
+INTEGER_LIT       39      15	1
+TIMES             39      17	*
+FLOAT_LIT         39      22	2.0
+FLOAT_DIVIDE      39      23	/
+INTEGER_LIT       39      25	4
+PLUS              39      27	+
+INTEGER_LIT       39      29	2
+SCOLON            39      30	;
+WRITELN           40       1	writeln
+LPAREN            40       8	(
+STRING_LIT        40       9	"From procedure otherthing is: "
+COMMA             40      41	,
+IDENTIFIER        40      43	otherthing
+RPAREN            40      53	)
+SCOLON            40      54	;
+END               41       1	end
+SCOLON            41       4	;
+FUNCTION          43       1	function
+IDENTIFIER        43      10	retstring
+LPAREN            43      19	(
+IDENTIFIER        43      21	x
+COMMA             43      22	,
+IDENTIFIER        43      23	y
+COLON             43      24	:
+FLOAT             43      25	float
+SCOLON            43      30	;
+IDENTIFIER        43      32	b
+COLON             43      33	:
+STRING            43      34	string
+RPAREN            43      40	)
+COLON             43      41	:
+STRING            43      42	string
+SCOLON            43      48	;
+VAR               44       1	var
+IDENTIFIER        44       5	intconverter
+COLON             44      17	:
+INTEGER           44      19	integer
+SCOLON            44      26	;
+PROCEDURE         45       1	procedure
+IDENTIFIER        45      11	imbedded
+LPAREN            45      19	(
+IDENTIFIER        45      20	b
+COLON             45      21	:
+INTEGER           45      22	integer
+RPAREN            45      29	)
+SCOLON            45      30	;
+PROCEDURE         47       1	procedure
+IDENTIFIER        47      11	imbeddedagain
+LPAREN            47      24	(
+IDENTIFIER        47      25	b
+COLON             47      26	:
+INTEGER           47      27	integer
+RPAREN            47      34	)
+SCOLON            47      35	;
+PROCEDURE         49       1	procedure
+IDENTIFIER        49      11	somemoreimbedding
+LPAREN            49      28	(
+IDENTIFIER        49      29	b
+COLON             49      30	:
+INTEGER           49      31	integer
+RPAREN            49      38	)
+SCOLON            49      39	;
+BEGIN             51       1	begin
+WRITELN           52       1	writeln
+LPAREN            52       8	(
+STRING_LIT        52       9	"I am super imbedded and awesome. B is "
+COMMA             52      49	,
+IDENTIFIER        52      51	b
+RPAREN            52      52	)
+SCOLON            52      53	;
+END               53       1	end
+SCOLON            53       4	;
+BEGIN             55       1	begin
+IDENTIFIER        56       1	somemoreimbedding
+LPAREN            56      18	(
+IDENTIFIER        56      19	b
+RPAREN            56      20	)
+SCOLON            56      21	;
+END               57       1	end
+SCOLON            57       4	;
+BEGIN             58       1	begin
+IDENTIFIER        59       1	imbeddedagain
+LPAREN            59      14	(
+IDENTIFIER        59      15	b
+RPAREN            59      16	)
+SCOLON            59      17	;
+END               60       1	end
+SCOLON            60       4	;
+BEGIN             61       1	begin
+WRITELN           62       1	writeln
+LPAREN            62       8	(
+STRING_LIT        62       9	"trying the whole imbedded thing"
+COMMA             62      42	,
+IDENTIFIER        62      44	b
+RPAREN            62      45	)
+SCOLON            62      46	;
+IDENTIFIER        63       1	intconverter
+ASSIGN            63      14	:=
+IDENTIFIER        63      17	x
+PLUS              63      19	+
+IDENTIFIER        63      21	y
+SCOLON            63      22	;
+IDENTIFIER        64       1	imbedded
+LPAREN            64       9	(
+IDENTIFIER        64      10	intconverter
+RPAREN            64      22	)
+SCOLON            64      23	;
+IDENTIFIER        66       1	retstring
+ASSIGN            66      11	:=
+STRING_LIT        66      14	"This string was returned as a value"
+SCOLON            66      51	;
+END               67       1	end
+SCOLON            67       4	;
+PROCEDURE         69       1	procedure
+IDENTIFIER        69      11	refcheck
+LPAREN            69      19	(
+VAR               69      20	var
+IDENTIFIER        69      24	x
+COLON             69      25	:
+INTEGER           69      27	integer
+RPAREN            69      34	)
+SCOLON            69      35	;
+BEGIN             71       1	begin
+IDENTIFIER        72       1	x
+ASSIGN            72       3	:=
+INTEGER_LIT       72       6	5
+PLUS              72       8	+
+IDENTIFIER        72      10	x
+SCOLON            72      11	;
+WRITELN           73       1	writeln
+LPAREN            73       8	(
+STRING_LIT        73       9	"Variable x should be changed to "
+COMMA             73      43	,
+IDENTIFIER        73      45	x
+RPAREN            73      46	)
+SCOLON            73      47	;
+END               74       1	end
+SCOLON            74       4	;
+PROCEDURE         76       1	procedure
+IDENTIFIER        76      11	refcheck2
+LPAREN            76      20	(
+IDENTIFIER        76      21	z
+COLON             76      22	:
+INTEGER           76      24	integer
+SCOLON            76      31	;
+VAR               76      33	var
+IDENTIFIER        76      37	x
+COMMA             76      38	,
+IDENTIFIER        76      40	y
+COLON             76      41	:
+FLOAT             76      43	float
+RPAREN            76      48	)
+SCOLON            76      49	;
+PROCEDURE         78       1	procedure
+IDENTIFIER        78      11	refcheck3
+LPAREN            78      20	(
+VAR               78      21	var
+IDENTIFIER        78      25	chicken
+COLON             78      32	:
+FLOAT             78      34	float
+RPAREN            78      39	)
+SCOLON            78      40	;
+BEGIN             80       1	begin
+WRITELN           81       1	writeln
+LPAREN            81       8	(
+STRING_LIT        81       9	"In refCheck 3 value is: "
+COMMA             81      35	,
+IDENTIFIER        81      37	chicken
+RPAREN            81      44	)
+SCOLON            81      45	;
+WRITELN           82       1	writeln
+LPAREN            82       8	(
+STRING_LIT        82       9	""
+RPAREN            82      11	)
+SCOLON            82      12	;
+END               83       1	end
+SCOLON            83       4	;
+BEGIN             85       1	begin
+IDENTIFIER        86       1	x
+ASSIGN            86       3	:=
+IDENTIFIER        86       6	x
+PLUS              86       8	+
+IDENTIFIER        86      10	y
+SCOLON            86      11	;
+WRITELN           87       1	writeln
+LPAREN            87       8	(
+STRING_LIT        87       9	"X in refcheck2 is "
+COMMA             87      29	,
+IDENTIFIER        87      31	x
+RPAREN            87      32	)
+SCOLON            87      33	;
+IDENTIFIER        88       1	refcheck3
+LPAREN            88      10	(
+IDENTIFIER        88      11	y
+RPAREN            88      12	)
+SCOLON            88      13	;
+END               89       1	end
+SCOLON            89       4	;
+BEGIN             91       3	begin
+WRITELN           92       1	writeln
+LPAREN            92       8	(
+STRING_LIT        92       9	"Welcome to my program (^_^ )"
+RPAREN            92      39	)
+SCOLON            92      40	;
+WRITELN           93       1	writeln
+LPAREN            93       8	(
+STRING_LIT        93       9	"Please enter an integer to find the factorial of:"
+RPAREN            93      60	)
+SCOLON            93      61	;
+READ              94       1	read
+LPAREN            94       5	(
+IDENTIFIER        94       6	choice
+RPAREN            94      12	)
+SCOLON            94      13	;
+IF                95       1	if
+NOT               95       4	not
+LPAREN            95       7	(
+FALSE             95       8	false
+RPAREN            95      13	)
+THEN              95      15	then
+WRITELN           96       1	writeln
+LPAREN            96       8	(
+IDENTIFIER        96       9	factorial
+LPAREN            96      18	(
+IDENTIFIER        96      19	choice
+RPAREN            96      25	)
+RPAREN            96      26	)
+ELSE              97       1	else
+WRITELN           98       1	writeln
+LPAREN            98       8	(
+STRING_LIT        98       9	"-1"
+RPAREN            98      13	)
+SCOLON            98      14	;
+IDENTIFIER       100       1	listnum
+LPAREN           100       8	(
+INTEGER_LIT      100       9	100
+DIV              100      13	div
+INTEGER_LIT      100      17	2
+RPAREN           100      18	)
+SCOLON           100      19	;
+IDENTIFIER       101       1	listnum
+LPAREN           101       8	(
+IDENTIFIER       101       9	factorial
+LPAREN           101      18	(
+INTEGER_LIT      101      19	9
+DIV              101      21	div
+INTEGER_LIT      101      25	3
+RPAREN           101      26	)
+RPAREN           101      27	)
+SCOLON           101      28	;
+IDENTIFIER       103       1	otherthing
+ASSIGN           103      12	:=
+INTEGER_LIT      103      15	5
+MOD              103      17	mod
+INTEGER_LIT      103      21	2
+SCOLON           103      22	;
+WRITELN          104       1	writeln
+LPAREN           104       8	(
+MINUS            104       9	-
+IDENTIFIER       104      10	otherthing
+RPAREN           104      20	)
+SCOLON           104      21	;
+IDENTIFIER       107       1	bob
+ASSIGN           107       5	:=
+TRUE             107       8	true
+SCOLON           107      12	;
+IDENTIFIER       108       1	fred
+ASSIGN           108       6	:=
+FALSE            108       9	false
+SCOLON           108      14	;
+WRITELN          111       1	writeln
+LPAREN           111       8	(
+IDENTIFIER       111       9	bob
+COMMA            111      12	,
+IDENTIFIER       111      13	fred
+RPAREN           111      17	)
+SCOLON           111      18	;
+IDENTIFIER       113       1	fred
+ASSIGN           113       6	:=
+IDENTIFIER       113       9	fred
+AND              113      14	and
+IDENTIFIER       113      18	bob
+SCOLON           113      21	;
+WRITELN          114       1	writeln
+LPAREN           114       8	(
+IDENTIFIER       114       9	fred
+RPAREN           114      13	)
+SCOLON           114      14	;
+IDENTIFIER       115       1	fred
+ASSIGN           115       6	:=
+IDENTIFIER       115       9	fred
+OR               115      14	or
+IDENTIFIER       115      17	bob
+SCOLON           115      20	;
+WRITELN          116       1	writeln
+LPAREN           116       8	(
+IDENTIFIER       116       9	fred
+RPAREN           116      13	)
+SCOLON           116      14	;
+WRITELN          118       1	writeln
+LPAREN           118       8	(
+MINUS            118       9	-
+LPAREN           118      10	(
+INTEGER_LIT      118      11	1
+PLUS             118      13	+
+INTEGER_LIT      118      15	2
+RPAREN           118      16	)
+RPAREN           118      17	)
+SCOLON           118      18	;
+IDENTIFIER       120       1	otherthing
+ASSIGN           120      12	:=
+INTEGER_LIT      120      15	15
+TIMES            120      18	*
+INTEGER_LIT      120      20	15
+DIV              120      23	div
+INTEGER_LIT      120      27	5
+PLUS             120      29	+
+INTEGER_LIT      120      31	1
+MINUS            120      33	-
+INTEGER_LIT      120      35	2
+TIMES            120      37	*
+INTEGER_LIT      120      39	2
+SCOLON           120      40	;
+WRITELN          121       1	writeln
+LPAREN           121       8	(
+STRING_LIT       121       9	"From *main* otherthing is: "
+COMMA            121      38	,
+IDENTIFIER       121      40	otherthing
+RPAREN           121      50	)
+SCOLON           121      51	;
+IDENTIFIER       122       1	scopetest
+SCOLON           122      10	;
+WRITELN          123       1	writeln
+LPAREN           123       8	(
+STRING_LIT       123       9	"From *main* otherthing still is: "
+COMMA            123      44	,
+IDENTIFIER       123      46	otherthing
+RPAREN           123      56	)
+SCOLON           123      57	;
+IDENTIFIER       124       1	floatmathtest
+ASSIGN           124      15	:=
+LPAREN           124      18	(
+FLOAT_LIT        124      22	7.0
+TIMES            124      23	*
+FLOAT_LIT        124      27	2.1
+MINUS            124      28	-
+FLOAT_LIT        124      33	0.6
+FLOAT_DIVIDE     124      34	/
+INTEGER_LIT      124      36	13
+RPAREN           124      38	)
+TIMES            124      40	*
+LPAREN           124      42	(
+IDENTIFIER       124      43	factorial
+LPAREN           124      52	(
+INTEGER_LIT      124      53	13
+MINUS            124      56	-
+INTEGER_LIT      124      58	11
+RPAREN           124      60	)
+RPAREN           124      61	)
+SCOLON           124      62	;
+WRITELN          125       1	writeln
+LPAREN           125       8	(
+IDENTIFIER       125       9	floatmathtest
+RPAREN           125      22	)
+SCOLON           125      23	;
+WRITELN          130       1	writeln
+LPAREN           130       8	(
+IDENTIFIER       130       9	retstring
+LPAREN           130      18	(
+FLOAT_LIT        130      24	0.001
+COMMA            130      24	,
+FLOAT_LIT        130      30	1.23
+COMMA            130      30	,
+STRING_LIT       130      32	"String as input argument"
+RPAREN           130      58	)
+RPAREN           130      59	)
+SCOLON           130      60	;
+WRITELN          132       1	writeln
+LPAREN           132       8	(
+STRING_LIT       132       9	"X starts at "
+COMMA            132      23	,
+IDENTIFIER       132      25	otherthing
+RPAREN           132      35	)
+SCOLON           132      36	;
+IDENTIFIER       133       1	refcheck
+LPAREN           133       9	(
+IDENTIFIER       133      10	otherthing
+RPAREN           133      20	)
+SCOLON           133      21	;
+WRITELN          134       1	writeln
+LPAREN           134       8	(
+STRING_LIT       134       9	"X is now "
+COMMA            134      20	,
+IDENTIFIER       134      22	otherthing
+COMMA            134      32	,
+STRING_LIT       134      34	" in main"
+RPAREN           134      44	)
+SCOLON           134      45	;
+WRITELN          136       1	writeln
+LPAREN           136       8	(
+STRING_LIT       136       9	"floatMathTest start: "
+COMMA            136      32	,
+IDENTIFIER       136      34	floatmathtest
+RPAREN           136      47	)
+SCOLON           136      48	;
+IDENTIFIER       138       1	refcheck2
+LPAREN           138      10	(
+INTEGER_LIT      138      11	10
+DIV              138      14	div
+INTEGER_LIT      138      18	3
+COMMA            138      19	,
+IDENTIFIER       138      21	floatmathtest
+COMMA            138      34	,
+IDENTIFIER       138      36	floatmathtest
+RPAREN           138      49	)
+SCOLON           138      50	;
+WRITELN          140       1	writeln
+LPAREN           140       8	(
+STRING_LIT       140       9	"floatMathTest is now "
+COMMA            140      32	,
+IDENTIFIER       140      34	floatmathtest
+COMMA            140      47	,
+STRING_LIT       140      49	" in main"
+RPAREN           140      59	)
+SCOLON           140      60	;
+IDENTIFIER       142       1	otherthing
+ASSIGN           142      12	:=
+INTEGER_LIT      142      15	5
+SCOLON           142      16	;
+REPEAT           143       1	repeat
+BEGIN            144       1	begin
+WRITE            145       1	write
+LPAREN           145       6	(
+IDENTIFIER       145       7	otherthing
+COMMA            145      17	,
+STRING_LIT       145      19	" "
+RPAREN           145      22	)
+SCOLON           145      23	;
+IDENTIFIER       146       1	otherthing
+ASSIGN           146      12	:=
+IDENTIFIER       146      15	otherthing
+MINUS            146      26	-
+INTEGER_LIT      146      28	3
+SCOLON           146      29	;
+END              147       1	end
+SCOLON           147       4	;
+UNTIL            148       1	until
+LPAREN           148       7	(
+IDENTIFIER       148       8	otherthing
+LTHAN            148      19	<
+INTEGER_LIT      148      21	0
+RPAREN           148      22	)
+SCOLON           148      23	;
+IDENTIFIER       152       1	booleanvalue
+ASSIGN           152      14	:=
+TRUE             152      17	true
+SCOLON           152      21	;
+WRITELN          154       1	writeln
+LPAREN           154       8	(
+INTEGER_LIT      154       9	5
+PLUS             154      11	+
+FLOAT_LIT        154      16	6.5
+RPAREN           154      16	)
+SCOLON           154      17	;
+WRITELN          156       1	writeln
+LPAREN           156       8	(
+STRING_LIT       156       9	"Thank you for using this!"
+RPAREN           156      36	)
+SCOLON           156      37	;
+END              157       3	end
+PERIOD           157       6	.
+EOF              158       1	EOF
+1 2 3 
+Matching program
+107 
+Matching lab1
+Program name is: lab1
+
+Matching ;
+4 5 
+Matching var
+9 113 
+Matching otherthing
+114 
+Matching ,
+
+Matching choice
+115 
+Matching :
+10 
+Matching integer
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: otherthing, Type: INTEGER
+-----------------------END---------------------------
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: otherthing, Type: INTEGER
+Entry ---> Lexeme: choice, Type: INTEGER
+-----------------------END---------------------------
+
+Matching ;
+7 9 113 
+Matching floatmathtest
+115 
+Matching :
+11 
+Matching float
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: otherthing, Type: INTEGER
+Entry ---> Lexeme: choice, Type: INTEGER
+Entry ---> Lexeme: floatmathtest, Type: FLOAT
+-----------------------END---------------------------
+
+Matching ;
+7 9 113 
+Matching booleanvalue
+115 
+Matching :
+13 
+Matching boolean
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: otherthing, Type: INTEGER
+Entry ---> Lexeme: choice, Type: INTEGER
+Entry ---> Lexeme: floatmathtest, Type: FLOAT
+Entry ---> Lexeme: booleanvalue, Type: BOOLEAN
+-----------------------END---------------------------
+
+Matching ;
+7 9 113 
+Matching float_mathtest
+115 
+Matching :
+12 
+Matching string
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: otherthing, Type: INTEGER
+Entry ---> Lexeme: choice, Type: INTEGER
+Entry ---> Lexeme: floatmathtest, Type: FLOAT
+Entry ---> Lexeme: booleanvalue, Type: BOOLEAN
+Entry ---> Lexeme: float_mathtest, Type: STRING
+-----------------------END---------------------------
+
+Matching ;
+7 9 113 
+Matching bob
+114 
+Matching ,
+
+Matching fred
+115 
+Matching :
+13 
+Matching boolean
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: otherthing, Type: INTEGER
+Entry ---> Lexeme: choice, Type: INTEGER
+Entry ---> Lexeme: floatmathtest, Type: FLOAT
+Entry ---> Lexeme: booleanvalue, Type: BOOLEAN
+Entry ---> Lexeme: float_mathtest, Type: STRING
+Entry ---> Lexeme: bob, Type: BOOLEAN
+-----------------------END---------------------------
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: otherthing, Type: INTEGER
+Entry ---> Lexeme: choice, Type: INTEGER
+Entry ---> Lexeme: floatmathtest, Type: FLOAT
+Entry ---> Lexeme: booleanvalue, Type: BOOLEAN
+Entry ---> Lexeme: float_mathtest, Type: STRING
+Entry ---> Lexeme: bob, Type: BOOLEAN
+Entry ---> Lexeme: fred, Type: BOOLEAN
+-----------------------END---------------------------
+
+Matching ;
+8 15 18 20 
+Matching function
+110 
+Matching factorial
+21 
+Matching (
+25 27 113 
+Matching b
+115 
+Matching :
+10 
+Matching integer
+24 
+Matching )
+
+Matching :
+10 
+Matching integer
+
+Matching ;
+4 5 
+Matching var
+9 113 
+Matching x
+115 
+Matching :
+10 
+Matching integer
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: b, Type: INTEGER
+Entry ---> Lexeme: x, Type: INTEGER
+-----------------------END---------------------------
+
+Matching ;
+8 16 29 30 
+Matching begin
+31 39 56 
+Matching if
+111 73 82 87 91 116 108 
+Matching b
+93 84 74 76 
+Matching =
+82 87 91 99 
+Matching 0
+93 84 
+Matching then
+38 55 110 
+Matching factorial
+
+Matching :=
+73 82 87 91 99 
+Matching 1
+93 84 75 57 
+Matching else
+38 55 110 
+Matching factorial
+
+Matching :=
+73 82 87 91 116 108 
+Matching b
+92 94 
+Matching *
+106 110 
+Matching factorial
+68 
+Matching (
+112 73 82 87 91 116 108 
+Matching b
+93 83 89 
+Matching -
+91 99 
+Matching 1
+93 84 75 71 
+Matching )
+93 84 75 32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching ;
+14 17 19 
+Matching procedure
+109 
+Matching listnum
+21 
+Matching (
+25 27 113 
+Matching start
+115 
+Matching :
+10 
+Matching integer
+24 
+Matching )
+
+Matching ;
+4 5 
+Matching var
+9 113 
+Matching finish
+115 
+Matching :
+10 
+Matching integer
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: start, Type: INTEGER
+Entry ---> Lexeme: finish, Type: INTEGER
+-----------------------END---------------------------
+
+Matching ;
+8 16 29 30 
+Matching begin
+31 38 54 108 
+Matching finish
+
+Matching :=
+73 82 86 
+Matching -
+91 99 
+Matching 50
+93 84 75 32 
+Matching ;
+40 60 
+Matching while
+111 73 82 87 91 116 108 
+Matching start
+93 84 74 78 
+Matching >
+82 87 91 116 108 
+Matching finish
+93 84 
+Matching do
+35 30 
+Matching begin
+31 37 49 
+Matching write
+
+Matching (
+53 112 73 82 87 91 116 108 
+Matching start
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 101 
+Matching " "
+93 84 75 52 
+Matching )
+32 
+Matching ;
+38 54 108 
+Matching start
+
+Matching :=
+73 82 87 91 116 108 
+Matching start
+93 83 89 
+Matching -
+91 99 
+Matching 1
+93 84 75 32 
+Matching ;
+34 44 33 
+Matching end
+32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching ""
+93 84 75 52 
+Matching )
+32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching ;
+14 17 19 
+Matching procedure
+109 
+Matching scopetest
+22 
+Matching ;
+4 5 
+Matching var
+9 113 
+Matching otherthing
+115 
+Matching :
+11 
+Matching float
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: otherthing, Type: FLOAT
+-----------------------END---------------------------
+
+Matching ;
+8 16 29 30 
+Matching begin
+31 38 54 108 
+Matching otherthing
+
+Matching :=
+73 82 87 91 99 
+Matching 1
+92 94 
+Matching *
+100 
+Matching 2.0
+92 95 
+Matching /
+99 
+Matching 4
+93 83 88 
+Matching +
+91 99 
+Matching 2
+93 84 75 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "From procedure otherthing is: "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching otherthing
+93 84 75 52 
+Matching )
+32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching ;
+15 18 20 
+Matching function
+110 
+Matching retstring
+21 
+Matching (
+25 27 113 
+Matching x
+114 
+Matching ,
+
+Matching y
+115 
+Matching :
+11 
+Matching float
+23 
+Matching ;
+25 27 113 
+Matching b
+115 
+Matching :
+12 
+Matching string
+24 
+Matching )
+
+Matching :
+12 
+Matching string
+
+Matching ;
+4 5 
+Matching var
+9 113 
+Matching intconverter
+115 
+Matching :
+10 
+Matching integer
+--------------PRINTING SYMBOLTABLE-------------------
+Entry ---> Lexeme: x, Type: FLOAT
+Entry ---> Lexeme: y, Type: FLOAT
+Entry ---> Lexeme: b, Type: STRING
+Entry ---> Lexeme: intconverter, Type: INTEGER
+-----------------------END---------------------------
+
+Matching ;
+8 14 17 19 
+Matching procedure
+109 
+Matching imbedded
+21 
+Matching (
+25 27 113 
+Matching b
+115 
+Matching :
+10 
+Matching integer
+24 
+Matching )
+
+Matching ;
+4 6 14 17 19 
+Matching procedure
+109 
+Matching imbeddedagain
+21 
+Matching (
+25 27 113 
+Matching b
+115 
+Matching :
+10 
+Matching integer
+24 
+Matching )
+
+Matching ;
+4 6 14 17 19 
+Matching procedure
+109 
+Matching somemoreimbedding
+21 
+Matching (
+25 27 113 
+Matching b
+115 
+Matching :
+10 
+Matching integer
+24 
+Matching )
+
+Matching ;
+4 6 16 29 30 
+Matching begin
+31 37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "I am super imbedded and awesome. B is "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching b
+93 84 75 52 
+Matching )
+32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching ;
+16 29 30 
+Matching begin
+31 43 67 109 
+Matching somemoreimbedding
+68 
+Matching (
+112 73 82 87 91 116 108 
+Matching b
+93 84 75 71 
+Matching )
+32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching ;
+16 29 30 
+Matching begin
+31 43 67 109 
+Matching imbeddedagain
+68 
+Matching (
+112 73 82 87 91 116 108 
+Matching b
+93 84 75 71 
+Matching )
+32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching ;
+16 29 30 
+Matching begin
+31 37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "trying the whole imbedded thing"
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching b
+93 84 75 52 
+Matching )
+32 
+Matching ;
+38 54 108 
+Matching intconverter
+
+Matching :=
+73 82 87 91 116 108 
+Matching x
+93 83 88 
+Matching +
+91 116 108 
+Matching y
+93 84 75 32 
+Matching ;
+43 67 109 
+Matching imbedded
+68 
+Matching (
+112 73 82 87 91 116 108 
+Matching intconverter
+93 84 75 71 
+Matching )
+32 
+Matching ;
+38 55 110 
+Matching retstring
+
+Matching :=
+73 82 87 91 101 
+Matching "This string was returned as a value"
+93 84 75 32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching ;
+14 17 19 
+Matching procedure
+109 
+Matching refcheck
+21 
+Matching (
+26 28 
+Matching var
+113 
+Matching x
+115 
+Matching :
+10 
+Matching integer
+24 
+Matching )
+
+Matching ;
+4 6 16 29 30 
+Matching begin
+31 38 54 108 
+Matching x
+
+Matching :=
+73 82 87 91 99 
+Matching 5
+93 83 88 
+Matching +
+91 116 108 
+Matching x
+93 84 75 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "Variable x should be changed to "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching x
+93 84 75 52 
+Matching )
+32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching ;
+14 17 19 
+Matching procedure
+109 
+Matching refcheck2
+21 
+Matching (
+25 27 113 
+Matching z
+115 
+Matching :
+10 
+Matching integer
+23 
+Matching ;
+26 28 
+Matching var
+113 
+Matching x
+114 
+Matching ,
+
+Matching y
+115 
+Matching :
+11 
+Matching float
+24 
+Matching )
+
+Matching ;
+4 6 14 17 19 
+Matching procedure
+109 
+Matching refcheck3
+21 
+Matching (
+26 28 
+Matching var
+113 
+Matching chicken
+115 
+Matching :
+11 
+Matching float
+24 
+Matching )
+
+Matching ;
+4 6 16 29 30 
+Matching begin
+31 37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "In refCheck 3 value is: "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching chicken
+93 84 75 52 
+Matching )
+32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching ""
+93 84 75 52 
+Matching )
+32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching ;
+16 29 30 
+Matching begin
+31 38 54 108 
+Matching x
+
+Matching :=
+73 82 87 91 116 108 
+Matching x
+93 83 88 
+Matching +
+91 116 108 
+Matching y
+93 84 75 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "X in refcheck2 is "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching x
+93 84 75 52 
+Matching )
+32 
+Matching ;
+43 67 109 
+Matching refcheck3
+68 
+Matching (
+108 
+Matching y
+71 
+Matching )
+32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching ;
+16 29 30 
+Matching begin
+31 37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "Welcome to my program (^_^ )"
+93 84 75 52 
+Matching )
+32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "Please enter an integer to find the factorial of:"
+93 84 75 52 
+Matching )
+32 
+Matching ;
+36 45 
+Matching read
+
+Matching (
+48 108 
+Matching choice
+47 
+Matching )
+32 
+Matching ;
+39 56 
+Matching if
+111 73 82 87 91 104 
+Matching not
+105 
+Matching (
+73 82 87 91 103 
+Matching false
+93 84 75 
+Matching )
+93 84 75 
+Matching then
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 106 110 
+Matching factorial
+68 
+Matching (
+112 73 82 87 91 116 108 
+Matching choice
+93 84 75 71 
+Matching )
+93 84 75 52 
+Matching )
+57 
+Matching else
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "-1"
+93 84 75 52 
+Matching )
+32 
+Matching ;
+43 67 109 
+Matching listnum
+68 
+Matching (
+72 112 73 82 87 91 99 
+Matching 100
+92 96 
+Matching div
+99 
+Matching 2
+93 84 75 71 
+Matching )
+32 
+Matching ;
+43 67 109 
+Matching listnum
+68 
+Matching (
+112 73 82 87 91 106 110 
+Matching factorial
+68 
+Matching (
+72 112 73 82 87 91 99 
+Matching 9
+92 96 
+Matching div
+99 
+Matching 3
+93 84 75 71 
+Matching )
+93 84 75 71 
+Matching )
+32 
+Matching ;
+38 54 108 
+Matching otherthing
+
+Matching :=
+73 82 87 91 99 
+Matching 5
+92 97 
+Matching mod
+99 
+Matching 2
+93 84 75 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 86 
+Matching -
+91 116 108 
+Matching otherthing
+93 84 75 52 
+Matching )
+32 
+Matching ;
+38 54 108 
+Matching bob
+
+Matching :=
+73 82 87 91 102 
+Matching true
+93 84 75 32 
+Matching ;
+38 54 108 
+Matching fred
+
+Matching :=
+73 82 87 91 103 
+Matching false
+93 84 75 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 116 108 
+Matching bob
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching fred
+93 84 75 52 
+Matching )
+32 
+Matching ;
+38 54 108 
+Matching fred
+
+Matching :=
+73 82 87 91 116 108 
+Matching fred
+92 98 
+Matching and
+116 108 
+Matching bob
+93 84 75 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 116 108 
+Matching fred
+93 84 75 52 
+Matching )
+32 
+Matching ;
+38 54 108 
+Matching fred
+
+Matching :=
+73 82 87 91 116 108 
+Matching fred
+93 83 90 
+Matching or
+91 116 108 
+Matching bob
+93 84 75 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 116 108 
+Matching fred
+93 84 75 52 
+Matching )
+32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 86 
+Matching -
+91 105 
+Matching (
+73 82 87 91 99 
+Matching 1
+93 83 88 
+Matching +
+91 99 
+Matching 2
+93 84 75 
+Matching )
+93 84 75 52 
+Matching )
+32 
+Matching ;
+38 54 108 
+Matching otherthing
+
+Matching :=
+73 82 87 91 99 
+Matching 15
+92 94 
+Matching *
+99 
+Matching 15
+92 96 
+Matching div
+99 
+Matching 5
+93 83 88 
+Matching +
+91 99 
+Matching 1
+93 83 89 
+Matching -
+91 99 
+Matching 2
+92 94 
+Matching *
+99 
+Matching 2
+93 84 75 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "From *main* otherthing is: "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching otherthing
+93 84 75 52 
+Matching )
+32 
+Matching ;
+43 67 109 
+Matching scopetest
+69 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "From *main* otherthing still is: "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching otherthing
+93 84 75 52 
+Matching )
+32 
+Matching ;
+38 54 108 
+Matching floatmathtest
+
+Matching :=
+73 82 87 91 105 
+Matching (
+73 82 87 91 100 
+Matching 7.0
+92 94 
+Matching *
+100 
+Matching 2.1
+93 83 89 
+Matching -
+91 100 
+Matching 0.6
+92 95 
+Matching /
+99 
+Matching 13
+93 84 75 
+Matching )
+92 94 
+Matching *
+105 
+Matching (
+73 82 87 91 106 110 
+Matching factorial
+68 
+Matching (
+72 112 73 82 87 91 99 
+Matching 13
+93 83 89 
+Matching -
+91 99 
+Matching 11
+93 84 75 71 
+Matching )
+93 84 75 
+Matching )
+93 84 75 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 116 108 
+Matching floatmathtest
+93 84 75 52 
+Matching )
+32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 106 110 
+Matching retstring
+68 
+Matching (
+72 112 73 82 87 91 100 
+Matching 0.001
+93 84 75 70 
+Matching ,
+72 112 73 82 87 91 100 
+Matching 1.23
+93 84 75 70 
+Matching ,
+72 112 73 82 87 91 101 
+Matching "String as input argument"
+93 84 75 71 
+Matching )
+93 84 75 52 
+Matching )
+32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "X starts at "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching otherthing
+93 84 75 52 
+Matching )
+32 
+Matching ;
+43 67 109 
+Matching refcheck
+68 
+Matching (
+108 
+Matching otherthing
+71 
+Matching )
+32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "X is now "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching otherthing
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 101 
+Matching " in main"
+93 84 75 52 
+Matching )
+32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "floatMathTest start: "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching floatmathtest
+93 84 75 52 
+Matching )
+32 
+Matching ;
+43 67 109 
+Matching refcheck2
+68 
+Matching (
+72 112 73 82 87 91 99 
+Matching 10
+92 96 
+Matching div
+99 
+Matching 3
+93 84 75 70 
+Matching ,
+108 
+Matching floatmathtest
+70 
+Matching ,
+108 
+Matching floatmathtest
+71 
+Matching )
+32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "floatMathTest is now "
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 116 108 
+Matching floatmathtest
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 101 
+Matching " in main"
+93 84 75 52 
+Matching )
+32 
+Matching ;
+38 54 108 
+Matching otherthing
+
+Matching :=
+73 82 87 91 99 
+Matching 5
+93 84 75 32 
+Matching ;
+41 59 
+Matching repeat
+31 35 30 
+Matching begin
+31 37 49 
+Matching write
+
+Matching (
+53 112 73 82 87 91 116 108 
+Matching otherthing
+93 84 75 51 
+Matching ,
+53 112 73 82 87 91 101 
+Matching " "
+93 84 75 52 
+Matching )
+32 
+Matching ;
+38 54 108 
+Matching otherthing
+
+Matching :=
+73 82 87 91 116 108 
+Matching otherthing
+93 83 89 
+Matching -
+91 99 
+Matching 3
+93 84 75 32 
+Matching ;
+34 44 33 
+Matching end
+32 
+Matching ;
+34 44 33 
+Matching until
+111 73 82 87 91 105 
+Matching (
+73 82 87 91 116 108 
+Matching otherthing
+93 84 74 77 
+Matching <
+82 87 91 99 
+Matching 0
+93 84 
+Matching )
+93 84 75 32 
+Matching ;
+38 54 108 
+Matching booleanvalue
+
+Matching :=
+73 82 87 91 102 
+Matching true
+93 84 75 32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 99 
+Matching 5
+93 83 88 
+Matching +
+91 100 
+Matching 6.5
+93 84 75 52 
+Matching )
+32 
+Matching ;
+37 50 
+Matching writeln
+
+Matching (
+53 112 73 82 87 91 101 
+Matching "Thank you for using this!"
+93 84 75 52 
+Matching )
+32 
+Matching ;
+34 44 33 
+Matching end
+
+Matching .
+
+Matching EOF
+
+The input program parses!

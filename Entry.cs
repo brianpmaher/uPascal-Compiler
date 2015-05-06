@@ -16,14 +16,16 @@ using System.Collections.Generic;
  */
 public class Entry {
     public string Lexeme {get; private set;}
+    public string Label {get; private set;}
     public TYPES Type {get; private set;}
     public KINDS Kind {get; private set;}
     public int Size {get; private set;}
     public int Offset {get; set;}
-    public List<string> Parameters {get; private set;}
+    public List<Parameter> Parameters {get; private set;}
     public bool Modifiable {get; set;}
+    public bool VarParameter {get; private set;}
 
-    public Entry(string lexeme, TYPES type, KINDS kind, int size, int offset, List<string> parameters) {
+    public Entry(string lexeme, TYPES type, KINDS kind, int size, int offset, List<Parameter> parameters, bool varparameter = false) {
         Lexeme     = lexeme;
         Type       = type;
         Kind       = kind;
@@ -31,5 +33,18 @@ public class Entry {
         Offset     = offset;
         Parameters = parameters;
         Modifiable = true;
+        VarParameter = varparameter;
+    }
+
+    public Entry(string lexeme, string label, TYPES type, KINDS kind, int size, int offset, List<Parameter> parameters, bool varparameter = false) {
+        Lexeme     = lexeme;
+        Label      = label;
+        Type       = type;
+        Kind       = kind;
+        Size       = size;
+        Offset     = offset;
+        Parameters = parameters;
+        Modifiable = true;
+        VarParameter = varparameter;
     }
 }

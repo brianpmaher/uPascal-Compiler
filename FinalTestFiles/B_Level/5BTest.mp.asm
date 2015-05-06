@@ -1,0 +1,84 @@
+BR L0
+L0:
+PUSH D0
+ADD SP #3 SP
+SUB SP #4 D0
+PUSH #"This is test 6 of B level"
+WRTS
+PUSH #""
+WRTLNS
+PUSH #"Please enter a positive integer"
+WRTS
+PUSH #""
+WRTLNS
+RD 1(D0)
+PUSH 1(D0)
+POP 2(D0)
+PUSH 1(D0)
+POP 1(D0)
+ADD SP #1 SP
+PUSH #0
+POP 4(D0)
+L1:
+PUSH 4(D0)
+PUSH 1(D0)
+CMPLES
+BRFS L2
+PUSH 1(D0)
+WRTS
+PUSH #", "
+WRTS
+PUSH #-1
+PUSH 1(D0)
+ADDS
+POP 1(D0)
+BR L1
+L2:
+ADD SP #-1 SP
+PUSH #"\nShould print from "
+WRTS
+PUSH 2(D0)
+WRTS
+PUSH #" to 0 inclusive"
+WRTS
+PUSH #""
+WRTLNS
+PUSH #"Please enter a negative integer"
+WRTS
+PUSH #""
+WRTLNS
+RD 1(D0)
+PUSH 1(D0)
+POP 2(D0)
+PUSH 1(D0)
+POP 1(D0)
+ADD SP #1 SP
+PUSH #0
+POP 4(D0)
+L3:
+PUSH 4(D0)
+PUSH 1(D0)
+CMPGES
+BRFS L4
+PUSH 1(D0)
+WRTS
+PUSH #", "
+WRTS
+PUSH #1
+PUSH 1(D0)
+ADDS
+POP 1(D0)
+BR L3
+L4:
+ADD SP #-1 SP
+PUSH #"\nShould print from "
+WRTS
+PUSH 2(D0)
+WRTS
+PUSH #" to 0 inclusive"
+WRTS
+PUSH #""
+WRTLNS
+SUB SP #3 SP
+POP D0
+HLT

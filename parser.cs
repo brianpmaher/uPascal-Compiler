@@ -111,7 +111,9 @@ public class Parser {
                 Console.Write(2 + " ");
                 programHeading();
                 match(TOKENS.SCOLON);
-                block();
+                string label = LabelMaker.genLabel();
+                __analyzer.genBr("L" + label);
+                block(label);
                 match(TOKENS.PERIOD);
                 break;
             default:
@@ -130,7 +132,6 @@ public class Parser {
                 __symbolTableStack.Push(new SymbolTable(
                     programName, 0, 0, 0, new List<Entry>(),
                     null));
-                __analyzer.genInit();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROGRAM});
@@ -138,7 +139,7 @@ public class Parser {
         }
     }
 
-    private void block() {
+    private void block(string label) {
         switch(__lookahead.Type) {
             case TOKENS.BEGIN:
             case TOKENS.FUNCTION:
@@ -147,9 +148,60 @@ public class Parser {
                 Console.Write(4 + " ");
                 variableDeclarationPart();
                 procedureAndFunctionDeclarationPart();
+                __analyzer.genOut("L" + label + ":");
+
+                // generate push of nesting level if main (to fix for the new
+                // offsetting of variables, etc)
+                if( __symbolTableStack.Peek().NestingLevel == 0){
+                    __analyzer.genPushCurrentNestingLevel();
+                }
+
+                // This needs to be changed. Right now it is assuming we need
+                // to allocate space for the parameters which is out of date now
+                // However, we still need to generate for local variables.
                 __analyzer.genSymSize();
+
+                // If this is nesting level 0 meaning 'main'
+                if( __symbolTableStack.Peek().NestingLevel == 0){
+                    __analyzer.genPointer("D" + __symbolTableStack.Peek().NestingLevel);
+                }
+
                 statementPart();
                 __analyzer.genEnd();
+                break;
+            default:
+                error(new List<TOKENS>{TOKENS.BEGIN, TOKENS.FUNCTION, TOKENS.PROCEDURE,
+                    TOKENS.VAR});
+                break;
+        }
+    }
+
+    private void block(string label, int size) {
+        switch(__lookahead.Type) {
+            case TOKENS.BEGIN:
+            case TOKENS.FUNCTION:
+            case TOKENS.PROCEDURE:
+            case TOKENS.VAR:
+                Console.Write(4 + " ");
+                variableDeclarationPart();
+                procedureAndFunctionDeclarationPart();
+                __analyzer.genOut("L" + label + ":");
+
+                // This needs to be changed. Right now it is assuming we need
+                // to allocate space for the parameters which is out of date now
+                // However, we still need to generate for local variables.
+                //__analyzer.genSymSize();
+                SymbolTable top = __symbolTableStack.Peek();
+                int temp = top.GetSize() - size;
+                __analyzer.genSymSize(temp);
+
+                // If this is nesting level 0 meaning 'main'
+                if( __symbolTableStack.Peek().NestingLevel == 0){
+                    __analyzer.genPointer("D" + __symbolTableStack.Peek().NestingLevel);
+                }
+
+                statementPart();
+                __analyzer.genEnd(temp);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.BEGIN, TOKENS.FUNCTION, TOKENS.PROCEDURE,
@@ -161,6 +213,7 @@ public class Parser {
     private void variableDeclarationPart() {
         switch(__lookahead.Type) {
             case TOKENS.VAR:
+                // Ensure there is room for the PC
                 Console.Write(5 + " ");
                 match(TOKENS.VAR);
                 variableDeclaration();
@@ -209,6 +262,7 @@ public class Parser {
                 if(typeRec != TYPES.NONE) {
                     foreach(String identifier in identifiers) {
                         top.AddEntry(identifier, typeRec, KINDS.VAR, 1, null);
+                        __symbolTableStack.Peek().printSymbolTable();
                     }
                 }
                 break;
@@ -269,9 +323,22 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
                 Console.Write(17 + " ");
-                procedureHeading();
+
+                // get parameters
+                List<Entry> parameters = new List<Entry>();
+                string label = LabelMaker.genLabel();
+
+                parameters = procedureHeading(label);
+
                 match(TOKENS.SCOLON);
-                block();
+
+                block(label, parameters.Count);
+
+                // popping the table off the stack after procedure
+                // declaration is done so that
+                // nesting level decrements and main can print HLT instead
+                // of RET
+                __symbolTableStack.Pop();
                 match(TOKENS.SCOLON);
                 break;
             default:
@@ -284,9 +351,17 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.FUNCTION:
                 Console.Write(18 + " ");
-                functionHeading();
+
+                // get parameters
+                List<Entry> parameters = new List<Entry>();
+                string label = LabelMaker.genLabel();
+
+                parameters = functionHeading(label);
                 match(TOKENS.SCOLON);
-                block();
+
+                block(label, parameters.Count);
+
+                __symbolTableStack.Pop();
                 match(TOKENS.SCOLON);
                 break;
             default:
@@ -295,26 +370,35 @@ public class Parser {
         }
     }
 
-    private void procedureHeading() {
+    private List<Entry> procedureHeading(string label) {
+        List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type) {
             case TOKENS.PROCEDURE:
                 Console.Write(19 + " ");
                 match(TOKENS.PROCEDURE);
-                String identifier = procedureIdentifier();
-                List<Entry> entries = optionalFormalParameterList();
+                string identifier = procedureIdentifier();
+
+                // get parameters
+                entries = optionalFormalParameterList();
+
                 // Make procedure symbol table entry and table
-                List<String> paras = new List<String>();
+                List<Parameter> paras = new List<Parameter>();
                 foreach(Entry entry in entries) {
-                    paras.Add(entry.Lexeme);
+                    paras.Add(new Parameter(entry.VarParameter, entry.Type));
                 }
-                //Add the entry for the procedure
+
+                // Add the entry for the procedure in the current top of stack
+                // symbol table
                 __symbolTableStack.Peek().AddEntry(
                     identifier,
+                    label,
                     TYPES.NONE,
                     KINDS.PROCEDURE,
                     0,
                     paras
                 );
+
+                // Push procedure symbol table to top of the symboltablestack
                 __symbolTableStack.Push(
                     new SymbolTable(
                         identifier,
@@ -325,35 +409,44 @@ public class Parser {
                         __symbolTableStack.Peek()
                     )
                 );
+
+                // Add entries for the parameters on the procedure symbol
+                // table (which should be at the top of the stack now)
                 foreach(Entry entry in entries) {
                     __symbolTableStack.Peek().AddEntry(entry);
                 }
+
+                // This for the program counter.
+                __symbolTableStack.Peek().IncSize();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.PROCEDURE});
                 break;
         }
+        return entries;
     }
 
-    private void functionHeading() {
+    private List<Entry> functionHeading(string label) {
+        List<Entry> entries = new List<Entry>();
         switch(__lookahead.Type) {
             case TOKENS.FUNCTION:
                 Console.Write(20 + " ");
                 match(TOKENS.FUNCTION);
                 String identifier = functionIdentifier();
-                List<Entry> entries = optionalFormalParameterList();
+                entries = optionalFormalParameterList();
                 match(TOKENS.COLON);
                 TYPES funcRetType = type();
                 // Make function symbol table entry and table
-                List<String> paras = new List<String>();
+                List<Parameter> paras = new List<Parameter>();
                 foreach(Entry entry in entries) {
                     if(entry != null) {
-                        paras.Add(entry.Lexeme);
+                        paras.Add(new Parameter(entry.VarParameter, entry.Type));
                     }
                 }
                 // Add the entry for the function
                 __symbolTableStack.Peek().AddEntry(
                     identifier,
+                    label,
                     funcRetType,
                     KINDS.FUNCTION,
                     0,
@@ -374,11 +467,15 @@ public class Parser {
                 foreach(Entry entry in entries) {
                     __symbolTableStack.Peek().AddEntry(entry);
                 }
+
+                //This is for the program counter.
+                __symbolTableStack.Peek().IncSize();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FUNCTION});
                 break;
         }
+        return entries;
     }
 
     private List<Entry> optionalFormalParameterList() {
@@ -468,7 +565,7 @@ public class Parser {
                 match(TOKENS.COLON);
                 TYPES varType = type();
                 foreach(String id in idList) {
-                    entries.Add(new Entry(id, varType, KINDS.PARAMETER, 1, 0, null));
+                    entries.Add(new Entry(id, varType, KINDS.PARAMETER, 1, 0, null, true));
                 }
                 break;
             default:
@@ -860,25 +957,33 @@ public class Parser {
                 Entry variable = __symbolTableStack.Peek().GetEntry(controlVar.Lexeme);
                 variable.Modifiable = false;
 
-                // Generate the starting label
-                __analyzer.genOut(start + ":");
-
                 // Retrieve the semrecord for what type of for loop
                 // (to or downto). Note: this will return either a 1 or -1
                 // for adding later.
                 SemRecord step = stepValue();
 
+
+                __analyzer.genSymSize(1);
                 // Retrieve finalValue semrec and generate the push the initial
                 // (now controlVariable) and the finalValue on the stack for it.
                 SemRecord finalVal = finalValue();
+                SemRecord finalVar = new SemRecord(finalVal.Type, "finalVal" + start);
 
-                Entry finalValEntry = __symbolTableStack.Peek().GetEntry(finalVal.Lexeme);
+                __symbolTableStack.Peek().AddEntry(finalVar.Lexeme, finalVar.Type, KINDS.VAR, 1, null);
+                Entry finalValEntry = __symbolTableStack.Peek().GetEntry(finalVar.Lexeme);
+
+                __analyzer.genAssign(finalVar, finalVal);
 
                 if(finalValEntry != null) {
                     finalValEntry.Modifiable = false;
                 }
 
+                // Generate the starting label
+                __analyzer.genOut(start + ":");
+
+                __analyzer.genPushVar(finalVar);
                 __analyzer.genPushVar(controlVar);
+
 
                 // Generate either CMPGES or CMPLES depending on what was chosen
                 // (either to or downto).
@@ -913,6 +1018,8 @@ public class Parser {
                     finalValEntry.Modifiable = true;
                 }
                 __analyzer.genOut(end + ":");
+                __symbolTableStack.Peek().RemoveEntry(finalValEntry);
+                __analyzer.genSymSize(-1);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FOR});
@@ -1010,8 +1117,40 @@ public class Parser {
         switch(__lookahead.Type) {
             case TOKENS.IDENTIFIER:
                 Console.Write(67 + " ");
-                procedureIdentifier();
-                optionalActualParameterList();
+                string procedure = procedureIdentifier();
+                SymbolTable top = __symbolTableStack.Peek();
+
+                // find label from symbol table stack
+                Entry current = top.GetEntry(procedure);
+
+                // find symbol where the procedure is. Then that symbol tables
+                // nesting level + 1.
+                int appropriateNestingLevel = 0;
+                foreach(Entry entry in top.Entries){
+                    if(entry.Lexeme.Equals(procedure)){
+                        appropriateNestingLevel = top.NestingLevel;
+                    }
+                }
+                appropriateNestingLevel++;
+
+                // Push nesting level (Needs to be fixed)
+                __analyzer.genPushNestingLevel(appropriateNestingLevel);
+
+                List<SemRecord> listOfParams = optionalActualParameterList(current.Parameters);
+
+                // generate the register so we can point it to
+                int NestingPlusOne = top.GetNestingLevel(procedure) + 1;
+                int sizeOfParamsPlusOne = listOfParams.Count + 1;
+                __analyzer.genPointer(sizeOfParamsPlusOne, "D" + NestingPlusOne);
+
+                // print label for calling
+                __analyzer.genCall("L" + current.Label);
+
+                // Remove the number of parameters
+                __analyzer.genCleanup(listOfParams.Count);
+
+                // Pop the current nesting level (Needs to be fixed)
+                __analyzer.genPopNestingLevel(appropriateNestingLevel);
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.IDENTIFIER});
@@ -1019,7 +1158,9 @@ public class Parser {
         }
     }
 
-    private void optionalActualParameterList() {
+    private List<SemRecord> optionalActualParameterList(List<Parameter> paras) {
+        List<SemRecord> list = new List<SemRecord>();
+        List<Parameter> copy = new List<Parameter>(paras);
         switch(__lookahead.Type) {
             case TOKENS.AND:
             case TOKENS.DIV:
@@ -1050,8 +1191,8 @@ public class Parser {
             case TOKENS.LPAREN:
                 Console.Write(68 + " ");
                 match(TOKENS.LPAREN);
-                actualParameter();
-                actualParameterTail();
+                list.Add(actualParameter(copy));
+                list.AddRange(actualParameterTail(copy));
                 match(TOKENS.RPAREN);
                 break;
             default:
@@ -1062,15 +1203,17 @@ public class Parser {
                     TOKENS.RPAREN, TOKENS.SCOLON, TOKENS.TIMES});
                 break;
         }
+        return list;
     }
 
-    private void actualParameterTail() {
+    private List<SemRecord> actualParameterTail(List<Parameter> parametercopy) {
+        List<SemRecord> list = new List<SemRecord>();
         switch(__lookahead.Type) {
             case TOKENS.COMMA:
                 Console.Write(70 + " ");
                 match(TOKENS.COMMA);
-                actualParameter();
-                actualParameterTail();
+                list.Add(actualParameter(parametercopy));
+                list.AddRange(actualParameterTail(parametercopy));
                 break;
             case TOKENS.RPAREN:
                 Console.Write(71 + " ");
@@ -1079,14 +1222,30 @@ public class Parser {
                 error(new List<TOKENS>{TOKENS.COMMA, TOKENS.RPAREN});
                 break;
         }
+        return list;
     }
 
-    private void actualParameter() {
+    private SemRecord actualParameter(List<Parameter> parametercopy) {
+        SemRecord actSem = null;
         switch(__lookahead.Type) {
+            case TOKENS.IDENTIFIER:
+                string id = __lookahead.Lexeme;
+                Entry idEntry = __symbolTableStack.Peek().GetEntry(id);
+                Parameter wecare = parametercopy[0];
+                parametercopy.RemoveAt(0);
+                if(!wecare.VarType) {
+                    actSem = ordinalExpression();
+                    return actSem;
+                } else {
+                    int nestingLevel = __symbolTableStack.Peek().GetNestingLevel(id);
+                    actSem = new SemRecord(idEntry.Type, idEntry.Lexeme);
+                    __analyzer.genVarParameter(idEntry.Offset, nestingLevel, idEntry.VarParameter);
+                    variableIdentifier();
+                    return actSem;
+                }
             case TOKENS.FALSE:
             case TOKENS.NOT:
             case TOKENS.TRUE:
-            case TOKENS.IDENTIFIER:
             case TOKENS.INTEGER_LIT:
             case TOKENS.FLOAT_LIT:
             case TOKENS.STRING_LIT:
@@ -1094,7 +1253,8 @@ public class Parser {
             case TOKENS.MINUS:
             case TOKENS.PLUS:
                 Console.Write(72 + " ");
-                ordinalExpression();
+                parametercopy.RemoveAt(0);
+                actSem = ordinalExpression();
                 break;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
@@ -1102,6 +1262,7 @@ public class Parser {
                     TOKENS.LPAREN, TOKENS.MINUS, TOKENS.PLUS});
                 break;
         }
+        return actSem;
     }
 
     private SemRecord expression() {
@@ -1364,7 +1525,6 @@ public class Parser {
                 Console.Write(92 + " ");
                 Func<SemRecord, SemRecord, TYPES> mulOp = multiplyingOperator();
                 SemRecord right = factor();
-                Console.WriteLine(right.Lexeme + " of Type " + right.Type);
                 SemRecord mulRec = new SemRecord(mulOp(left, right), "");
                 SemRecord tailRec = factorTail(mulRec);
                 return tailRec;
@@ -1471,8 +1631,41 @@ public class Parser {
                     return factorRec;
                 } else if(identifierKind == KINDS.FUNCTION) {
                     Console.Write(106 + " ");
-                    String funcId = functionIdentifier();
-                    optionalActualParameterList();
+                    string funcId = functionIdentifier();
+
+                    /////////////
+                    SymbolTable top = __symbolTableStack.Peek();
+
+                    // find label from symbol table stack
+                    Entry current = top.GetEntry(funcId);
+
+                    // find symbol where the function is. Then that symbol tables
+                    // nesting level + 1.
+                    int appropriateNestingLevel = top.GetNestingLevel(funcId) + 1;
+
+                    // add space for function return
+                    __analyzer.genSymSize(1);
+
+                    // Push nesting level (Needs to be fixed)
+                    __analyzer.genPushNestingLevel(appropriateNestingLevel);
+
+                    List<SemRecord> listOfParams = optionalActualParameterList(current.Parameters);
+
+                    // generate the register so we can point it to
+                    int NestingPlusOne = top.GetNestingLevel(funcId) + 1;
+                    int sizeOfParamsPlusOne = listOfParams.Count + 1;
+                    __analyzer.genPointer(sizeOfParamsPlusOne, "D" + NestingPlusOne);
+
+                    // print label for calling
+                    __analyzer.genCall("L" + current.Label);
+
+                    // Remove the number of parameters
+                    __analyzer.genCleanup(listOfParams.Count);
+
+                    // Pop the current nesting level (Needs to be fixed)
+                    __analyzer.genPopNestingLevel(appropriateNestingLevel);
+                    /////////////
+
                     TYPES funcType = __symbolTableStack.Peek().GetType(funcId);
                     return new SemRecord(funcType, funcId); // Just a placeholder until we implement functions
                 } else {
@@ -1498,7 +1691,6 @@ public class Parser {
                 match(TOKENS.LPAREN);
                 factorRec = expression();
                 match(TOKENS.RPAREN);
-                Console.WriteLine("factorRec is of type " + factorRec.Type);
                 return factorRec;
             default:
                 error(new List<TOKENS>{TOKENS.FALSE, TOKENS.NOT, TOKENS.TRUE, TOKENS.IDENTIFIER,
