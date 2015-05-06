@@ -76,21 +76,31 @@ Compilers 2015
 <!-- InstanceBeginEditable name="Main" -->
 <h1>UML</h1>
 <p>
-As noted elsewhere, a clear outline was given to all teams for the design and implementation of the scanner, parser, and semantic analyzer. With approval, teams were allowed to vary their actual designs and implmementations. The scanner was the only module that required UML ahead of time. That is provided on this page along with the UML for the scanner as it actually was implemented.
+As noted elsewhere, a clear outline was given to all teams for the design and implementation of the
+scanner, parser, and semantic analyzer. With approval, teams were allowed to vary their actual
+designs and implmementations. The scanner was the only module that required UML ahead of time. That
+is provided on this page along with the UML for the scanner as it actually was implemented.
 </p>
 
-<!--
-Attach the UML design diagrams for your capstone project that were created before you began coding your project.
--->
-<h2>Symbol Table UML (Before Coding)</h2>
+<h2>Scanner UML (Before Coding)</h2>
 
-<p><img src="before.jpg" width="800" /></p>
+<p><img src="before.jpg" width="200" /></p>
 
-<p>After our initial design of the symbol table and its implementation, we realized we needed to add functionality to the symbol Table. For example, the runtime address offsets needed to be stored in the symbol table as well as well as the nesting level. Fortunately, our initial design only needed to be modified by adding attributes and methods to the Table class and the Symbol class. The basic design of symbol storage in the Table class and the recursive nature of the Table class did not need to be modified.</p>
+<p>
+  Our initial design for the Scanner was naive as it did not take into account a proper method for
+  detecting and storing the list of lexemes and their associated tokens. Before programming the
+  scanner, the idea was to have a distinct FSA for each group of tokens in the micro-Pascal
+  language. This proved to be difficult as it required the dispatcher to look ahead more than a
+  single character in order to more accurately decide which FSA to pass the character off to and
+  would have required FSAs to backtrack and pass along the lexeme to another FSA mid-generation.
+  This seemed messy and an ineffective way to handle the various FSAs. Eventually, the model was
+  adapted to have each FSA responsible for handling one type of input (a digit, a letter, a symbol,
+  etc).
+</p>
 
-<h2>Symbol Table UML (Revised After Coding)</h2>
+<h2>Scanner UML (Revised After Coding)</h2>
 
-<p><img src="after.jpg" width="800" /></p>
+<p><img src="after.jpg" width="500" /></p>
 
 <!-- InstanceEndEditable -->
 
