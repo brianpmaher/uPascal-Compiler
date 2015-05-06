@@ -485,7 +485,7 @@ public class SemAnalyzer{
                 output("POP -1(D" + top.NestingLevel + ")");
             }
             else {
-                output("POP " + assigneeSymRec.Offset + "(D" + top.NestingLevel + ")");
+                output("POP " + assigneeSymRec.Offset + "(D" + top.GetNestingLevel(assignee.Lexeme) + ")");
             }
 
         } else {
