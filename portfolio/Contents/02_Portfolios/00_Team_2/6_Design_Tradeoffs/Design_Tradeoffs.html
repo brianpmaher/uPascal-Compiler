@@ -14,7 +14,7 @@
 
 
 <!-- InstanceBeginEditable name="doctitle" -->
-<title>Life Cycle</title>
+<title>Design Tradeoffs</title>
 <!-- InstanceEndEditable -->
 </head>
 
@@ -37,7 +37,7 @@
   <div id="headMatter">
     <span id="headTitle1">
       <!-- InstanceBeginEditable name="Header" -->
-        LIFE CYCLE
+        Team 2
 	  <!-- InstanceEndEditable --> 
     </span>
     <span id="headTitle2">
@@ -51,7 +51,7 @@
 
 <aside id="aside-left">
 <div id="asideLeftTitle">
-Compilers 2014
+Compilers 2015
 </div>
 
 </aside>
@@ -74,9 +74,32 @@ Compilers 2014
 
 <article id="mainContent">
 <!-- InstanceBeginEditable name="Main" -->
-<h1>Life Cycle</h1>
+<h1>Design Tradeoffs</h1>
+
+<h3>Error Handling</h3>
 <p>
-TO BE PROVIDED.
+  Initially, we were planning on implementing error recovery such that if there were scan errors
+  we would skip the lexeme and attempt to continue to scan for tokens and list out all scan errors
+  found. The issue arose that it became difficult to know when to stop scanning and attempt scan
+  recovery which would actually lead errors to be more difficult to read or lead to more errors than
+  there actually were without implementing a comlex error handling strategy. Since the purpose of
+  the error handling system was to handle errors effectively and with precision, the decision was
+  made by the team to stop compiling and output errors the first time we see one. While this didn't
+  allow for the programmer to get a full list of errors, it did allow for each error to be much
+  more specific and made the process of debugging simpler for the programmer utilizing our compiler.
+</p>
+
+<h3>Test Suite</h3>
+<p>
+  Another design tradeoff that was made was our test suite. This was meant to be able to be run by
+  us via a "--test" flag in our compiler in order to run unit tests instead of compiling. The main
+  tradeoff here was time. In the beginning we implemented a set of thorough unit tests for the
+  scanner that tested every FSA in various combinations that we believed led to a very full coverage
+  of the correctness of our scanner. The same idea was to be implemented for the parser, but due to
+  the time constraints of this project, it became necessary to halt further work on the unit test
+  suite in favor of actually completing the compiler. We did end up having to fix several parser
+  bugs that arose later which may have been found sooner had we incorporated the parser test suite
+  as planned.
 </p>
 <!-- InstanceEndEditable -->
 

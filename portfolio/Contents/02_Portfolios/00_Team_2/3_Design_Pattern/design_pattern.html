@@ -14,7 +14,7 @@
 
 
 <!-- InstanceBeginEditable name="doctitle" -->
-<title>Design Tradeoffs</title>
+<title>Design Patterns</title>
 <!-- InstanceEndEditable -->
 </head>
 
@@ -37,7 +37,7 @@
   <div id="headMatter">
     <span id="headTitle1">
       <!-- InstanceBeginEditable name="Header" -->
-        Header
+        Team 2
 	  <!-- InstanceEndEditable --> 
     </span>
     <span id="headTitle2">
@@ -74,29 +74,18 @@ Compilers 2014
 
 <article id="mainContent">
 <!-- InstanceBeginEditable name="Main" -->
-<h1>Design Tradeoffs</h1>
-THIS IS AN EXAMPLE. LIST YOUR OWN DESIGN TRADEOFF. THE RESERVED WORD LOOKUP TABLE IS A GOOD ONE, BUT SO IS THE SYMBOL TABLE. REMOVE THIS LINE.
+<h1>Design Pattern</h1>
 
-<h2>Data Structure Tradeoffs</h2>
-
-<h3>Resolution of Keywords</h3>
+<h2>Design Patterns in the Compilers Course</h2>
+<p>The components of the compiler&#8212;the scanner, parser, symbol table, and semantic
+analyzer&#8212;were each by way of a specific pattern that students were asked to follow. In some
+cases, students were allowed to deviate from the patterns. As a result, some students may have
+chosen and/or used different formal design patterns for portions of the compiler. If so, they appear
+below.</p>
+<h2>Specific Design Patterns</h2>
 <p>
-The &micro;-pascal language has 36 reserved words. 
-We chose to use an array to store these words and simply do a linear search of each token scanned to determine whether or not it is a reserved word. 
-While this is not the most efficient method of searching, it is easy to program, and with only 36 elements in the list, is certainly fast enough. 
-A hash function makes little sense on a data set as small as this because calculating the hash would be expensive as performing a linear search. 
-Another alternative would be to implement a binary tree to reduce the search time to O(log(n)). 
-Again, because the data structure is more complicated than a simple array, the actual time savings would be insignificant to the overall runtime of the program.
-</p>
-
-<h3>Symbol Table Design</h3>
-<p>
-Our implementation of the symbol table as a singularly linked list forced our lookup of elements in the table to be O(n). 
-Of course faster search algorithms exist. 
-The symbol table would have to have an additional field representing the nesting level and be a simple list to use a hash table or other data structure that allows faster lookup time. 
-However, this adds some complexity to the search to ensure the variable currently in scope is the variable being referenced. 
-The linked list symbol table with a recursive linear search solves this problem. 
-The actual time difference of faster search algorithms was not sufficient to justify the ease of not only writing the code, but also elegantly solve the problem of variable scope.
+  Our team did not implement any additional design patterns besides following the design outlined
+  in class for the scanner, parser, symbol table, and semantic analyzer.
 </p>
 <!-- InstanceEndEditable -->
 

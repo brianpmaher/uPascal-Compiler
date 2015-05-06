@@ -14,7 +14,7 @@
 
 
 <!-- InstanceBeginEditable name="doctitle" -->
-<title>Parser</title>
+<title>UML</title>
 <!-- InstanceEndEditable -->
 </head>
 
@@ -37,7 +37,7 @@
   <div id="headMatter">
     <span id="headTitle1">
       <!-- InstanceBeginEditable name="Header" -->
-        Team 0
+        Team 2
 	  <!-- InstanceEndEditable --> 
     </span>
     <span id="headTitle2">
@@ -51,7 +51,7 @@
 
 <aside id="aside-left">
 <div id="asideLeftTitle">
-Compilers 2014
+Compilers 2015
 </div>
 
 </aside>
@@ -74,20 +74,34 @@ Compilers 2014
 
 <article id="mainContent">
 <!-- InstanceBeginEditable name="Main" -->
-<h1>Parser</h1>
-
-<h2>Specifications</h2>
+<h1>UML</h1>
 <p>
-Click <a href="../../../01_Introduction/2_Project_Specifications/2_Parser_Specifications.html">here</a><a href="../../../01_Introduction/2_Project_Specifications/2_Parser.html"></a> to view the parser specifications.
+As noted elsewhere, a clear outline was given to all teams for the design and implementation of the
+scanner, parser, and semantic analyzer. With approval, teams were allowed to vary their actual
+designs and implmementations. The scanner was the only module that required UML ahead of time. That
+is provided on this page along with the UML for the scanner as it actually was implemented.
 </p>
 
-<h2>Source Listing</h2>
+<h2>Scanner UML (Before Coding)</h2>
 
-<pre class="prettyprint" ><code class="language-java">
-Replace these lines with your parser code.  
-BE SURE THAT THERE ARE NO POORLY WRAPPED LINES,
-AND THAT YOUR CODE IS READABLE, AND THAT IT FITS WITHIN THE BOUNDARIES.</code></pre>
-</code></pre>
+<p><img src="before.jpg" width="200" /></p>
+
+<p>
+  Our initial design for the Scanner was naive as it did not take into account a proper method for
+  detecting and storing the list of lexemes and their associated tokens. Before programming the
+  scanner, the idea was to have a distinct FSA for each group of tokens in the micro-Pascal
+  language. This proved to be difficult as it required the dispatcher to look ahead more than a
+  single character in order to more accurately decide which FSA to pass the character off to and
+  would have required FSAs to backtrack and pass along the lexeme to another FSA mid-generation.
+  This seemed messy and an ineffective way to handle the various FSAs. Eventually, the model was
+  adapted to have each FSA responsible for handling one type of input (a digit, a letter, a symbol,
+  etc).
+</p>
+
+<h2>Scanner UML (Revised After Coding)</h2>
+
+<p><img src="after.jpg" width="500" /></p>
+
 <!-- InstanceEndEditable -->
 
 </article>
